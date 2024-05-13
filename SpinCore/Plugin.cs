@@ -1,4 +1,5 @@
 using BepInEx;
+using HarmonyLib;
 
 namespace SpinCore
 {
@@ -11,7 +12,11 @@ namespace SpinCore
 
         private void Awake()
         {
+            TranslationHelper.AddTranslationKey("SpinCore_ModTab", "Quick Mod Settings");
             Logger.LogMessage($"Hello from {Name}");
+            Harmony harmony = new Harmony(Guid);
+            harmony.PatchAll(typeof(TranslationPatches));
+            harmony.PatchAll(typeof(UIPatches));
         }
     }
 }
