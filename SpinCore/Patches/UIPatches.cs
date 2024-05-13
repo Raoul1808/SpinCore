@@ -1,7 +1,7 @@
 using HarmonyLib;
 using XDMenuPlay;
 
-namespace SpinCore
+namespace SpinCore.Patches
 {
     internal static class UIPatches
     {

@@ -1,6 +1,6 @@
 using HarmonyLib;
 
-namespace SpinCore
+namespace SpinCore.Patches
 {
     internal static class TranslationPatches
     {
