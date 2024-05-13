@@ -5,7 +5,7 @@ namespace SpinCore
     public static class TranslationHelper
     {
         private static bool _readyToAdd = false;
-        internal static void MarkReadyToAdd() => _readyToAdd = true;
+        private static void MarkReadyToAdd() => _readyToAdd = true;
 
         private static Dictionary<string, string> _pendingTranslations = new Dictionary<string, string>();
 
@@ -38,6 +38,7 @@ namespace SpinCore
             {
                 AddKey(pair.Key, pair.Value);
             }
+            _pendingTranslations.Clear();
         }
         
         private static void AddKey(string key, string value)
