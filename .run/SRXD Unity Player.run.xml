@@ -1,0 +1,9 @@
+<component name="ProjectRunConfigurationManager">
+  <configuration default="false" name="SRXD Unity Player" type="UnityPlayer" factoryName="UnityAttachToPlayer">
+    <option name="playerId" value="CustomPlayer(localhost:10000)" />
+    <option name="playerInstanceId" value="Custom" />
+    <option name="port" value="10000" />
+    <option name="projectName" value="Custom" />
+    <method v="2" />
+  </configuration>
+</component>
