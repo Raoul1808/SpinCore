@@ -18,6 +18,7 @@ namespace SpinCore
         {
             _logger = Logger;
             TranslationHelper.AddTranslationKey("SpinCore_ModTab", "Quick Mod Settings");
+            TranslationHelper.AddTranslationKey("SpinCore_ModTabButton", "Hello World!");
             Logger.LogMessage($"Hello from {Name}");
             Harmony harmony = new Harmony(Guid);
             harmony.PatchAll(typeof(TranslationPatches));
