@@ -7,7 +7,7 @@ using SpinCore.Patches;
 namespace SpinCore
 {
     [BepInPlugin(Guid, Name, Version)]
-    public class Plugin : BaseUnityPlugin
+    internal class Plugin : BaseUnityPlugin
     {
         private const string Guid = "srxd.raoul1808.spincore";
         private const string Name = "SpinCore";
