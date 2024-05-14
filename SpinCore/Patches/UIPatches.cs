@@ -24,6 +24,15 @@ namespace SpinCore.Patches
             sidePanelButtonBase.SetActive(false);
             sidePanelButtonBase.name = "SampleSidePanelButtonAsset";
             UIHelper.SidePanelButtonBase = sidePanelButtonBase;
+            var filterPanelClone = GameObject.Instantiate(instance.tabs[1].prefabs[0].gameObject, new GameObject().transform);
+            var multiChoiceBase = GameObject.Instantiate(filterPanelClone.transform.Find("FilterSettingsPopout/TrackSorting").gameObject, new GameObject().transform);
+            multiChoiceBase.name = "SampleMultiChoiceButton";
+            Object.Destroy(multiChoiceBase.GetComponent<XDNavigableOptionMultiChoice_IntValue>());
+            multiChoiceBase.GetComponent<XDNavigableOptionMultiChoice>().state.callbacks = new XDNavigableOptionMultiChoice.Callbacks();
+            multiChoiceBase.GetComponentInChildren<TranslatedTextMeshPro>().translation = TranslationReference.Empty;
+            multiChoiceBase.SetActive(false);
+            UIHelper.MultiChoiceBase = multiChoiceBase;
+            Object.Destroy(filterPanelClone);
             for (int i = panelContent.childCount; i > 0; i--)
             {
                 Object.DestroyImmediate(panelContent.GetChild(i - 1).gameObject);
@@ -60,6 +69,7 @@ namespace SpinCore.Patches
         {
             if (_loadedTab || tabName != "Mods") return;
             UIHelper.CallSidePanelEvent(__instance.tabPanelDisplay.transform.Find(CloneName + "/Scroll List Tab Prefab/Scroll View/Viewport/Content"));
+            _loadedTab = true;
         }
     }
 }

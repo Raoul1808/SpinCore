@@ -1,4 +1,3 @@
-using System.Diagnostics;
 using BepInEx;
 using BepInEx.Logging;
 using HarmonyLib;
@@ -15,6 +14,14 @@ namespace SpinCore
 
         private static ManualLogSource _logger;
 
+        private enum Modders
+        {
+            Mew,
+            Aexus,
+            Pink,
+            Edge,
+        }
+        
         private void Awake()
         {
             _logger = Logger;
@@ -25,21 +32,48 @@ namespace SpinCore
             
             TranslationHelper.AddTranslationKey("SpinCore_ModTab", "Quick Mod Settings");
             TranslationHelper.AddTranslationKey("SpinCore_HelloWorld", "Hello World!");
-            TranslationHelper.AddTranslationKey("SpinCore_SecondTestButton", "Free banger on YouTube");
+            TranslationHelper.AddTranslationKey("SpinCore_SecondTestButton", "Notify");
+            TranslationHelper.AddTranslationKey("SpinCore_ShiftValue", "Shift Value");
+            TranslationHelper.AddTranslationKey("SpinCore_BestModder", "Best Modder");
+            TranslationHelper.AddTranslationKey("SpinCore_TestToggle", "Test Toggle");
 
             UIHelper.OnSidePanelLoaded += parent =>
             {
+                int value = 0;
                 UIHelper.CreateButton(
                     parent,
                     "HelloWorld",
-                    new TranslationReference("SpinCore_HelloWorld", false),
+                    "SpinCore_HelloWorld",
                     () => { NotificationSystemGUI.AddMessage("Hello, world!"); }
                 );
                 UIHelper.CreateButton(
                     parent,
-                    "FreeBanger",
-                    new TranslationReference("SpinCore_SecondTestButton", false),
-                    () => { Process.Start("https://www.youtube.com/watch?v=RZHR4DtWufo"); }
+                    "ShowValue",
+                    "SpinCore_SecondTestButton",
+                    () => { NotificationSystemGUI.AddMessage("Value: " + value); }
+                );
+                UIHelper.CreateMultiChoiceButton(
+                    parent,
+                    "ShiftValue",
+                    "SpinCore_ShiftValue",
+                    0,
+                    v => value = v,
+                    () => new IntRange(0, 101),
+                    v => v.ToString()
+                );
+                UIHelper.CreateMultiChoiceButton(
+                    parent,
+                    "BestModder",
+                    "SpinCore_BestModder",
+                    Modders.Mew,
+                    modder => NotificationSystemGUI.AddMessage("The new best modder is " + modder)
+                );
+                UIHelper.CreateToggle(
+                    parent,
+                    "TestToggle",
+                    "SpinCore_TestToggle",
+                    false,
+                    enable => NotificationSystemGUI.AddMessage("Enabled: " + enable)
                 );
             };
         }

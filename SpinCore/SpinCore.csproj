@@ -17,6 +17,9 @@
       <Reference Include="SSD.Game">
         <HintPath>..\srxd-dir\SpinRhythm_Data\Managed\SSD.Game.dll</HintPath>
       </Reference>
+      <Reference Include="SSD.Types">
+        <HintPath>..\srxd-dir\SpinRhythm_Data\Managed\SSD.Types.dll</HintPath>
+      </Reference>
       <Reference Include="Unity.TextMeshPro">
         <HintPath>..\srxd-dir\SpinRhythm_Data\Managed\Unity.TextMeshPro.dll</HintPath>
       </Reference>
