@@ -17,6 +17,9 @@
       <Reference Include="SSD.Game">
         <HintPath>..\srxd-dir\SpinRhythm_Data\Managed\SSD.Game.dll</HintPath>
       </Reference>
+      <Reference Include="SSD.PlayerServiceManager">
+        <HintPath>..\srxd-dir\SpinRhythm_Data\Managed\SSD.PlayerServiceManager.dll</HintPath>
+      </Reference>
       <Reference Include="SSD.Types">
         <HintPath>..\srxd-dir\SpinRhythm_Data\Managed\SSD.Types.dll</HintPath>
       </Reference>

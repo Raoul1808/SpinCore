@@ -1,3 +1,4 @@
+using System.Diagnostics;
 using BepInEx;
 using BepInEx.Logging;
 using HarmonyLib;
@@ -37,8 +38,10 @@ namespace SpinCore
             TranslationHelper.AddTranslationKey("SpinCore_ShiftValue", "Shift Value");
             TranslationHelper.AddTranslationKey("SpinCore_BestModder", "Best Modder");
             TranslationHelper.AddTranslationKey("SpinCore_TestToggle", "Test Toggle");
+            TranslationHelper.AddTranslationKey("SpinCore_TanocTab", "HARDCORE TANO*C");
 
-            UIHelper.OnSidePanelLoaded += parent =>
+            var modPanel = UIHelper.CreateSidePanel("QuickModSettings", "SpinCore_ModTab");
+            modPanel.OnSidePanelLoaded += parent =>
             {
                 int value = 0;
                 UIHelper.CreateButton(
@@ -79,6 +82,17 @@ namespace SpinCore
                     "SpinCore_TestToggle",
                     false,
                     enable => NotificationSystemGUI.AddMessage("Enabled: " + enable)
+                );
+            };
+
+            var tanocTab = UIHelper.CreateSidePanel("TanocTab", "SpinCore_TanocTab");
+            tanocTab.OnSidePanelLoaded += parent =>
+            {
+                UIHelper.CreateButton(
+                    parent,
+                    "TanocButton",
+                    "SpinCore_TanocTab",
+                    () => { Process.Start("https://www.youtube.com/@tanoc_official"); }
                 );
             };
         }
