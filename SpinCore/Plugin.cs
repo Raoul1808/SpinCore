@@ -2,6 +2,7 @@ using BepInEx;
 using BepInEx.Logging;
 using HarmonyLib;
 using SpinCore.Patches;
+using SpinCore.UI;
 
 namespace SpinCore
 {
@@ -46,7 +47,7 @@ namespace SpinCore
                     "SpinCore_HelloWorld",
                     () => { NotificationSystemGUI.AddMessage("Hello, world!"); }
                 );
-                UIHelper.CreateButton(
+                var notifyButton = UIHelper.CreateButton(
                     parent,
                     "ShowValue",
                     "SpinCore_SecondTestButton",
@@ -57,7 +58,11 @@ namespace SpinCore
                     "ShiftValue",
                     "SpinCore_ShiftValue",
                     0,
-                    v => value = v,
+                    v =>
+                    {
+                        value = v;
+                        notifyButton.ExtraText = v.ToString();
+                    },
                     () => new IntRange(0, 101),
                     v => v.ToString()
                 );

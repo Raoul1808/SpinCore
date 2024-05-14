@@ -5,7 +5,7 @@ using UnityEngine.Events;
 using UnityEngine.UI;
 using XDMenuPlay;
 
-namespace SpinCore
+namespace SpinCore.UI
 {
     public static class UIHelper
     {
@@ -21,8 +21,8 @@ namespace SpinCore
             OnSidePanelLoaded?.Invoke(parent);
         }
 
-        public static GameObject CreateButton(Transform parent, string name, string translationKey, UnityAction action) => CreateButton(parent, name, new TranslationReference(translationKey, false), action);
-        public static GameObject CreateButton(Transform parent, string name, TranslationReference translation, UnityAction action)
+        public static CustomButton CreateButton(Transform parent, string name, string translationKey, UnityAction action) => CreateButton(parent, name, new TranslationReference(translationKey, false), action);
+        public static CustomButton CreateButton(Transform parent, string name, TranslationReference translation, UnityAction action)
         {
             var button = GameObject.Instantiate(SidePanelButtonBase, parent);
             button.name = name;
@@ -30,10 +30,10 @@ namespace SpinCore
             button.GetComponentInChildren<TranslatedTextMeshPro>().SetTranslation(translation);
             button.GetComponent<XDNavigableButton>().onClick = new Button.ButtonClickedEvent();
             button.GetComponent<XDNavigableButton>().onClick.AddListener(action);
-            return button;
+            return new CustomButton(button);
         }
 
-        public static GameObject CreateToggle(
+        public static CustomMultiChoice CreateToggle(
             Transform parent,
             string name,
             string translationKey,
@@ -49,7 +49,7 @@ namespace SpinCore
             );
         }
         
-        public static GameObject CreateToggle(
+        public static CustomMultiChoice CreateToggle(
             Transform parent,
             string name,
             TranslationReference translation,
@@ -67,7 +67,7 @@ namespace SpinCore
             );
         }
 
-        public static GameObject CreateMultiChoiceButton<T>(
+        public static CustomMultiChoice CreateMultiChoiceButton<T>(
             Transform parent,
             string name,
             string translationKey,
@@ -83,7 +83,7 @@ namespace SpinCore
             );
         }
         
-        public static GameObject CreateMultiChoiceButton<T>(
+        public static CustomMultiChoice CreateMultiChoiceButton<T>(
             Transform parent,
             string name,
             TranslationReference translation,
@@ -103,7 +103,7 @@ namespace SpinCore
             );
         }
 
-        public static GameObject CreateMultiChoiceButton(
+        public static CustomMultiChoice CreateMultiChoiceButton(
             Transform parent,
             string name,
             string translationKey,
@@ -123,7 +123,7 @@ namespace SpinCore
             );
         }
         
-        public static GameObject CreateMultiChoiceButton(
+        public static CustomMultiChoice CreateMultiChoiceButton(
             Transform parent,
             string name,
             TranslationReference translation,
@@ -138,7 +138,7 @@ namespace SpinCore
             button.GetComponentInChildren<TranslatedTextMeshPro>().SetTranslation(translation);
             button.GetComponent<XDNavigableOptionMultiChoice>().state.callbacks = new XDNavigableOptionMultiChoice.Callbacks();
             button.GetComponent<XDNavigableOptionMultiChoice>().SetCallbacksAndValue(defaultValue, valueChanged, valueRangeRequested, valueTextRequested);
-            return button;
+            return new CustomMultiChoice(button);
         }
     }
 }
