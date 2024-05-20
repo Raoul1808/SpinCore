@@ -39,6 +39,9 @@ namespace SpinCore
             TranslationHelper.AddTranslationKey("SpinCore_BestModder", "Best Modder");
             TranslationHelper.AddTranslationKey("SpinCore_TestToggle", "Test Toggle");
             TranslationHelper.AddTranslationKey("SpinCore_TanocTab", "HARDCORE TANO*C");
+            TranslationHelper.AddTranslationKey("SpinCore_CustomiseModsTabButton", "Mod Settings");
+            TranslationHelper.AddTranslationKey("SpinCore_CustomTestSection", "This is a test section :D");
+            TranslationHelper.AddTranslationKey("SpinCore_CustomTestButton", "Test Button :O");
 
             var modPanel = UIHelper.CreateSidePanel("QuickModSettings", "SpinCore_ModTab");
             modPanel.OnSidePanelLoaded += parent =>
