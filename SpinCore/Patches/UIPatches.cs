@@ -1,7 +1,8 @@
+using System.Linq;
 using HarmonyLib;
 using SpinCore.UI;
 using UnityEngine;
-using UnityEngine.Events;
+using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 using XDMenuPlay;
 using XDMenuPlay.Customise;
@@ -11,7 +12,7 @@ namespace SpinCore.Patches
 {
     internal static class UIPatches
     {
-        private static void GetRequiredUIComponents(XDTabPanelGroup instance)
+        private static void GetRequiredPanelUIComponents(XDTabPanelGroup instance)
         {
             var modPanel = GameObject.Instantiate(instance.tabs[instance.tabs.Length - 1].prefabs[0].gameObject, CustomPrefabStore.RootTransform);
             modPanel.name = "TabPanel_SpinCoreBasePanel";
@@ -21,7 +22,7 @@ namespace SpinCore.Patches
             var sidePanelButtonBase = GameObject.Instantiate(panelContent.Find("ManageTrackPopout/DeleteSelected").gameObject, CustomPrefabStore.RootTransform);
             sidePanelButtonBase.SetActive(false);
             sidePanelButtonBase.name = "SampleSidePanelButtonAsset";
-            UIHelper.SidePanelButtonBase = sidePanelButtonBase;
+            UIHelper.Prefabs.LargeButton = sidePanelButtonBase;
             var filterPanelClone = GameObject.Instantiate(instance.tabs[1].prefabs[0].gameObject, new GameObject().transform);
             var multiChoiceBase = GameObject.Instantiate(filterPanelClone.transform.Find("FilterSettingsPopout/TrackSorting").gameObject, CustomPrefabStore.RootTransform);
             multiChoiceBase.name = "SampleMultiChoiceButton";
@@ -29,20 +30,20 @@ namespace SpinCore.Patches
             multiChoiceBase.GetComponent<XDNavigableOptionMultiChoice>().state.callbacks = new XDNavigableOptionMultiChoice.Callbacks();
             multiChoiceBase.GetComponentInChildren<TranslatedTextMeshPro>().translation = TranslationReference.Empty;
             multiChoiceBase.SetActive(false);
-            UIHelper.MultiChoiceBase = multiChoiceBase;
+            UIHelper.Prefabs.MultiChoice = multiChoiceBase;
             Object.Destroy(filterPanelClone);
             for (int i = panelContent.childCount; i > 0; i--)
             {
                 Object.DestroyImmediate(panelContent.GetChild(i - 1).gameObject);
             }
-            UIHelper.SidePanelBase = modPanel;
+            UIHelper.Prefabs.SidePanel = modPanel;
         }
 
         [HarmonyPatch(typeof(XDTabPanelGroup), nameof(XDTabPanelGroup.SetupTabs))]
         [HarmonyPostfix]
         private static void PrepareUIHelper(XDTabPanelGroup __instance)
         {
-            GetRequiredUIComponents(__instance);
+            GetRequiredPanelUIComponents(__instance);
             UIHelper.LoadSidePanels(__instance);
         }
 
@@ -53,106 +54,143 @@ namespace SpinCore.Patches
             UIHelper.CallSidePanelEvent(tabName);
         }
 
-        private static GameObject _customTab;
-        private static bool _wantToCreateMenu = false;
-        private static bool _shouldRecheckMenu = false;
-        private static GameObject _customTabContent;
         private static XDNavigable _customTopNavigable;
         private static XDNavigable _settingsButtonRef;
+        private static CustomPage _modSettingsPage;
 
-        private static void CreateMenu()
+        private static void PrepareMenuPrefabs(XDCustomiseMenu instance)
         {
-            var customSection = GameObject.Instantiate(_customTabContent.transform.Find("General Settings Section").gameObject, CustomPrefabStore.RootTransform);
-            customSection.name = "CustomSectionPrefab";
-            var sectionHeader = GameObject.Instantiate(customSection.transform.GetChild(0).gameObject, CustomPrefabStore.RootTransform);
+            var settingsTab = instance.gameObject.transform.Find("VRContainerOffset/MenuContainer/CustomiseTabsContainer/CustomiseSettingsTab").gameObject;
+            var tabBase = GameObject.Instantiate(settingsTab, CustomPrefabStore.RootTransform);
+            var settingsTabLoadPrefabComponent = tabBase.GetComponent<LoadPrefabOnStart>();
+            var settingsTabContentPrefab = settingsTabLoadPrefabComponent.prefabToLoad;
+            Object.DestroyImmediate(settingsTabLoadPrefabComponent);
+            var tabContentBase = GameObject.Instantiate(settingsTabContentPrefab, tabBase.transform.Find("Scroll View/Viewport/"));
+            tabContentBase.name = "Content";
+            var tabSectionBase = GameObject.Instantiate(tabContentBase.transform.Find("General Settings Section").gameObject, CustomPrefabStore.RootTransform);
+            tabSectionBase.name = "CustomSectionPrefab";
+            var sectionHeader = GameObject.Instantiate(tabSectionBase.transform.GetChild(0).gameObject, CustomPrefabStore.RootTransform);
             sectionHeader.name = "CustomSectionHeader";
-            var sectionLine = GameObject.Instantiate(_customTabContent.transform.Find("BuildInfoSection/Line").gameObject, CustomPrefabStore.RootTransform);
+            var sectionLine = GameObject.Instantiate(tabContentBase.transform.Find("BuildInfoSection/Line").gameObject, CustomPrefabStore.RootTransform);
             sectionLine.name = "CustomLine";
-            for (int i = customSection.transform.childCount; i > 0; i--)
+            var popoutButton = GameObject.Instantiate(tabContentBase.transform.Find("General Settings Section/CalibrationButton").gameObject, CustomPrefabStore.RootTransform);
+            popoutButton.name = "CustomPopoutButton";
+            popoutButton.GetComponent<XDNavigableButton>().onClick = new Button.ButtonClickedEvent();
+            for (int i = tabSectionBase.transform.childCount; i > 0; i--)
             {
-                Object.DestroyImmediate(customSection.transform.GetChild(i - 1).gameObject);
+                Object.DestroyImmediate(tabSectionBase.transform.GetChild(i - 1).gameObject);
             }
-            for (int i = _customTabContent.transform.childCount; i > 0; i--)
+            for (int i = tabContentBase.transform.childCount; i > 0; i--)
             {
-                Object.DestroyImmediate(_customTabContent.transform.GetChild(i - 1).gameObject);
+                Object.DestroyImmediate(tabContentBase.transform.GetChild(i - 1).gameObject);
             }
 
-            var newSection = GameObject.Instantiate(customSection, _customTabContent.transform);
-            newSection.name = "Test Section";
-            var newSectionHeader = GameObject.Instantiate(sectionHeader, newSection.transform);
-            newSectionHeader.name = "Test Section Header";
-            newSectionHeader.GetComponentInChildren<TranslatedTextMeshPro>().SetTranslationKey("SpinCore_CustomTestSection");
-            UIHelper.CreateButton(newSection.transform, "Test Button In Settings", "SpinCore_CustomTestButton", () => NotificationSystemGUI.AddMessage(":O"));
-            var newSectionLine = GameObject.Instantiate(sectionLine, newSection.transform);
-            newSectionLine.name = "Test Line Line Line (fuwa fuwa fuwa fuwa)";
+            UIHelper.Prefabs.Line = sectionLine;
+            UIHelper.Prefabs.EmptySection = tabSectionBase;
+            UIHelper.Prefabs.SectionHeader = sectionHeader;
+            UIHelper.Prefabs.SettingsPage = tabBase;
+            UIHelper.Prefabs.PopoutButton = popoutButton;
         }
-        
-        [HarmonyPatch(typeof(XDCustomiseMenu), nameof(XDCustomiseMenu.OnStartupInitialise))]
-        [HarmonyPostfix]
-        private static void CreateModOptionsPage(XDCustomiseMenu __instance)
+
+        private static void CreateModSettingsButton(XDCustomiseMenu instance)
         {
-            var tabButtonsTransform = __instance.gameObject.transform.Find("VRContainerOffset/TabButtons");
+            var tabButtonsTransform = instance.gameObject.transform.Find("VRContainerOffset/TabButtons");
+            var customiseTabsContainerTransform = instance.gameObject.transform.Find("VRContainerOffset/MenuContainer/CustomiseTabsContainer");
             var settingsTopButton = tabButtonsTransform.Find("CustomiseSettingsButton").gameObject;
+            var customiseSettingsTab = customiseTabsContainerTransform.Find("CustomiseSettingsTab").gameObject;
             _settingsButtonRef = settingsTopButton.GetComponent<XDNavigable>();
             var customTopButton = GameObject.Instantiate(settingsTopButton, tabButtonsTransform);
             customTopButton.name = "CustomiseModsButton";
             customTopButton.GetComponentInChildren<TranslatedTextMeshPro>().SetTranslationKey("SpinCore_CustomiseModsTabButton");
             _customTopNavigable = customTopButton.GetComponent<XDNavigable>();
 
-            var customiseTabsContainerTransform = __instance.gameObject.transform.Find("VRContainerOffset/MenuContainer/CustomiseTabsContainer");
-            var customiseSettingsTab = customiseTabsContainerTransform.Find("CustomiseSettingsTab").gameObject;
-            _customTab = GameObject.Instantiate(customiseSettingsTab, customiseTabsContainerTransform);
-            _customTab.name = "CustomiseModsTab";
-            _customTab.SetActive(false);
+            _modSettingsPage = UIHelper.CreateSettingsPage("CustomiseModSettings");
+            _modSettingsPage.OnPageLoad += transform =>
+            {
+                UIHelper.CreateSection(
+                    transform,
+                    "Mod List",
+                    sectionTransform =>
+                    {
+                        UIHelper.CreateSectionHeader(
+                            sectionTransform,
+                            "ModListSectionHeader",
+                            "SpinCore_ModSettings_ModList"
+                        );
+                    }
+                );
+                UIHelper.CreateSection(
+                    transform,
+                    "Other Stuff",
+                    sectionTransform =>
+                    {
+                        UIHelper.CreateLine(sectionTransform, "Line");
+                        UIHelper.CreateButton(
+                            sectionTransform,
+                            "Test Button",
+                            "SpinCore_ModSettings_TestButton",
+                            () => { NotificationSystemGUI.AddMessage("This button works properly. Yay!"); }
+                        );
+                    }
+                );
+            };
+
             customTopButton.GetComponent<XDNavigableButton>().onClick = new Button.ButtonClickedEvent();
             customTopButton.GetComponent<XDNavigableButton>().onClick.AddListener(() =>
             {
+                if (UIHelper.AnyPagesLeftOnStack())
+                    UIHelper.ClearStack();
                 customTopButton.GetComponent<GameStateUIHelper>().ChangeState(XDCustomiseMenu.StateNames.CustomiseSettings);
                 _customTopNavigable.forceExpanded = true;
                 customiseSettingsTab.SetActive(false);
                 _settingsButtonRef.forceExpanded = false;
-                _customTab.SetActive(true);
-                if (_customTabContent == null)
-                    _wantToCreateMenu = true;
+                UIHelper.PushPageOnStack(_modSettingsPage);
             });
             settingsTopButton.GetComponent<XDNavigableButton>().onClick.AddListener(() =>
             {
                 HideCustomMenu();
+                UIHelper.ClearStack();
                 customiseSettingsTab.SetActive(true);
                 _settingsButtonRef.forceExpanded = true;
             });
+
+            var backButton = instance.transform.Find("VRContainerOffset/BackButtonContainer/BackButton Variant").gameObject;
+            backButton.GetComponent<XDNavigableButton>().onClick = new Button.ButtonClickedEvent();
+            backButton.GetComponent<XDNavigableButton>().onClick.AddListener(() =>
+            {
+                UIHelper.RemoveLastFromStack();
+                if (!UIHelper.AnyPagesLeftOnStack())
+                    instance.ExitButtonPressed();
+            });
+        }
+
+        [HarmonyPatch(typeof(XDCustomiseMenu), nameof(XDCustomiseMenu.OnStartupInitialise))]
+        [HarmonyPostfix]
+        private static void CreateModOptionsPage(XDCustomiseMenu __instance)
+        {
+            var customiseTabsContainerTransform = __instance.gameObject.transform.Find("VRContainerOffset/MenuContainer/CustomiseTabsContainer");
+            UIHelper.SetTabParent(customiseTabsContainerTransform);
+            PrepareMenuPrefabs(__instance);
+            CreateModSettingsButton(__instance);
         }
 
         [HarmonyPatch(typeof(XDCustomiseMenu), nameof(XDCustomiseMenu.OnGameStateChange))]
         [HarmonyPostfix]
         private static void HideCustomMenu()
         {
+            UIHelper.ClearStack();
             _customTopNavigable.forceExpanded = false;
-            _customTab.SetActive(false);
+            _modSettingsPage.Active = false;
         }
 
         [HarmonyPatch(typeof(Track), nameof(Track.LateUpdate))]
         [HarmonyPostfix]
-        private static void CheckMenuCreation()
+        private static void ApplyOptionsVisualFix()
         {
-            if (_customTab?.activeSelf == true)
+            if (UIHelper.AnyPagesLeftOnStack())
             {
                 _settingsButtonRef.forceExpanded = false;
             }
-            if (!_wantToCreateMenu && !_shouldRecheckMenu) return;
-            if (_shouldRecheckMenu)
-            {
-                Plugin.LogInfo("aaa");
-                _shouldRecheckMenu = false;
-                _customTabContent = _customTab.transform.Find("Scroll View/Viewport/Content Settings Tab  Prefab(Clone)").gameObject;
-                Plugin.LogInfo(_customTabContent);
-                Plugin.LogInfo("life is saved");
-                CreateMenu();
-                return;
-            }
-            Plugin.LogInfo("Checking menu next frame");
-            _wantToCreateMenu = false;
-            _shouldRecheckMenu = true;
         }
     }
 }

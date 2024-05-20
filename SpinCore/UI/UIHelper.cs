@@ -10,13 +10,34 @@ namespace SpinCore.UI
 {
     public static class UIHelper
     {
+        public class UIPrefabs
+        {
+            public GameObject LargeButton { get; internal set; }
+            public GameObject SidePanel { get; internal set; }
+            public GameObject MultiChoice { get; internal set; }
+            public GameObject SettingsPage { get; internal set; }
+            public GameObject Line { get; internal set; }
+            public GameObject SectionHeader { get; internal set; }
+            public GameObject EmptySection { get; internal set; }
+            public GameObject PopoutButton { get; internal set; }
+            
+            internal UIPrefabs() {}
+        }
+
+        public static UIPrefabs Prefabs { get; } = new UIPrefabs();
+
         private const string PanelNamePrefix = "TabPanel_SpinCore";
-        internal static GameObject SidePanelButtonBase;
-        internal static GameObject SidePanelBase;
-        internal static GameObject MultiChoiceBase;
         private static XDTabPanelGroup _tabPanelGroupInstance;
 
         private static readonly List<CustomSidePanel> SidePanels = new List<CustomSidePanel>();
+        private static readonly List<CustomPage> PageStack = new List<CustomPage>();
+
+        private static Transform _commonTabParent;
+
+        internal static void SetTabParent(Transform baseTransform)
+        {
+            _commonTabParent = baseTransform;
+        }
 
         internal static void LoadSidePanels(XDTabPanelGroup instance)
         {
@@ -27,7 +48,7 @@ namespace SpinCore.UI
 
         internal static void CreateSidePanelObject(CustomSidePanel panel)
         {
-            var panelObj = GameObject.Instantiate(SidePanelBase, CustomPrefabStore.RootTransform);
+            var panelObj = GameObject.Instantiate(Prefabs.SidePanel, CustomPrefabStore.RootTransform);
             panelObj.name = PanelNamePrefix + panel.PanelName;
             var tabConfig = new XDTabPanelGroup.TabConfig
             {
@@ -83,6 +104,78 @@ namespace SpinCore.UI
             }
         }
 
+        internal static void PushPageOnStack(CustomPage page)
+        {
+            Plugin.LogInfo("Try add " + page.PageName);
+            if (PageStack.Contains(page)) return;
+            Plugin.LogInfo("Adding page " + page.PageName);
+
+            if (PageStack.Count > 0)
+                PageStack[PageStack.Count - 1].Active = false;
+            page.Active = true;
+            page.OnFocus();
+            PageStack.Add(page);
+        }
+
+        internal static void ClearStack()
+        {
+            Plugin.LogInfo("Clearing page stack");
+            if (PageStack.Count > 0)
+                PageStack[PageStack.Count - 1].Active = false;
+            PageStack.Clear();
+        }
+
+        internal static void RemoveLastFromStack()
+        {
+            if (PageStack.Count > 0)
+            {
+                Plugin.LogInfo("Removing last from stack");
+                PageStack[PageStack.Count - 1].Active = false;
+                PageStack.RemoveAt(PageStack.Count - 1);
+            }
+        }
+
+        internal static bool AnyPagesLeftOnStack() => PageStack.Count > 0;
+
+        public static CustomPage CreateSettingsPage(string name)
+        {
+            var customPage = GameObject.Instantiate(Prefabs.SettingsPage, _commonTabParent);
+            customPage.name = "SpinCoreCustomTab_" + name;
+            var contentTransform = customPage.transform.Find("Scroll View/Viewport/Content");
+            return new CustomPage(name)
+            {
+                Active = false,
+                GameObject = customPage,
+                PageTransform = customPage.transform,
+                PageContentTransform = contentTransform,
+            };
+        }
+
+        public static CustomActiveComponent CreateSection(Transform parent, string name, Action<Transform> createContent)
+        {
+            var section = GameObject.Instantiate(Prefabs.EmptySection, parent);
+            section.name = name;
+            createContent.Invoke(section.transform);
+            return new CustomActiveComponent(section);
+        }
+
+        public static CustomSimpleText CreateSectionHeader(Transform parent, string name, string translationKey) => CreateSectionHeader(parent, name, new TranslationReference(translationKey, false));
+
+        public static CustomSimpleText CreateSectionHeader(Transform parent, string name, TranslationReference translation)
+        {
+            var header = GameObject.Instantiate(Prefabs.SectionHeader, parent);
+            header.name = name;
+            header.GetComponentInChildren<TranslatedTextMeshPro>().SetTranslation(translation);
+            return new CustomSimpleText(header);
+        }
+
+        public static GameObject CreateLine(Transform parent, string name)
+        {
+            var line = GameObject.Instantiate(Prefabs.Line, parent);
+            line.name = name;
+            return line;
+        }
+
         public static CustomSidePanel CreateSidePanel(string name, string translationKey) => CreateSidePanel(name, new TranslationReference(translationKey, false));
         public static CustomSidePanel CreateSidePanel(string name, TranslationReference translation)
         {
@@ -98,7 +191,7 @@ namespace SpinCore.UI
         public static CustomButton CreateButton(Transform parent, string name, string translationKey, UnityAction action) => CreateButton(parent, name, new TranslationReference(translationKey, false), action);
         public static CustomButton CreateButton(Transform parent, string name, TranslationReference translation, UnityAction action)
         {
-            var button = GameObject.Instantiate(SidePanelButtonBase, parent);
+            var button = GameObject.Instantiate(Prefabs.LargeButton, parent);
             button.name = name;
             button.SetActive(true);
             button.GetComponentInChildren<TranslatedTextMeshPro>().SetTranslation(translation);
@@ -206,7 +299,7 @@ namespace SpinCore.UI
             XDNavigableOptionMultiChoice.OnValueRangeRequested valueRangeRequested,
             XDNavigableOptionMultiChoice.OnValueTextRequested valueTextRequested)
         {
-            var button = GameObject.Instantiate(MultiChoiceBase, parent);
+            var button = GameObject.Instantiate(Prefabs.MultiChoice, parent);
             button.name = name;
             button.SetActive(true);
             button.GetComponentInChildren<TranslatedTextMeshPro>().SetTranslation(translation);

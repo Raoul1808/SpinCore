@@ -2,14 +2,12 @@ using UnityEngine;
 
 namespace SpinCore.UI
 {
-    public abstract class CustomUIComponent
+    public abstract class CustomUIComponent : CustomActiveComponent
     {
-        public GameObject GameObject { get; private set; }
         private TranslatedTextMeshPro _tmpText;
         
-        internal CustomUIComponent(GameObject obj)
+        internal CustomUIComponent(GameObject obj) : base(obj)
         {
-            GameObject = obj;
             _tmpText = obj.GetComponentInChildren<TranslatedTextMeshPro>();
         }
         
