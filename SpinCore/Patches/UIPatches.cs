@@ -102,51 +102,7 @@ namespace SpinCore.Patches
             customTopButton.GetComponentInChildren<TranslatedTextMeshPro>().SetTranslationKey("SpinCore_CustomiseModsTabButton");
             _customTopNavigable = customTopButton.GetComponent<XDNavigable>();
 
-            var testPage = UIHelper.CreateSettingsPage("CustomiseTestPage");
-            testPage.OnPageLoad += transform =>
-            {
-                var section = UIHelper.CreateSection(
-                    transform,
-                    "Test Header"
-                );
-                UIHelper.CreateSectionHeader(
-                    section.Transform,
-                    "TestSectionHeader",
-                    "SpinCore_ModSettings_TestHeader"
-                );
-            };
-
-            _modSettingsPage = UIHelper.CreateSettingsPage("CustomiseModSettings");
-            _modSettingsPage.OnPageLoad += transform =>
-            {
-                var section1 = UIHelper.CreateSection(
-                    transform,
-                    "Mod List"
-                );
-                UIHelper.CreateSectionHeader(
-                    section1.Transform,
-                    "ModListSectionHeader",
-                    "SpinCore_ModSettings_ModList"
-                );
-                UIHelper.CreatePopout(
-                    section1.Transform,
-                    "TestPagePopoutButton",
-                    "SpinCore_ModSettings_TestPopout",
-                    testPage
-                );
-
-                var section2 = UIHelper.CreateSection(
-                    transform,
-                    "Other Stuff"
-                );
-                UIHelper.CreateLine(section2.Transform, "Line");
-                UIHelper.CreateButton(
-                    section2.Transform,
-                    "Test Button",
-                    "SpinCore_ModSettings_TestButton",
-                    () => { NotificationSystemGUI.AddMessage("This button works properly. Yay!"); }
-                );
-            };
+            _modSettingsPage = UIHelper.InitializeCustomModPage();
 
             customTopButton.GetComponent<XDNavigableButton>().onClick = new Button.ButtonClickedEvent();
             customTopButton.GetComponent<XDNavigableButton>().onClick.AddListener(() =>
@@ -184,6 +140,7 @@ namespace SpinCore.Patches
             UIHelper.CommonTabParent = customiseTabsContainerTransform;
             PrepareMenuPrefabs(__instance);
             CreateModSettingsButton(__instance);
+            UIHelper.CreateCustomPagesInBuffer();
         }
 
         [HarmonyPatch(typeof(XDCustomiseMenu), nameof(XDCustomiseMenu.OnGameStateChange))]

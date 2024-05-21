@@ -32,6 +32,10 @@ namespace SpinCore.UI
 
         private static readonly List<CustomSidePanel> SidePanels = new List<CustomSidePanel>();
         private static readonly List<CustomPage> PageStack = new List<CustomPage>();
+        private static readonly List<(TranslationReference, CustomPage)> ModSettingsPopoutBuffer = new List<(TranslationReference, CustomPage)>();
+        private static readonly List<CustomPage> CustomPageBuffer = new List<CustomPage>();
+        private static CustomPage _modSettingsPageRef;
+        private static CustomActiveComponent _modSettingsListRef;
         private static CustomPage LastPageOnStack => PageStack.Count > 0 ? PageStack[PageStack.Count - 1] : null;
         internal static Transform CommonTabParent { get; set; }
         #endregion
@@ -103,13 +107,10 @@ namespace SpinCore.UI
         }
         #endregion
 
-        #region Internal CustomPage Stack Management
+        #region Internal CustomPage Management
         internal static void PushPageOnStack(CustomPage page)
         {
-            Plugin.LogInfo("Try add " + page.PageName);
             if (PageStack.Contains(page)) return;
-            Plugin.LogInfo("Adding page " + page.PageName);
-
             if (LastPageOnStack != null)
                 LastPageOnStack.Active = false;
             page.Active = true;
@@ -119,7 +120,6 @@ namespace SpinCore.UI
 
         internal static void ClearStack()
         {
-            Plugin.LogInfo("Clearing page stack");
             if (LastPageOnStack != null)
                 LastPageOnStack.Active = false;
             PageStack.Clear();
@@ -129,7 +129,6 @@ namespace SpinCore.UI
         {
             if (LastPageOnStack != null)
             {
-                Plugin.LogInfo("Removing last from stack");
                 PageStack[PageStack.Count - 1].Active = false;
                 PageStack.RemoveAt(PageStack.Count - 1);
                 if (LastPageOnStack != null)
@@ -138,21 +137,71 @@ namespace SpinCore.UI
         }
 
         internal static bool AnyPagesLeftOnStack() => PageStack.Count > 0;
+        
+        internal static CustomPage InitializeCustomModPage()
+        {
+            _modSettingsPageRef = CreateSettingsPage("CustomiseModSettings");
+            _modSettingsPageRef.OnPageLoad += transform =>
+            {
+                var modListSection = CreateSection(
+                    transform,
+                    "Mod List"
+                );
+                CreateSectionHeader(
+                    modListSection.Transform,
+                    "Mod List Section Header",
+                    "SpinCore_ModSettings_ModList"
+                );
+                foreach ((TranslationReference translation, CustomPage page) in ModSettingsPopoutBuffer)
+                {
+                    CreatePopout(modListSection.Transform, page.PageName + " Popout", translation, page);
+                }
+                ModSettingsPopoutBuffer.Clear();
+                _modSettingsListRef = modListSection;
+            };
+            return _modSettingsPageRef;
+        }
+
+        internal static void CreateCustomPagesInBuffer()
+        {
+            foreach (var page in CustomPageBuffer)
+            {
+                CreateCustomPage(page);
+            }
+            CustomPageBuffer.Clear();
+        }
+
+        internal static void CreateCustomPage(CustomPage page)
+        {
+            page.GameObject = GameObject.Instantiate(Prefabs.SettingsPage, CommonTabParent);
+            page.GameObject.name = "SpinCoreCustomTab_" + page.PageName;
+            page.PageTransform = page.GameObject.transform;
+            page.PageContentTransform = page.PageTransform.Find("Scroll View/Viewport/Content");
+        }
         #endregion
 
         #region UI Component Creation
+        public static void RegisterMenuInModSettingsRoot(string translationKey, CustomPage page) => RegisterMenuInModSettingsRoot(new TranslationReference(translationKey, false), page);
+        public static void RegisterMenuInModSettingsRoot(TranslationReference translation, CustomPage page)
+        {
+            if (_modSettingsListRef != null)
+            {
+                CreatePopout(_modSettingsListRef.Transform, page.PageName + " Popout", translation, page);
+                return;
+            }
+            ModSettingsPopoutBuffer.Add((translation, page));
+        }
+
         public static CustomPage CreateSettingsPage(string name)
         {
-            var customPage = GameObject.Instantiate(Prefabs.SettingsPage, CommonTabParent);
-            customPage.name = "SpinCoreCustomTab_" + name;
-            var contentTransform = customPage.transform.Find("Scroll View/Viewport/Content");
-            return new CustomPage(name)
+            var page = new CustomPage(name);
+            if (Prefabs.SettingsPage is null)
             {
-                Active = false,
-                GameObject = customPage,
-                PageTransform = customPage.transform,
-                PageContentTransform = contentTransform,
-            };
+                CustomPageBuffer.Add(page);
+                return page;
+            }
+            CreateCustomPage(page);
+            return page;
         }
 
         public static CustomActiveComponent CreateSection(Transform parent, string name)
@@ -172,11 +221,11 @@ namespace SpinCore.UI
             return new CustomSimpleText(header);
         }
 
-        public static GameObject CreateLine(Transform parent, string name)
+        public static CustomActiveComponent CreateLine(Transform parent, string name = "Line")
         {
             var line = GameObject.Instantiate(Prefabs.Line, parent);
             line.name = name;
-            return line;
+            return new CustomActiveComponent(line);
         }
 
         public static CustomPopoutButton CreatePopout(Transform parent, string name, string translationKey, CustomPage page) => CreatePopout(parent, name, new TranslationReference(translationKey, false), page);

@@ -42,9 +42,27 @@ namespace SpinCore
             TranslationHelper.AddTranslationKey("SpinCore_TanocTab", "HARDCORE TANO*C");
             TranslationHelper.AddTranslationKey("SpinCore_CustomiseModsTabButton", "Mod Settings");
             TranslationHelper.AddTranslationKey("SpinCore_ModSettings_ModList", "Mods");
-            TranslationHelper.AddTranslationKey("SpinCore_ModSettings_TestButton", "Test Button Again :D");
-            TranslationHelper.AddTranslationKey("SpinCore_ModSettings_TestHeader", "Test Header :O");
-            TranslationHelper.AddTranslationKey("SpinCore_ModSettings_TestPopout", "Open Test Popout");
+            TranslationHelper.AddTranslationKey("SpinCore_ModSettings_TestPopout", "Test Popout UI");
+            TranslationHelper.AddTranslationKey("SpinCore_ModSettings_TestPopoutHeader", "Test Popout Header");
+            TranslationHelper.AddTranslationKey("SpinCore_ModSettings_TestPopoutButton", "Test Popout Button");
+
+            var testSettings = UIHelper.CreateSettingsPage("TestPopout");
+            testSettings.OnPageLoad += pageTransform =>
+            {
+                var section = UIHelper.CreateSection(pageTransform, "Test Section");
+                UIHelper.CreateSectionHeader(
+                    section.Transform,
+                    "Section Header",
+                    "SpinCore_ModSettings_TestPopoutHeader"
+                );
+                UIHelper.CreateButton(
+                    section.Transform,
+                    "Test Button",
+                    "SpinCore_ModSettings_TestPopoutButton",
+                    () => NotificationSystemGUI.AddMessage("Test Button clicked!")
+                );
+            };
+            UIHelper.RegisterMenuInModSettingsRoot("SpinCore_ModSettings_TestPopout", testSettings);
 
             var modPanel = UIHelper.CreateSidePanel("QuickModSettings", "SpinCore_ModTab");
             modPanel.OnSidePanelLoaded += parent =>
