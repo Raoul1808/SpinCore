@@ -28,20 +28,5 @@ namespace SpinCore.Patches
         {
             TriggerManager.ClearAllTriggers();
         }
-
-        [HarmonyPatch(typeof(SplineTrackData.DataToGenerate), MethodType.Constructor, typeof(PlayableTrackData))]
-        [HarmonyPostfix]
-        private static void ChartLoaded(PlayableTrackData trackData)
-        {
-            // TODO: find a better patch than this
-            TriggerManager.ClearAllTriggers();
-            if (trackData.TrackDataList.Count == 0)
-                return;
-            var data = trackData.TrackDataList[0];
-            string path = data.CustomFile?.FilePath;
-            if (string.IsNullOrEmpty(path))
-                return;
-            TriggerManager.InvokeChartLoadEvent(data);
-        }
     }
 }

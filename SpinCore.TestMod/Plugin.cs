@@ -1,6 +1,7 @@
 using System.Diagnostics;
 using BepInEx;
 using BepInEx.Logging;
+using SpinCore.Triggers;
 using SpinCore.UI;
 
 namespace SpinCore.TestMod
@@ -35,8 +36,6 @@ namespace SpinCore.TestMod
             TranslationHelper.AddTranslationKey("SpinCore_BestModder", "Best Modder");
             TranslationHelper.AddTranslationKey("SpinCore_TestToggle", "Test Toggle");
             TranslationHelper.AddTranslationKey("SpinCore_TanocTab", "HARDCORE TANO*C");
-            TranslationHelper.AddTranslationKey("SpinCore_CustomiseModsTabButton", "Mod Settings");
-            TranslationHelper.AddTranslationKey("SpinCore_ModSettings_ModList", "Mods");
             TranslationHelper.AddTranslationKey("SpinCore_ModSettings_TestPopout", "Test Popout UI");
             TranslationHelper.AddTranslationKey("SpinCore_ModSettings_TestPopoutHeader", "Test Popout Header");
             TranslationHelper.AddTranslationKey("SpinCore_ModSettings_TestPopoutButton", "Test Popout Button");
@@ -115,6 +114,42 @@ namespace SpinCore.TestMod
                     () => { Process.Start("https://www.youtube.com/@tanoc_official"); }
                 );
             };
+
+            Track.OnLoadedIntoTrack += (handle, states) =>
+            {
+                var triggers = new[]
+                {
+                    new TestTrigger
+                    {
+                        Message = "Initial Trigger",
+                        Time = 0f,
+                    },
+                    new TestTrigger
+                    {
+                        Message = "This should fire at 2 seconds",
+                        Time = 2f,
+                    },
+                    new TestTrigger
+                    {
+                        Message = "This should fire at 5 seconds",
+                        Time = 5f,
+                    },
+                    new TestTrigger
+                    {
+                        Message = "This should fire at 3.5 seconds",
+                        Time = 3.5f,
+                    }
+                };
+                TriggerManager.LoadTriggers(triggers);
+            };
+
+            string lastMessage = "";
+            TriggerManager.RegisterTriggerEvent<TestTrigger>((trigger, trackTime) =>
+            {
+                if (trigger.Message == lastMessage) return;
+                LogInfo(trigger.Message);
+                lastMessage = trigger.Message;
+            });
         }
 
         internal static void LogInfo(object msg) => _logger.LogMessage(msg);

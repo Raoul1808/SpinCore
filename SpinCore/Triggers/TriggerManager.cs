@@ -8,12 +8,15 @@ namespace SpinCore.Triggers
     {
         private static readonly Dictionary<string, ModTriggerStore> TriggerStores = new Dictionary<string, ModTriggerStore>();
 
-        public delegate void ChartLoad(TrackData trackData);
-        
         /// <summary>
-        /// This event is fired whenever the game loads a custom chart.
+        /// Loads the given triggers into the internal trigger manager.
         /// </summary>
-        public static event ChartLoad OnChartLoad;
+        /// <param name="triggers">The list of triggers</param>
+        /// <typeparam name="T">The affected trigger type</typeparam>
+        public static void LoadTriggers<T>(T[] triggers) where T : ITrigger
+        {
+            LoadTriggers(Array.ConvertAll(triggers, t => (ITrigger)t), typeof(T).Name);
+        }
 
         /// <summary>
         /// Loads the given triggers into the internal trigger manager.
@@ -21,7 +24,7 @@ namespace SpinCore.Triggers
         /// <param name="triggers">The list of triggers</param>
         /// <param name="key">The key to use internally</param>
         /// <exception cref="ArgumentException">Raised if the given array contains nothing</exception>
-        public static void LoadTriggers(ITrigger[] triggers, string key = "")
+        public static void LoadTriggers(ITrigger[] triggers, string key)
         {
             if (triggers.Length == 0)
                 throw new ArgumentException("ITrigger array needs to contain triggers");
@@ -43,15 +46,20 @@ namespace SpinCore.Triggers
         }
         
         public delegate void TriggerUpdate(ITrigger trigger, float trackTime);
+        public delegate void TriggerUpdate<in T>(T trigger, float trackTime) where T : ITrigger;
         
         /// <summary>
         /// Fires the given method when a trigger is fired/updates
         /// </summary>
         /// <param name="action">A callback method</param>
         /// <typeparam name="T">The affected trigger (required)</typeparam>
-        public static void RegisterTriggerEvent<T>(TriggerUpdate action) where T : ITrigger
+        public static void RegisterTriggerEvent<T>(TriggerUpdate<T> action) where T : ITrigger
         {
-            RegisterTriggerEvent(typeof(T).Name, action);
+            RegisterTriggerEvent(typeof(T).Name, (trigger, trackTime) =>
+            {
+                var castTrigger = (T)trigger;
+                action.Invoke(castTrigger, trackTime);
+            });
         }
 
         /// <summary>
@@ -112,11 +120,6 @@ namespace SpinCore.Triggers
             {
                 store.Update(trackTime);
             }
-        }
-
-        internal static void InvokeChartLoadEvent(TrackData trackData)
-        {
-            OnChartLoad?.Invoke(trackData);
         }
 
         internal static void ResetTriggerStores()
