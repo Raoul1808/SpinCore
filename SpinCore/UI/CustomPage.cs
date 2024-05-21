@@ -11,7 +11,7 @@ namespace SpinCore.UI
         }
 
         private bool _loaded = false;
-        public string PageName { get; internal set; }
+        public string PageName { get; }
         
         public GameObject GameObject { get; internal set; }
         public Transform PageTransform { get; internal set; }

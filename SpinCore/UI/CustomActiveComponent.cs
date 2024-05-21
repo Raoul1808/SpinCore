@@ -4,7 +4,7 @@ namespace SpinCore.UI
 {
     public class CustomActiveComponent
     {
-        public GameObject GameObject { get; private set; }
+        public GameObject GameObject { get; }
         public Transform Transform => GameObject.transform;
 
         internal CustomActiveComponent(GameObject obj)
