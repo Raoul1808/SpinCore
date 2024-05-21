@@ -30,10 +30,8 @@ namespace SpinCore.Patches
             multiChoiceBase.SetActive(false);
             UIHelper.Prefabs.MultiChoice = multiChoiceBase;
             Object.Destroy(filterPanelClone);
-            for (int i = panelContent.childCount; i > 0; i--)
-            {
-                Object.DestroyImmediate(panelContent.GetChild(i - 1).gameObject);
-            }
+
+            panelContent.RemoveAllChildren();
             UIHelper.Prefabs.SidePanel = modPanel;
         }
 
@@ -74,14 +72,9 @@ namespace SpinCore.Patches
             var popoutButton = GameObject.Instantiate(tabContentBase.transform.Find("General Settings Section/CalibrationButton").gameObject, CustomPrefabStore.RootTransform);
             popoutButton.name = "CustomPopoutButton";
             popoutButton.GetComponent<XDNavigableButton>().onClick = new Button.ButtonClickedEvent();
-            for (int i = tabSectionBase.transform.childCount; i > 0; i--)
-            {
-                Object.DestroyImmediate(tabSectionBase.transform.GetChild(i - 1).gameObject);
-            }
-            for (int i = tabContentBase.transform.childCount; i > 0; i--)
-            {
-                Object.DestroyImmediate(tabContentBase.transform.GetChild(i - 1).gameObject);
-            }
+
+            tabSectionBase.transform.RemoveAllChildren();
+            tabContentBase.transform.RemoveAllChildren();
 
             UIHelper.Prefabs.Line = sectionLine;
             UIHelper.Prefabs.EmptySection = tabSectionBase;
