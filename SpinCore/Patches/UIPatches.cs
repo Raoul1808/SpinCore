@@ -172,7 +172,6 @@ namespace SpinCore.Patches
             settingsTopButton.GetComponent<XDNavigableButton>().onClick.AddListener(() =>
             {
                 HideCustomMenu();
-                UIHelper.ClearStack();
                 customiseSettingsTab.SetActive(true);
                 _settingsButtonRef.forceExpanded = true;
             });

@@ -31,6 +31,7 @@ namespace SpinCore.UI
 
         private static readonly List<CustomSidePanel> SidePanels = new List<CustomSidePanel>();
         private static readonly List<CustomPage> PageStack = new List<CustomPage>();
+        private static CustomPage LastPageOnStack => PageStack.Count > 0 ? PageStack[PageStack.Count - 1] : null;
 
         private static Transform _commonTabParent;
 
@@ -110,8 +111,8 @@ namespace SpinCore.UI
             if (PageStack.Contains(page)) return;
             Plugin.LogInfo("Adding page " + page.PageName);
 
-            if (PageStack.Count > 0)
-                PageStack[PageStack.Count - 1].Active = false;
+            if (LastPageOnStack != null)
+                LastPageOnStack.Active = false;
             page.Active = true;
             page.OnFocus();
             PageStack.Add(page);
@@ -120,20 +121,20 @@ namespace SpinCore.UI
         internal static void ClearStack()
         {
             Plugin.LogInfo("Clearing page stack");
-            if (PageStack.Count > 0)
-                PageStack[PageStack.Count - 1].Active = false;
+            if (LastPageOnStack != null)
+                LastPageOnStack.Active = false;
             PageStack.Clear();
         }
 
         internal static void RemoveLastFromStack()
         {
-            if (PageStack.Count > 0)
+            if (LastPageOnStack != null)
             {
                 Plugin.LogInfo("Removing last from stack");
                 PageStack[PageStack.Count - 1].Active = false;
                 PageStack.RemoveAt(PageStack.Count - 1);
-                if (PageStack.Count > 0)
-                    PageStack[PageStack.Count - 1].Active = true;
+                if (LastPageOnStack != null)
+                    LastPageOnStack.Active = true;
             }
         }
 
