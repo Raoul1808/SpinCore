@@ -132,6 +132,8 @@ namespace SpinCore.UI
                 Plugin.LogInfo("Removing last from stack");
                 PageStack[PageStack.Count - 1].Active = false;
                 PageStack.RemoveAt(PageStack.Count - 1);
+                if (PageStack.Count > 0)
+                    PageStack[PageStack.Count - 1].Active = true;
             }
         }
 
@@ -174,6 +176,22 @@ namespace SpinCore.UI
             var line = GameObject.Instantiate(Prefabs.Line, parent);
             line.name = name;
             return line;
+        }
+
+        public static CustomPopoutButton CreatePopout(Transform parent, string name, string translationKey, CustomPage page) => CreatePopout(parent, name, new TranslationReference(translationKey, false), page);
+
+        public static CustomPopoutButton CreatePopout(Transform parent, string name, TranslationReference translation, CustomPage page)
+        {
+            var button = GameObject.Instantiate(Prefabs.PopoutButton, parent);
+            button.name = name;
+            button.SetActive(true);
+            button.GetComponentInChildren<TranslatedTextMeshPro>().SetTranslation(translation);
+            button.GetComponent<XDNavigableButton>().onClick = new Button.ButtonClickedEvent();
+            button.GetComponent<XDNavigableButton>().onClick.AddListener(() =>
+            {
+                PushPageOnStack(page);
+            });
+            return new CustomPopoutButton(button, page);
         }
 
         public static CustomSidePanel CreateSidePanel(string name, string translationKey) => CreateSidePanel(name, new TranslationReference(translationKey, false));

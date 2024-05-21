@@ -42,6 +42,8 @@ namespace SpinCore
             TranslationHelper.AddTranslationKey("SpinCore_CustomiseModsTabButton", "Mod Settings");
             TranslationHelper.AddTranslationKey("SpinCore_ModSettings_ModList", "Mods");
             TranslationHelper.AddTranslationKey("SpinCore_ModSettings_TestButton", "Test Button Again :D");
+            TranslationHelper.AddTranslationKey("SpinCore_ModSettings_TestHeader", "Test Header :O");
+            TranslationHelper.AddTranslationKey("SpinCore_ModSettings_TestPopout", "Open Test Popout");
 
             var modPanel = UIHelper.CreateSidePanel("QuickModSettings", "SpinCore_ModTab");
             modPanel.OnSidePanelLoaded += parent =>

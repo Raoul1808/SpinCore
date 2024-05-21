@@ -104,6 +104,23 @@ namespace SpinCore.Patches
             customTopButton.GetComponentInChildren<TranslatedTextMeshPro>().SetTranslationKey("SpinCore_CustomiseModsTabButton");
             _customTopNavigable = customTopButton.GetComponent<XDNavigable>();
 
+            var testPage = UIHelper.CreateSettingsPage("CustomiseTestPage");
+            testPage.OnPageLoad += transform =>
+            {
+                UIHelper.CreateSection(
+                    transform,
+                    "Test Header",
+                    sectionTransform =>
+                    {
+                        UIHelper.CreateSectionHeader(
+                            sectionTransform,
+                            "TestSectionHeader",
+                            "SpinCore_ModSettings_TestHeader"
+                        );
+                    }
+                );
+            };
+
             _modSettingsPage = UIHelper.CreateSettingsPage("CustomiseModSettings");
             _modSettingsPage.OnPageLoad += transform =>
             {
@@ -116,6 +133,12 @@ namespace SpinCore.Patches
                             sectionTransform,
                             "ModListSectionHeader",
                             "SpinCore_ModSettings_ModList"
+                        );
+                        UIHelper.CreatePopout(
+                            sectionTransform,
+                            "TestPagePopoutButton",
+                            "SpinCore_ModSettings_TestPopout",
+                            testPage
                         );
                     }
                 );
