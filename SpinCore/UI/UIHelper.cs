@@ -24,6 +24,7 @@ namespace SpinCore.UI
             internal UIPrefabs() {}
         }
 
+        #region Fields and Properties
         public static UIPrefabs Prefabs { get; } = new UIPrefabs();
 
         private const string PanelNamePrefix = "TabPanel_SpinCore";
@@ -32,14 +33,10 @@ namespace SpinCore.UI
         private static readonly List<CustomSidePanel> SidePanels = new List<CustomSidePanel>();
         private static readonly List<CustomPage> PageStack = new List<CustomPage>();
         private static CustomPage LastPageOnStack => PageStack.Count > 0 ? PageStack[PageStack.Count - 1] : null;
+        internal static Transform CommonTabParent { get; set; }
+        #endregion
 
-        private static Transform _commonTabParent;
-
-        internal static void SetTabParent(Transform baseTransform)
-        {
-            _commonTabParent = baseTransform;
-        }
-
+        #region Internal Side Panel Management
         internal static void LoadSidePanels(XDTabPanelGroup instance)
         {
             _tabPanelGroupInstance = instance;
@@ -104,7 +101,9 @@ namespace SpinCore.UI
                 sidePanel.OnSidePanelFocus();
             }
         }
+        #endregion
 
+        #region Internal CustomPage Stack Management
         internal static void PushPageOnStack(CustomPage page)
         {
             Plugin.LogInfo("Try add " + page.PageName);
@@ -139,10 +138,12 @@ namespace SpinCore.UI
         }
 
         internal static bool AnyPagesLeftOnStack() => PageStack.Count > 0;
+        #endregion
 
+        #region UI Component Creation
         public static CustomPage CreateSettingsPage(string name)
         {
-            var customPage = GameObject.Instantiate(Prefabs.SettingsPage, _commonTabParent);
+            var customPage = GameObject.Instantiate(Prefabs.SettingsPage, CommonTabParent);
             customPage.name = "SpinCoreCustomTab_" + name;
             var contentTransform = customPage.transform.Find("Scroll View/Viewport/Content");
             return new CustomPage(name)
@@ -326,5 +327,6 @@ namespace SpinCore.UI
             button.GetComponent<XDNavigableOptionMultiChoice>().SetCallbacksAndValue(defaultValue, valueChanged, valueRangeRequested, valueTextRequested);
             return new CustomMultiChoice(button);
         }
+        #endregion
     }
 }

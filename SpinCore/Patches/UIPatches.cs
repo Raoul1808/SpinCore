@@ -191,7 +191,7 @@ namespace SpinCore.Patches
         private static void CreateModOptionsPage(XDCustomiseMenu __instance)
         {
             var customiseTabsContainerTransform = __instance.gameObject.transform.Find("VRContainerOffset/MenuContainer/CustomiseTabsContainer");
-            UIHelper.SetTabParent(customiseTabsContainerTransform);
+            UIHelper.CommonTabParent = customiseTabsContainerTransform;
             PrepareMenuPrefabs(__instance);
             CreateModSettingsButton(__instance);
         }
