@@ -150,7 +150,8 @@ namespace SpinCore.UI
                 CreateSectionHeader(
                     modListSection.Transform,
                     "Mod List Section Header",
-                    "SpinCore_ModSettings_ModList"
+                    "SpinCore_ModSettings_ModList",
+                    false
                 );
                 foreach ((TranslationReference translation, CustomPage page) in ModSettingsPopoutBuffer)
                 {
@@ -211,14 +212,17 @@ namespace SpinCore.UI
             return new CustomActiveComponent(section);
         }
 
-        public static CustomSimpleText CreateSectionHeader(Transform parent, string name, string translationKey) => CreateSectionHeader(parent, name, new TranslationReference(translationKey, false));
+        public static CustomSectionHeader CreateSectionHeader(Transform parent, string name, string translationKey, bool spacer) => CreateSectionHeader(parent, name, new TranslationReference(translationKey, false), spacer);
 
-        public static CustomSimpleText CreateSectionHeader(Transform parent, string name, TranslationReference translation)
+        public static CustomSectionHeader CreateSectionHeader(Transform parent, string name, TranslationReference translation, bool spacer)
         {
-            var header = GameObject.Instantiate(Prefabs.SectionHeader, parent);
-            header.name = name;
-            header.GetComponentInChildren<TranslatedTextMeshPro>().SetTranslation(translation);
-            return new CustomSimpleText(header);
+            var obj = GameObject.Instantiate(Prefabs.SectionHeader, parent);
+            obj.name = name;
+            return new CustomSectionHeader(obj)
+            {
+                TextTranslation = translation,
+                Spacer = spacer
+            };
         }
 
         public static CustomActiveComponent CreateLine(Transform parent, string name = "Line")

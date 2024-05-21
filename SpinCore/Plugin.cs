@@ -53,7 +53,8 @@ namespace SpinCore
                 UIHelper.CreateSectionHeader(
                     section.Transform,
                     "Section Header",
-                    "SpinCore_ModSettings_TestPopoutHeader"
+                    "SpinCore_ModSettings_TestPopoutHeader",
+                    false
                 );
                 UIHelper.CreateButton(
                     section.Transform,

@@ -3,7 +3,7 @@ using XDMenuPlay;
 
 namespace SpinCore.UI
 {
-    public class CustomMultiChoice : CustomUIComponent
+    public class CustomMultiChoice : CustomTextComponent
     {
         private XDNavigableOptionMultiChoice _multiChoice;
 

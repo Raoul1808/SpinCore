@@ -3,7 +3,7 @@ using UnityEngine.Events;
 
 namespace SpinCore.UI
 {
-    public class CustomButton : CustomUIComponent
+    public class CustomButton : CustomTextComponent
     {
         private XDNavigableButton _button;
 

@@ -2,11 +2,11 @@ using UnityEngine;
 
 namespace SpinCore.UI
 {
-    public abstract class CustomUIComponent : CustomActiveComponent
+    public class CustomTextComponent : CustomActiveComponent
     {
         private TranslatedTextMeshPro _tmpText;
         
-        internal CustomUIComponent(GameObject obj) : base(obj)
+        internal CustomTextComponent(GameObject obj) : base(obj)
         {
             _tmpText = obj.GetComponentInChildren<TranslatedTextMeshPro>();
         }
@@ -20,7 +20,7 @@ namespace SpinCore.UI
         public TranslationReference TextTranslation
         {
             get => _tmpText.translation;
-            set => _tmpText.translation = value;
+            set => _tmpText.SetTranslation(value);
         }
 
         public string ExtraText
