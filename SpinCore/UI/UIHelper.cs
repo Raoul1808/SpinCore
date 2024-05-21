@@ -155,11 +155,10 @@ namespace SpinCore.UI
             };
         }
 
-        public static CustomActiveComponent CreateSection(Transform parent, string name, Action<Transform> createContent)
+        public static CustomActiveComponent CreateSection(Transform parent, string name)
         {
             var section = GameObject.Instantiate(Prefabs.EmptySection, parent);
             section.name = name;
-            createContent.Invoke(section.transform);
             return new CustomActiveComponent(section);
         }
 

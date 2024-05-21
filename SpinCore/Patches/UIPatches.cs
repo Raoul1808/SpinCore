@@ -1,8 +1,6 @@
-using System.Linq;
 using HarmonyLib;
 using SpinCore.UI;
 using UnityEngine;
-using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 using XDMenuPlay;
 using XDMenuPlay.Customise;
@@ -107,54 +105,46 @@ namespace SpinCore.Patches
             var testPage = UIHelper.CreateSettingsPage("CustomiseTestPage");
             testPage.OnPageLoad += transform =>
             {
-                UIHelper.CreateSection(
+                var section = UIHelper.CreateSection(
                     transform,
-                    "Test Header",
-                    sectionTransform =>
-                    {
-                        UIHelper.CreateSectionHeader(
-                            sectionTransform,
-                            "TestSectionHeader",
-                            "SpinCore_ModSettings_TestHeader"
-                        );
-                    }
+                    "Test Header"
+                );
+                UIHelper.CreateSectionHeader(
+                    section.Transform,
+                    "TestSectionHeader",
+                    "SpinCore_ModSettings_TestHeader"
                 );
             };
 
             _modSettingsPage = UIHelper.CreateSettingsPage("CustomiseModSettings");
             _modSettingsPage.OnPageLoad += transform =>
             {
-                UIHelper.CreateSection(
+                var section1 = UIHelper.CreateSection(
                     transform,
-                    "Mod List",
-                    sectionTransform =>
-                    {
-                        UIHelper.CreateSectionHeader(
-                            sectionTransform,
-                            "ModListSectionHeader",
-                            "SpinCore_ModSettings_ModList"
-                        );
-                        UIHelper.CreatePopout(
-                            sectionTransform,
-                            "TestPagePopoutButton",
-                            "SpinCore_ModSettings_TestPopout",
-                            testPage
-                        );
-                    }
+                    "Mod List"
                 );
-                UIHelper.CreateSection(
+                UIHelper.CreateSectionHeader(
+                    section1.Transform,
+                    "ModListSectionHeader",
+                    "SpinCore_ModSettings_ModList"
+                );
+                UIHelper.CreatePopout(
+                    section1.Transform,
+                    "TestPagePopoutButton",
+                    "SpinCore_ModSettings_TestPopout",
+                    testPage
+                );
+
+                var section2 = UIHelper.CreateSection(
                     transform,
-                    "Other Stuff",
-                    sectionTransform =>
-                    {
-                        UIHelper.CreateLine(sectionTransform, "Line");
-                        UIHelper.CreateButton(
-                            sectionTransform,
-                            "Test Button",
-                            "SpinCore_ModSettings_TestButton",
-                            () => { NotificationSystemGUI.AddMessage("This button works properly. Yay!"); }
-                        );
-                    }
+                    "Other Stuff"
+                );
+                UIHelper.CreateLine(section2.Transform, "Line");
+                UIHelper.CreateButton(
+                    section2.Transform,
+                    "Test Button",
+                    "SpinCore_ModSettings_TestButton",
+                    () => { NotificationSystemGUI.AddMessage("This button works properly. Yay!"); }
                 );
             };
 
