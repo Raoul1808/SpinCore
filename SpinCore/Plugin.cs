@@ -31,6 +31,7 @@ namespace SpinCore
             Harmony harmony = new Harmony(Guid);
             harmony.PatchAll(typeof(TranslationPatches));
             harmony.PatchAll(typeof(UIPatches));
+            harmony.PatchAll(typeof(TriggerPatches));
             
             TranslationHelper.AddTranslationKey("SpinCore_ModTab", "Quick Mod Settings");
             TranslationHelper.AddTranslationKey("SpinCore_HelloWorld", "Hello World!");
