@@ -21,7 +21,7 @@ namespace SpinCore.Patches
             sidePanelButtonBase.SetActive(false);
             sidePanelButtonBase.name = "SampleSidePanelButtonAsset";
             UIHelper.Prefabs.LargeButton = sidePanelButtonBase;
-            var filterPanelClone = GameObject.Instantiate(instance.tabs[1].prefabs[0].gameObject, new GameObject().transform);
+            var filterPanelClone = GameObject.Instantiate(instance.tabs[1].prefabs[0].gameObject, CustomPrefabStore.RootTransform);
             var multiChoiceBase = GameObject.Instantiate(filterPanelClone.transform.Find("FilterSettingsPopout/TrackSorting").gameObject, CustomPrefabStore.RootTransform);
             multiChoiceBase.name = "SampleMultiChoiceButton";
             Object.Destroy(multiChoiceBase.GetComponent<XDNavigableOptionMultiChoice_IntValue>());
