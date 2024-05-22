@@ -22,13 +22,6 @@ namespace SpinCore.Patches
             sidePanelButtonBase.name = "SampleSidePanelButtonAsset";
             UIHelper.Prefabs.LargeButton = sidePanelButtonBase;
             var filterPanelClone = GameObject.Instantiate(instance.tabs[1].prefabs[0].gameObject, CustomPrefabStore.RootTransform);
-            var multiChoiceBase = GameObject.Instantiate(filterPanelClone.transform.Find("FilterSettingsPopout/TrackSorting").gameObject, CustomPrefabStore.RootTransform);
-            multiChoiceBase.name = "SampleMultiChoiceButton";
-            Object.Destroy(multiChoiceBase.GetComponent<XDNavigableOptionMultiChoice_IntValue>());
-            multiChoiceBase.GetComponent<XDNavigableOptionMultiChoice>().state.callbacks = new XDNavigableOptionMultiChoice.Callbacks();
-            multiChoiceBase.GetComponentInChildren<TranslatedTextMeshPro>().translation = TranslationReference.Empty;
-            multiChoiceBase.SetActive(false);
-            UIHelper.Prefabs.MultiChoice = multiChoiceBase;
             Object.Destroy(filterPanelClone);
 
             panelContent.RemoveAllChildren();
@@ -56,7 +49,7 @@ namespace SpinCore.Patches
 
         private static void PrepareMenuPrefabs(XDCustomiseMenu instance)
         {
-            var settingsTab = instance.gameObject.transform.Find("VRContainerOffset/MenuContainer/CustomiseTabsContainer/CustomiseSettingsTab").gameObject;
+            var settingsTab = instance.gameObject.transform.Find("MenuContainer/CustomiseTabsContainer/CustomiseSettingsTab").gameObject;
             var tabBase = GameObject.Instantiate(settingsTab, CustomPrefabStore.RootTransform);
             var settingsTabLoadPrefabComponent = tabBase.GetComponent<LoadPrefabOnStart>();
             var settingsTabContentPrefab = settingsTabLoadPrefabComponent.prefabToLoad;
@@ -73,6 +66,15 @@ namespace SpinCore.Patches
             popoutButton.name = "CustomPopoutButton";
             popoutButton.GetComponent<XDNavigableButton>().onClick = new Button.ButtonClickedEvent();
 
+            var multiChoiceBase = GameObject.Instantiate(tabSectionBase.transform.Find("Language").gameObject, CustomPrefabStore.RootTransform);
+            multiChoiceBase.name = "SampleMultiChoiceButton";
+            Object.DestroyImmediate(multiChoiceBase.GetComponent<XDNavigableOptionMultiChoice_IntValue>());
+            Object.DestroyImmediate(multiChoiceBase.GetComponent<LanguageMultiChoiceHandler>());
+            multiChoiceBase.GetComponent<XDNavigableOptionMultiChoice>().state.callbacks = new XDNavigableOptionMultiChoice.Callbacks();
+            multiChoiceBase.GetComponentInChildren<TranslatedTextMeshPro>().translation = TranslationReference.Empty;
+            multiChoiceBase.SetActive(false);
+            UIHelper.Prefabs.MultiChoice = multiChoiceBase;
+
             tabSectionBase.transform.RemoveAllChildren();
             tabContentBase.transform.RemoveAllChildren();
 
@@ -85,8 +87,8 @@ namespace SpinCore.Patches
 
         private static void CreateModSettingsButton(XDCustomiseMenu instance)
         {
-            var tabButtonsTransform = instance.gameObject.transform.Find("VRContainerOffset/TabButtons");
-            var customiseTabsContainerTransform = instance.gameObject.transform.Find("VRContainerOffset/MenuContainer/CustomiseTabsContainer");
+            var tabButtonsTransform = instance.gameObject.transform.Find("TabButtons");
+            var customiseTabsContainerTransform = instance.gameObject.transform.Find("MenuContainer/CustomiseTabsContainer");
             var settingsTopButton = tabButtonsTransform.Find("CustomiseSettingsButton").gameObject;
             var customiseSettingsTab = customiseTabsContainerTransform.Find("CustomiseSettingsTab").gameObject;
             _settingsButtonRef = settingsTopButton.GetComponent<XDNavigable>();
@@ -115,7 +117,7 @@ namespace SpinCore.Patches
                 _settingsButtonRef.forceExpanded = true;
             });
 
-            var backButton = instance.transform.Find("VRContainerOffset/BackButtonContainer/BackButton Variant").gameObject;
+            var backButton = instance.transform.Find("BackButtonContainer/BackButton Variant").gameObject;
             backButton.GetComponent<XDNavigableButton>().onClick = new Button.ButtonClickedEvent();
             backButton.GetComponent<XDNavigableButton>().onClick.AddListener(() =>
             {
@@ -129,7 +131,7 @@ namespace SpinCore.Patches
         [HarmonyPostfix]
         private static void CreateModOptionsPage(XDCustomiseMenu __instance)
         {
-            var customiseTabsContainerTransform = __instance.gameObject.transform.Find("VRContainerOffset/MenuContainer/CustomiseTabsContainer");
+            var customiseTabsContainerTransform = __instance.gameObject.transform.Find("MenuContainer/CustomiseTabsContainer");
             UIHelper.CommonTabParent = customiseTabsContainerTransform;
             PrepareMenuPrefabs(__instance);
             CreateModSettingsButton(__instance);

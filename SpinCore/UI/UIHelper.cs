@@ -71,7 +71,7 @@ namespace SpinCore.UI
             tabInstance.selectorButton = _tabPanelGroupInstance.CreateTabButton(tabInstance);
             tabInstance.selectorButton.transform.SetSiblingIndex(_tabPanelGroupInstance._tabInstances.Count + 1);
             _tabPanelGroupInstance._tabInstances.Add(tabInstance);
-            _tabPanelGroupInstance._tabInstancesByName.Add(panel.PanelName, tabInstance);
+            // _tabPanelGroupInstance._tabInstancesByName.Add(panel.PanelName, tabInstance);
             _tabPanelGroupInstance.UpdateTabInternal();
         }
 
