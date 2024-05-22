@@ -79,14 +79,9 @@ namespace SpinCore.UI
         {
             if (_tabPanelGroupInstance == null) return; // This should never happen but just in case
             CustomSidePanel sidePanel;
-            try
-            {
-                sidePanel = SidePanels.Find(panel => panel.PanelName == panelName);
-            }
-            catch (ArgumentNullException)
-            {
+            sidePanel = SidePanels.Find(panel => panel.PanelName == panelName);
+            if (sidePanel == null)
                 return;
-            }
 
             // FIXME: This bit of code is here to prevent a NullReferenceException due to some weird shenanigans.
             // TODO: Fix above
