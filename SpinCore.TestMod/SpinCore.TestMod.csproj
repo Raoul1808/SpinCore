@@ -27,6 +27,18 @@
       <Reference Include="UnityEngine.CoreModule">
         <HintPath>..\srxd-dir\SpinRhythm_Data\Managed\UnityEngine.CoreModule.dll</HintPath>
       </Reference>
+      <Reference Include="UnityEngine.ImageConversionModule">
+        <HintPath>..\srxd-dir\SpinRhythm_Data\Managed\UnityEngine.ImageConversionModule.dll</HintPath>
+      </Reference>
+    </ItemGroup>
+
+    <ItemGroup>
+      <None Remove="Resources\wrench.png" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <None Remove="Resources\TestModIcon.png" />
+      <EmbeddedResource Include="Resources\TestModIcon.png" />
     </ItemGroup>
 
     <Target Name="PostBuildScript" AfterTargets="AfterBuild">

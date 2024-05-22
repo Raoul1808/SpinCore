@@ -10,11 +10,13 @@ namespace SpinCore.UI
         public Transform PanelContentTransform { get; internal set; }
         public string PanelName { get; private set; }
         public TranslationReference Translation { get; private set; }
+        public Sprite Sprite { get; internal set; }
         
-        internal CustomSidePanel(string name, TranslationReference translation)
+        internal CustomSidePanel(string name, TranslationReference translation, Sprite sprite)
         {
             PanelName = name;
             Translation = translation;
+            Sprite = sprite;
         }
 
         public delegate void SidePanelLoad(Transform panelTransform);

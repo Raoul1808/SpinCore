@@ -62,6 +62,7 @@ namespace SpinCore.UI
                 name = panel.PanelName,
                 prefabs = new [] {panelObj.GetComponentInChildren<XDSelectionListItemDisplay>()},
                 translation = panel.Translation,
+                icon = panel.Sprite,
             };
             XDTabPanelGroup.TabInstance tabInstance = new XDTabPanelGroup.TabInstance
             {
@@ -243,10 +244,10 @@ namespace SpinCore.UI
             return new CustomPopoutButton(button, page);
         }
 
-        public static CustomSidePanel CreateSidePanel(string name, string translationKey) => CreateSidePanel(name, new TranslationReference(translationKey, false));
-        public static CustomSidePanel CreateSidePanel(string name, TranslationReference translation)
+        public static CustomSidePanel CreateSidePanel(string name, string translationKey, Sprite sprite = null) => CreateSidePanel(name, new TranslationReference(translationKey, false), sprite);
+        public static CustomSidePanel CreateSidePanel(string name, TranslationReference translation, Sprite sprite = null)
         {
-            var panel = new CustomSidePanel(name, translation);
+            var panel = new CustomSidePanel(name, translation, sprite);
             if (_tabPanelGroupInstance != null)
             {
                 CreateSidePanelObject(panel);

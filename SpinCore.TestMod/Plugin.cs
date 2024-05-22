@@ -1,8 +1,11 @@
 using System.Diagnostics;
+using System.IO;
+using System.Reflection;
 using BepInEx;
 using BepInEx.Logging;
 using SpinCore.Triggers;
 using SpinCore.UI;
+using UnityEngine;
 
 namespace SpinCore.TestMod
 {
@@ -26,6 +29,20 @@ namespace SpinCore.TestMod
 
         private void Awake()
         {
+            byte[] imageData;
+            using (Stream imageStream = Assembly.GetExecutingAssembly().GetManifestResourceStream("SpinCore.TestMod.Resources.TestModIcon.png"))
+            {
+                using (MemoryStream mem = new MemoryStream())
+                {
+                    imageStream.CopyTo(mem);
+                    imageData = mem.ToArray();
+                }
+            }
+            var tex = new Texture2D(1, 1);
+            tex.LoadImage(imageData);
+            const int squareBorderOffset = 10;
+            var sprite = Sprite.Create(tex, new Rect(squareBorderOffset, squareBorderOffset, tex.width - squareBorderOffset * 2, tex.height - squareBorderOffset * 2), Vector2.zero);
+
             _logger = Logger;
             LogInfo($"Hello from {Name}!");
 
@@ -59,7 +76,7 @@ namespace SpinCore.TestMod
             };
             UIHelper.RegisterMenuInModSettingsRoot("SpinCore_ModSettings_TestPopout", testSettings);
 
-            var modPanel = UIHelper.CreateSidePanel("QuickModSettings", "SpinCore_ModTab");
+            var modPanel = UIHelper.CreateSidePanel("QuickModSettings", "SpinCore_ModTab", sprite);
             modPanel.OnSidePanelLoaded += parent =>
             {
                 int value = 0;
