@@ -1,15 +1,32 @@
 using System.Collections.Generic;
+using System.IO;
+using Newtonsoft.Json;
 
-namespace SpinCore
+namespace SpinCore.Translation
 {
     public static class TranslationHelper
     {
         private static bool _readyToAdd = false;
         private static void MarkReadyToAdd() => _readyToAdd = true;
 
-        private static Dictionary<string, string> _pendingTranslations = new Dictionary<string, string>();
+        private static Dictionary<string, TranslatedString> _pendingTranslations = new Dictionary<string, TranslatedString>();
 
-        public static void AddTranslationKey(string key, string value)
+        public static void LoadTranslationsFromStream(Stream stream)
+        {
+            string fullText = "";
+            using (StreamReader reader = new StreamReader(stream))
+            {
+                fullText = reader.ReadToEnd();
+            }
+
+            var strings = JsonConvert.DeserializeObject<Dictionary<string, TranslatedString>>(fullText);
+            foreach (var stringPair in strings)
+            {
+                AddTranslation(stringPair.Key, stringPair.Value);
+            }
+        }
+
+        public static void AddTranslation(string key, TranslatedString value)
         {
             if (!_readyToAdd)
             {
@@ -20,7 +37,7 @@ namespace SpinCore
             AddKey(key, value);
         }
 
-        public static void RemoveTranslationKey(string key)
+        public static void RemoveTranslation(string key)
         {
             if (!_readyToAdd)
             {
@@ -41,13 +58,13 @@ namespace SpinCore
             _pendingTranslations.Clear();
         }
         
-        private static void AddKey(string key, string value)
+        private static void AddKey(string key, TranslatedString value)
         {
             var language = TranslationSystem.Instance.translationSystemSettings.translations[TranslationSystem.Instance.translationSystemSettings.translations.Length - 1];
             language.translationKeys.Add(key);
             foreach (var lang in language.languages)
             {
-                lang.strings.Add(value);
+                lang.strings.Add(value[lang.supportedLanguage] ?? value[SupportedLanguage.English]);
             }
 
             TranslationSystem.Instance.IncreaseGenerationId();

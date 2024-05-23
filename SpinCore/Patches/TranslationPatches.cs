@@ -1,4 +1,5 @@
 using HarmonyLib;
+using SpinCore.Translation;
 
 namespace SpinCore.Patches
 {
