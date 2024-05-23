@@ -1,0 +1,32 @@
+{
+  "SpinCore_ModTab": {
+    "en": "Quick Mod Settings"
+  },
+  "SpinCore_HelloWorld": {
+    "en": "Hello World!"
+  },
+  "SpinCore_SecondTestButton": {
+    "en": "Notify"
+  },
+  "SpinCore_ShiftValue": {
+    "en": "Shift Value"
+  },
+  "SpinCore_BestModder": {
+    "en": "Best Modder"
+  },
+  "SpinCore_TestToggle": {
+    "en": "Test Toggle"
+  },
+  "SpinCore_TanocTab": {
+    "en": "HARDCORE TANO*C"
+  },
+  "SpinCore_ModSettings_TestPopout": {
+    "en": "Test Popout UI"
+  },
+  "SpinCore_ModSettings_TestPopoutHeader": {
+    "en": "Test Popout Header"
+  },
+  "SpinCore_ModSettings_TestPopoutButton": {
+    "en": "Test Popout Button"
+  }
+}

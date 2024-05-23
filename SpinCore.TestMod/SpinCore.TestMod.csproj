@@ -39,6 +39,7 @@
     <ItemGroup>
       <None Remove="Resources\TestModIcon.png" />
       <EmbeddedResource Include="Resources\TestModIcon.png" />
+      <EmbeddedResource Include="locale.json" />
     </ItemGroup>
 
     <Target Name="PostBuildScript" AfterTargets="AfterBuild">

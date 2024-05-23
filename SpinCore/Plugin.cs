@@ -1,7 +1,9 @@
+using System.Reflection;
 using BepInEx;
 using BepInEx.Logging;
 using HarmonyLib;
 using SpinCore.Patches;
+using SpinCore.Translation;
 
 namespace SpinCore
 {
@@ -23,8 +25,8 @@ namespace SpinCore
             harmony.PatchAll(typeof(UIPatches));
             harmony.PatchAll(typeof(TriggerPatches));
 
-            TranslationHelper.AddTranslationKey("SpinCore_CustomiseModsTabButton", "Mod Settings");
-            TranslationHelper.AddTranslationKey("SpinCore_ModSettings_ModList", "Mods");
+            var localeStream = Assembly.GetExecutingAssembly().GetManifestResourceStream("SpinCore.locale.json");
+            TranslationHelper.LoadTranslationsFromStream(localeStream);
         }
 
         internal static void LogInfo(object msg) => _logger.LogInfo(msg);

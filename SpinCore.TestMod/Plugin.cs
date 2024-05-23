@@ -3,6 +3,7 @@ using System.IO;
 using System.Reflection;
 using BepInEx;
 using BepInEx.Logging;
+using SpinCore.Translation;
 using SpinCore.Triggers;
 using SpinCore.UI;
 using UnityEngine;
@@ -46,16 +47,8 @@ namespace SpinCore.TestMod
             _logger = Logger;
             LogInfo($"Hello from {Name}!");
 
-            TranslationHelper.AddTranslationKey("SpinCore_ModTab", "Quick Mod Settings");
-            TranslationHelper.AddTranslationKey("SpinCore_HelloWorld", "Hello World!");
-            TranslationHelper.AddTranslationKey("SpinCore_SecondTestButton", "Notify");
-            TranslationHelper.AddTranslationKey("SpinCore_ShiftValue", "Shift Value");
-            TranslationHelper.AddTranslationKey("SpinCore_BestModder", "Best Modder");
-            TranslationHelper.AddTranslationKey("SpinCore_TestToggle", "Test Toggle");
-            TranslationHelper.AddTranslationKey("SpinCore_TanocTab", "HARDCORE TANO*C");
-            TranslationHelper.AddTranslationKey("SpinCore_ModSettings_TestPopout", "Test Popout UI");
-            TranslationHelper.AddTranslationKey("SpinCore_ModSettings_TestPopoutHeader", "Test Popout Header");
-            TranslationHelper.AddTranslationKey("SpinCore_ModSettings_TestPopoutButton", "Test Popout Button");
+            var localeStream = Assembly.GetExecutingAssembly().GetManifestResourceStream("SpinCore.TestMod.locale.json");
+            TranslationHelper.LoadTranslationsFromStream(localeStream);
 
             var testSettings = UIHelper.CreateSettingsPage("TestPopout");
             testSettings.OnPageLoad += pageTransform =>
