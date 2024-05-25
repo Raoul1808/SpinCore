@@ -54,7 +54,7 @@ namespace SpinCore.TestMod
             var testSettings = UIHelper.CreateSettingsPage("TestPopout");
             testSettings.OnPageLoad += pageTransform =>
             {
-                var section = UIHelper.CreateSection(pageTransform, "Test Section");
+                var section = UIHelper.CreateGroup(pageTransform, "Test Section");
                 UIHelper.CreateSectionHeader(
                     section.Transform,
                     "Section Header",
@@ -114,9 +114,7 @@ namespace SpinCore.TestMod
                     enable => NotificationSystemGUI.AddMessage("Enabled: " + enable)
                 );
 
-                var section = UIHelper.CreateSection(parent, "Test Section");
-                DestroyImmediate(section.GameObject.GetComponent<VerticalLayoutGroup>());
-                section.GameObject.AddComponent<HorizontalLayoutGroup>();
+                var section = UIHelper.CreateGroup(parent, "Test Section", Axis.Horizontal);
 
                 UIHelper.CreateButton(
                     section.Transform,
