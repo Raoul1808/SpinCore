@@ -7,6 +7,7 @@ using SpinCore.Translation;
 using SpinCore.Triggers;
 using SpinCore.UI;
 using UnityEngine;
+using UnityEngine.UI;
 
 namespace SpinCore.TestMod
 {
@@ -53,7 +54,7 @@ namespace SpinCore.TestMod
             var testSettings = UIHelper.CreateSettingsPage("TestPopout");
             testSettings.OnPageLoad += pageTransform =>
             {
-                var section = UIHelper.CreateSection(pageTransform, "Test Section");
+                var section = UIHelper.CreateGroup(pageTransform, "Test Section");
                 UIHelper.CreateSectionHeader(
                     section.Transform,
                     "Section Header",
@@ -111,6 +112,27 @@ namespace SpinCore.TestMod
                     "SpinCore_TestToggle",
                     false,
                     enable => NotificationSystemGUI.AddMessage("Enabled: " + enable)
+                );
+
+                var section = UIHelper.CreateGroup(parent, "Test Section", Axis.Horizontal);
+
+                UIHelper.CreateButton(
+                    section.Transform,
+                    "TestHorizontalButton1",
+                    "SpinCore_FirstButton",
+                    () => NotificationSystemGUI.AddMessage("Am First Button bloop bloop")
+                );
+                UIHelper.CreateButton(
+                    section.Transform,
+                    "TestHorizontalButton2",
+                    "SpinCore_SecondButton",
+                    () => NotificationSystemGUI.AddMessage("Button, The 2nd")
+                );
+                UIHelper.CreateButton(
+                    section.Transform,
+                    "TestHorizontalButton3",
+                    "SpinCore_ThirdButton",
+                    () => NotificationSystemGUI.AddMessage("third button's the charm")
                 );
             };
 

@@ -28,5 +28,14 @@
   },
   "SpinCore_ModSettings_TestPopoutButton": {
     "en": "Test Popout Button"
+  },
+  "SpinCore_FirstButton": {
+    "en": "First Button"
+  },
+  "SpinCore_SecondButton": {
+    "en": "Second Button"
+  },
+  "SpinCore_ThirdButton": {
+    "en": "Third Button"
   }
 }

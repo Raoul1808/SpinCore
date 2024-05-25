@@ -139,7 +139,7 @@ namespace SpinCore.UI
             _modSettingsPageRef = CreateSettingsPage("CustomiseModSettings");
             _modSettingsPageRef.OnPageLoad += transform =>
             {
-                var modListSection = CreateSection(
+                var modListSection = CreateGroup(
                     transform,
                     "Mod List"
                 );
@@ -201,11 +201,13 @@ namespace SpinCore.UI
             return page;
         }
 
-        public static CustomActiveComponent CreateSection(Transform parent, string name)
+        public static CustomGroup CreateGroup(Transform parent, string name, Axis layoutDirection = Axis.Vertical)
         {
             var section = GameObject.Instantiate(Prefabs.EmptySection, parent);
             section.name = name;
-            return new CustomActiveComponent(section);
+            var group = new CustomGroup(section);
+            group.LayoutDirection = layoutDirection;
+            return group;
         }
 
         public static CustomSectionHeader CreateSectionHeader(Transform parent, string name, string translationKey, bool spacer) => CreateSectionHeader(parent, name, new TranslationReference(translationKey, false), spacer);
