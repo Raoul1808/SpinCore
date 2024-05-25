@@ -7,6 +7,7 @@ using SpinCore.Translation;
 using SpinCore.Triggers;
 using SpinCore.UI;
 using UnityEngine;
+using UnityEngine.UI;
 
 namespace SpinCore.TestMod
 {
@@ -111,6 +112,29 @@ namespace SpinCore.TestMod
                     "SpinCore_TestToggle",
                     false,
                     enable => NotificationSystemGUI.AddMessage("Enabled: " + enable)
+                );
+
+                var section = UIHelper.CreateSection(parent, "Test Section");
+                DestroyImmediate(section.GameObject.GetComponent<VerticalLayoutGroup>());
+                section.GameObject.AddComponent<HorizontalLayoutGroup>();
+
+                UIHelper.CreateButton(
+                    section.Transform,
+                    "TestHorizontalButton1",
+                    "SpinCore_FirstButton",
+                    () => NotificationSystemGUI.AddMessage("Am First Button bloop bloop")
+                );
+                UIHelper.CreateButton(
+                    section.Transform,
+                    "TestHorizontalButton2",
+                    "SpinCore_SecondButton",
+                    () => NotificationSystemGUI.AddMessage("Button, The 2nd")
+                );
+                UIHelper.CreateButton(
+                    section.Transform,
+                    "TestHorizontalButton3",
+                    "SpinCore_ThirdButton",
+                    () => NotificationSystemGUI.AddMessage("third button's the charm")
                 );
             };
 
