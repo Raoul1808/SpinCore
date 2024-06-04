@@ -29,6 +29,9 @@
   "SpinCore_ModSettings_TestPopoutButton": {
     "en": "Test Popout Button"
   },
+  "SpinCore_ModSettings_TestLabel": {
+    "en": "boing"
+  },
   "SpinCore_FirstButton": {
     "en": "First Button"
   },

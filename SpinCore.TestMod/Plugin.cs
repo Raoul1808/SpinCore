@@ -29,10 +29,10 @@ namespace SpinCore.TestMod
             Edge,
         }
 
-        private void Awake()
+        private Texture2D LoadImage(string name)
         {
             byte[] imageData;
-            using (Stream imageStream = Assembly.GetExecutingAssembly().GetManifestResourceStream("SpinCore.TestMod.Resources.TestModIcon.png"))
+            using (Stream imageStream = Assembly.GetExecutingAssembly().GetManifestResourceStream("SpinCore.TestMod.Resources." + name))
             {
                 using (MemoryStream mem = new MemoryStream())
                 {
@@ -42,14 +42,24 @@ namespace SpinCore.TestMod
             }
             var tex = new Texture2D(1, 1);
             tex.LoadImage(imageData);
+            return tex;
+        }
+
+        private void Awake()
+        {
+            var tabIcon = LoadImage("TestModIcon.png");
             const int squareBorderOffset = 10;
-            var sprite = Sprite.Create(tex, new Rect(squareBorderOffset, squareBorderOffset, tex.width - squareBorderOffset * 2, tex.height - squareBorderOffset * 2), Vector2.zero);
+            var sprite = Sprite.Create(tabIcon, new Rect(squareBorderOffset, squareBorderOffset, tabIcon.width - squareBorderOffset * 2, tabIcon.height - squareBorderOffset * 2), Vector2.zero);
+
+            var sproing = LoadImage("sproing.png");
 
             _logger = Logger;
             LogInfo($"Hello from {Name}!");
 
             var localeStream = Assembly.GetExecutingAssembly().GetManifestResourceStream("SpinCore.TestMod.locale.json");
             TranslationHelper.LoadTranslationsFromStream(localeStream);
+
+            TranslationHelper.AddTranslation("TestKey", "TestString");
 
             var testSettings = UIHelper.CreateSettingsPage("TestPopout");
             testSettings.OnPageLoad += pageTransform =>
@@ -67,6 +77,21 @@ namespace SpinCore.TestMod
                     "SpinCore_ModSettings_TestPopoutButton",
                     () => NotificationSystemGUI.AddMessage("Test Button clicked!")
                 );
+                {
+                    var subSection = UIHelper.CreateGroup(section.Transform, "Test Image Container");
+                    subSection.LayoutDirection = Axis.Horizontal;
+                    UIHelper.CreateImage(
+                        subSection.Transform,
+                        "Test Image",
+                        sproing
+                    );
+                    UIHelper.CreateLabel(
+                        subSection.Transform,
+                        "Test Label",
+                        "SpinCore_ModSettings_TestLabel"
+                    );
+                    // subSection.GameObject.GetComponent<VerticalLayoutGroup>().padding = new RectOffset(230, 10, 10, 10);
+                }
             };
             UIHelper.RegisterMenuInModSettingsRoot("SpinCore_ModSettings_TestPopout", testSettings);
 

@@ -21,6 +21,16 @@ namespace SpinCore.Patches
             sidePanelButtonBase.SetActive(false);
             sidePanelButtonBase.name = "SampleSidePanelButtonAsset";
             UIHelper.Prefabs.LargeButton = sidePanelButtonBase;
+
+            var panelLabel = GameObject.Instantiate(panelContent.Find("DescriptonContainer/CreateTrackDescription").gameObject, CustomPrefabStore.RootTransform);
+            panelLabel.name = "SampleLabel";
+            UIHelper.Prefabs.Label = panelLabel;
+
+            var panelImage = GameObject.Instantiate(panelContent.Find("DescriptonContainer/ImageContainer").gameObject, CustomPrefabStore.RootTransform);
+            panelImage.name = "SampleImage";
+            panelImage.GetComponentInChildren<LayoutElement>().ignoreLayout = false;
+            UIHelper.Prefabs.Image = panelImage;
+
             var filterPanelClone = GameObject.Instantiate(instance.tabs[1].prefabs[0].gameObject, CustomPrefabStore.RootTransform);
             var multiChoiceBase = GameObject.Instantiate(filterPanelClone.transform.Find("FilterSettingsPopout/TrackSorting").gameObject, CustomPrefabStore.RootTransform);
             multiChoiceBase.name = "SampleMultiChoiceButton";

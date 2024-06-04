@@ -13,6 +13,7 @@ namespace SpinCore
             {
                 name = "SpinCorePrefabStore"
             };
+            RootGameObject.SetActive(false);
         }
     }
 }
