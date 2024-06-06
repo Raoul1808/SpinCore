@@ -20,6 +20,8 @@ namespace SpinCore.UI
             public GameObject SectionHeader { get; internal set; }
             public GameObject EmptySection { get; internal set; }
             public GameObject PopoutButton { get; internal set; }
+            public GameObject Image { get; internal set; }
+            public GameObject Label { get; internal set; }
             
             internal UIPrefabs() {}
         }
@@ -187,6 +189,24 @@ namespace SpinCore.UI
                 return;
             }
             ModSettingsPopoutBuffer.Add((translation, page));
+        }
+
+        public static CustomImage CreateImage(Transform parent, string name, Texture tex)
+        {
+            var image = GameObject.Instantiate(Prefabs.Image, parent);
+            image.name = name;
+            image.GetComponentInChildren<SlantedRectangle>().texture = tex;
+            return new CustomImage(image);
+        }
+
+        public static CustomTextComponent CreateLabel(Transform parent, string name, string translationKey) => CreateLabel(parent, name, new TranslationReference(translationKey, false));
+
+        public static CustomTextComponent CreateLabel(Transform parent, string name, TranslationReference translation)
+        {
+            var text = GameObject.Instantiate(Prefabs.Label, parent);
+            text.name = name;
+            text.GetComponentInChildren<TranslatedTextMeshPro>().SetTranslation(translation);
+            return new CustomTextComponent(text);
         }
 
         public static CustomPage CreateSettingsPage(string name)

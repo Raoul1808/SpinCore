@@ -16,7 +16,10 @@ namespace SpinCore.Triggers
         /// <exception cref="ArgumentException">Raised if the given array contains nothing</exception>
         public static void LoadTriggers<T>(T[] triggers) where T : ITrigger
         {
-            LoadTriggers(typeof(T).Name, Array.ConvertAll(triggers, t => (ITrigger)t));
+            if (triggers.Length == 0)
+                throw new ArgumentException("ITrigger array needs to contain triggers");
+            string fullKey = $"{Assembly.GetCallingAssembly().GetName().Name}-{typeof(T).Name}";
+            InternalLoadTriggers(fullKey, Array.ConvertAll(triggers, t => (ITrigger)t));
         }
 
         /// <summary>
@@ -36,6 +39,11 @@ namespace SpinCore.Triggers
             }
 
             string fullKey = $"{Assembly.GetCallingAssembly().GetName().Name}-{key}";
+            InternalLoadTriggers(fullKey, triggers);
+        }
+
+        private static void InternalLoadTriggers(string fullKey, ITrigger[] triggers)
+        {
             if (!TriggerStores.TryGetValue(fullKey, out var store))
             {
                 store = new ModTriggerStore();
@@ -56,7 +64,12 @@ namespace SpinCore.Triggers
         /// <typeparam name="T">The affected trigger, used both as a lookup key and to automatically cast fired triggers into the target trigger type</typeparam>
         public static void RegisterTriggerEvent<T>(TriggerUpdate<T> action) where T : ITrigger
         {
-            RegisterTriggerEvent(typeof(T).Name, action);
+            string fullKey = $"{Assembly.GetCallingAssembly().GetName().Name}-{typeof(T).Name}";
+            InternalRegisterTriggerEvent(fullKey, (trigger, trackTime) =>
+            {
+                var castTrigger = (T)trigger;
+                action.Invoke(castTrigger, trackTime);
+            });
         }
 
         /// <summary>
@@ -67,7 +80,10 @@ namespace SpinCore.Triggers
         /// <typeparam name="T">The affected trigger, used to automatically cast fired triggers into the target trigger type</typeparam>
         public static void RegisterTriggerEvent<T>(string key, TriggerUpdate<T> action) where T : ITrigger
         {
-            RegisterTriggerEvent(key, (trigger, trackTime) =>
+            if (string.IsNullOrWhiteSpace(key))
+                throw new ArgumentException("Invalid key");
+            string fullKey = $"{Assembly.GetCallingAssembly().GetName().Name}-{key}";
+            InternalRegisterTriggerEvent(fullKey, (trigger, trackTime) =>
             {
                 var castTrigger = (T)trigger;
                 action.Invoke(castTrigger, trackTime);
@@ -84,6 +100,11 @@ namespace SpinCore.Triggers
             if (string.IsNullOrWhiteSpace(key))
                 throw new ArgumentException("Invalid key");
             string fullKey = $"{Assembly.GetCallingAssembly().GetName().Name}-{key}";
+            InternalRegisterTriggerEvent(fullKey, action);
+        }
+
+        private static void InternalRegisterTriggerEvent(string fullKey, TriggerUpdate action)
+        {
             if (!TriggerStores.TryGetValue(fullKey, out var store))
             {
                 store = new ModTriggerStore();
@@ -99,7 +120,8 @@ namespace SpinCore.Triggers
         /// <typeparam name="T">The affected trigger, used as a lookup key</typeparam>
         public static void ClearTriggers<T>() where T : ITrigger
         {
-            ClearTriggers(typeof(T).Name);
+            string fullKey = $"{Assembly.GetCallingAssembly().GetName().Name}-{typeof(T).Name}";
+            InternalClearTriggers(fullKey);
         }
 
         /// <summary>
@@ -109,6 +131,11 @@ namespace SpinCore.Triggers
         public static void ClearTriggers(string key)
         {
             string fullKey = $"{Assembly.GetCallingAssembly().GetName().Name}-{key}";
+            InternalClearTriggers(fullKey);
+        }
+
+        private static void InternalClearTriggers(string fullKey)
+        {
             if (!TriggerStores.TryGetValue(fullKey, out var store))
             {
                 store = new ModTriggerStore();
