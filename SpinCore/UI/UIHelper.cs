@@ -22,6 +22,7 @@ namespace SpinCore.UI
             public GameObject PopoutButton { get; internal set; }
             public GameObject Image { get; internal set; }
             public GameObject Label { get; internal set; }
+            public GameObject InputField { get; internal set; }
             
             internal UIPrefabs() {}
         }
@@ -191,6 +192,14 @@ namespace SpinCore.UI
             ModSettingsPopoutBuffer.Add((translation, page));
         }
 
+        public static CustomInputField CreateInputField(Transform parent, string name, Action<string, string> onValueChanged)
+        {
+            var textField = GameObject.Instantiate(Prefabs.InputField, parent);
+            textField.name = name;
+            textField.GetComponent<XDNavigableInputField>().OnValueChanged += onValueChanged;
+            return new CustomInputField(textField, onValueChanged);
+        }
+
         public static CustomImage CreateImage(Transform parent, string name, Texture tex)
         {
             var image = GameObject.Instantiate(Prefabs.Image, parent);
@@ -203,7 +212,7 @@ namespace SpinCore.UI
 
         public static CustomTextComponent CreateLabel(Transform parent, string name, TranslationReference translation)
         {
-            var text = GameObject.Instantiate(Prefabs.Label, parent);
+            var text = GameObject.Instantiate(Prefabs.MultiChoice.transform.Find("OptionLabel").gameObject, parent);
             text.name = name;
             text.GetComponentInChildren<TranslatedTextMeshPro>().SetTranslation(translation);
             return new CustomTextComponent(text);

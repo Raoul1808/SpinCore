@@ -92,6 +92,11 @@ namespace SpinCore.TestMod
                     );
                     // subSection.GameObject.GetComponent<VerticalLayoutGroup>().padding = new RectOffset(230, 10, 10, 10);
                 }
+                UIHelper.CreateInputField(
+                    section.Transform,
+                    "Test Input Field",
+                    (oldVal, newVal) => Plugin.LogInfo("Looking for " + oldVal + " of " + newVal)
+                );
             };
             UIHelper.RegisterMenuInModSettingsRoot("SpinCore_ModSettings_TestPopout", testSettings);
 
@@ -158,6 +163,12 @@ namespace SpinCore.TestMod
                     "TestHorizontalButton3",
                     "SpinCore_ThirdButton",
                     () => NotificationSystemGUI.AddMessage("third button's the charm")
+                );
+                
+                UIHelper.CreateInputField(
+                    parent,
+                    "Test Input Field From Side Bar",
+                    (s, newVal) => { if (!string.IsNullOrWhiteSpace(newVal)) NotificationSystemGUI.AddMessage("Hello " + newVal + "!"); }
                 );
             };
 
