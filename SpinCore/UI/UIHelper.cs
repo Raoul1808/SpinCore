@@ -404,6 +404,7 @@ namespace SpinCore.UI
             button.GetComponentInChildren<TranslatedTextMeshPro>().SetTranslation(translation);
             button.GetComponent<XDNavigableOptionMultiChoice>().state.callbacks = new XDNavigableOptionMultiChoice.Callbacks();
             button.GetComponent<XDNavigableOptionMultiChoice>().SetCallbacksAndValue(defaultValue, valueChanged, valueRangeRequested, valueTextRequested);
+            button.GetComponent<XDNavigableOptionMultiChoice>().allowBarDisplay = true;
             return new CustomMultiChoice(button);
         }
         #endregion
