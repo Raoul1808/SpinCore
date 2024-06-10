@@ -22,9 +22,9 @@ namespace SpinCore.Patches
             sidePanelButtonBase.name = "SampleSidePanelButtonAsset";
             UIHelper.Prefabs.LargeButton = sidePanelButtonBase;
 
-            var panelLabel = GameObject.Instantiate(panelContent.Find("DescriptonContainer/CreateTrackDescription").gameObject, CustomPrefabStore.RootTransform);
-            panelLabel.name = "SampleLabel";
-            UIHelper.Prefabs.Label = panelLabel;
+            // var panelLabel = GameObject.Instantiate(panelContent.Find("DescriptonContainer/CreateTrackDescription").gameObject, CustomPrefabStore.RootTransform);
+            // panelLabel.name = "SampleLabel";
+            // UIHelper.Prefabs.Label = panelLabel;
 
             var panelImage = GameObject.Instantiate(panelContent.Find("DescriptonContainer/ImageContainer").gameObject, CustomPrefabStore.RootTransform);
             panelImage.name = "SampleImage";
@@ -84,10 +84,12 @@ namespace SpinCore.Patches
             multiChoiceBase.GetComponentInChildren<TranslatedTextMeshPro>().translation = TranslationReference.Empty;
             multiChoiceBase.SetActive(false);
             UIHelper.Prefabs.MultiChoice = multiChoiceBase;
+            var optionLabel = GameObject.Instantiate(multiChoiceBase.transform.Find("OptionLabel").gameObject, CustomPrefabStore.RootTransform);
 
             tabSectionBase.transform.RemoveAllChildren();
             tabContentBase.transform.RemoveAllChildren();
 
+            UIHelper.Prefabs.Label = optionLabel;
             UIHelper.Prefabs.Line = sectionLine;
             UIHelper.Prefabs.EmptySection = tabSectionBase;
             UIHelper.Prefabs.SectionHeader = sectionHeader;
@@ -165,6 +167,18 @@ namespace SpinCore.Patches
             {
                 _settingsButtonRef.forceExpanded = false;
             }
+        }
+
+        [HarmonyPatch(typeof(XDSelectionListMenu), nameof(XDSelectionListMenu.OnStartupInitialise))]
+        [HarmonyPostfix]
+        private static void CloneSearchBar(XDSelectionListMenu __instance)
+        {
+            var searchBox = __instance.gameObject.transform.Find("Container/Content/MainContentMoveAmount/HorizontalMover/MainContentContainer/MainSelectionPanel/SearchButtonsContainer/SearchButtonsOffset/SearchFieldContainer/SearchFilter");
+            var inputFieldClone = GameObject.Instantiate(searchBox.gameObject, CustomPrefabStore.RootTransform);
+            inputFieldClone.GetComponent<XDNavigableInputField>().pointSize = 32;
+            inputFieldClone.transform.Find("Text Area").localPosition = new Vector3(24, 0, 0);
+            inputFieldClone.transform.Find("IconContainer").gameObject.SetActive(false);
+            UIHelper.Prefabs.InputField = inputFieldClone;
         }
     }
 }
