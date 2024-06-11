@@ -180,5 +180,12 @@ namespace SpinCore.Patches
             inputFieldClone.transform.Find("IconContainer").gameObject.SetActive(false);
             UIHelper.Prefabs.InputField = inputFieldClone;
         }
+
+        [HarmonyPatch(typeof(Game), nameof(Game.Update))]
+        [HarmonyPrefix]
+        private static void RunSidePanelBuffer()
+        {
+            UIHelper.CheckPanelCreation();
+        }
     }
 }

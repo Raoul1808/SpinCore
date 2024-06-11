@@ -34,6 +34,7 @@ namespace SpinCore.UI
         private static XDTabPanelGroup _tabPanelGroupInstance;
 
         private static readonly List<CustomSidePanel> SidePanels = new List<CustomSidePanel>();
+        private static readonly List<CustomSidePanel> SidePanelBuffer = new List<CustomSidePanel>();
         private static readonly List<CustomPage> PageStack = new List<CustomPage>();
         private static readonly List<(TranslationReference, CustomPage)> ModSettingsPopoutBuffer = new List<(TranslationReference, CustomPage)>();
         private static readonly List<CustomPage> CustomPageBuffer = new List<CustomPage>();
@@ -89,20 +90,26 @@ namespace SpinCore.UI
 
             // FIXME: This bit of code is here to prevent a NullReferenceException due to some weird shenanigans.
             // TODO: Fix above
-            if (!sidePanel.Preloaded)
-            {
-                sidePanel.Preload();
-                XDSelectionListMenu.Instance.CloseSidePanel();
-                return;
-            }
-
+            // Solution: defer UI initialization by one frame
             if (!sidePanel.Loaded)
+            {
+                SidePanelBuffer.Add(sidePanel);
+            }
+        }
+
+        internal static void CheckPanelCreation()
+        {
+            if (SidePanelBuffer.Count == 0)
+                return;
+            foreach (var sidePanel in SidePanelBuffer)
             {
                 _tabPanelGroupInstance.UpdateTabInternal();
                 sidePanel.PanelTransform = _tabPanelGroupInstance.tabPanelDisplay.transform.Find(PanelNamePrefix + sidePanel.PanelName + "(Clone)");
                 sidePanel.PanelContentTransform = sidePanel.PanelTransform.Find("Scroll List Tab Prefab/Scroll View/Viewport/Content");
                 sidePanel.OnSidePanelFocus();
             }
+
+            SidePanelBuffer.Clear();
         }
         #endregion
 
