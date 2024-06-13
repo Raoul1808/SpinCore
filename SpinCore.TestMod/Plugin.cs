@@ -1,4 +1,3 @@
-using System.Diagnostics;
 using System.IO;
 using System.Reflection;
 using BepInEx;
@@ -8,7 +7,6 @@ using SpinCore.Triggers;
 using SpinCore.UI;
 using SpinCore.Utility;
 using UnityEngine;
-using UnityEngine.UI;
 
 namespace SpinCore.TestMod
 {
@@ -56,7 +54,7 @@ namespace SpinCore.TestMod
             
             UIHelper.RegisterGroupInQuickModSettings(parent =>
             {
-                UIHelper.CreateLabel(parent, "Test", "SpinCore_HelloWorld");
+                UIHelper.CreateLabel(parent, "Test", "SpinCore_TestMod_HelloWorld");
             });
 
             var testSettings = UIHelper.CreateSettingsPage("TestPopout");
@@ -66,13 +64,13 @@ namespace SpinCore.TestMod
                 UIHelper.CreateSectionHeader(
                     section.Transform,
                     "Section Header",
-                    "SpinCore_ModSettings_TestPopoutHeader",
+                    "SpinCore_TestMod_ModSettings_TestPopoutHeader",
                     false
                 );
                 UIHelper.CreateButton(
                     section.Transform,
                     "Test Button",
-                    "SpinCore_ModSettings_TestPopoutButton",
+                    "SpinCore_TestMod_ModSettings_TestPopoutButton",
                     () => NotificationSystemGUI.AddMessage("Test Button clicked!")
                 );
                 {
@@ -86,7 +84,7 @@ namespace SpinCore.TestMod
                     UIHelper.CreateLabel(
                         subSection.Transform,
                         "Test Label",
-                        "SpinCore_ModSettings_TestLabel"
+                        "SpinCore_TestMod_ModSettings_TestLabel"
                     );
                     // subSection.GameObject.GetComponent<VerticalLayoutGroup>().padding = new RectOffset(230, 10, 10, 10);
                 }
@@ -96,28 +94,28 @@ namespace SpinCore.TestMod
                     (oldVal, newVal) => Plugin.LogInfo("Looking for " + oldVal + " of " + newVal)
                 );
             };
-            UIHelper.RegisterMenuInModSettingsRoot("SpinCore_ModSettings_TestPopout", testSettings);
+            UIHelper.RegisterMenuInModSettingsRoot("SpinCore_TestMod_ModSettings_TestPopout", testSettings);
 
-            var modPanel = UIHelper.CreateSidePanel("QuickModSettings", "SpinCore_ModTab", sprite);
+            var modPanel = UIHelper.CreateSidePanel("QuickModSettings", "SpinCore_TestMod_ModTab", sprite);
             modPanel.OnSidePanelLoaded += parent =>
             {
                 int value = 0;
                 UIHelper.CreateButton(
                     parent,
                     "HelloWorld",
-                    "SpinCore_HelloWorld",
+                    "SpinCore_TestMod_HelloWorld",
                     () => { NotificationSystemGUI.AddMessage("Hello, world!"); }
                 );
                 var notifyButton = UIHelper.CreateButton(
                     parent,
                     "ShowValue",
-                    "SpinCore_SecondTestButton",
+                    "SpinCore_TestMod_SecondTestButton",
                     () => { NotificationSystemGUI.AddMessage("Value: " + value); }
                 );
                 UIHelper.CreateMultiChoiceButton(
                     parent,
                     "ShiftValue",
-                    "SpinCore_ShiftValue",
+                    "SpinCore_TestMod_ShiftValue",
                     0,
                     v =>
                     {
@@ -130,14 +128,14 @@ namespace SpinCore.TestMod
                 UIHelper.CreateMultiChoiceButton(
                     parent,
                     "BestModder",
-                    "SpinCore_BestModder",
+                    "SpinCore_TestMod_BestModder",
                     Modders.Mew,
                     modder => NotificationSystemGUI.AddMessage("The new best modder is " + modder)
                 );
                 UIHelper.CreateToggle(
                     parent,
                     "TestToggle",
-                    "SpinCore_TestToggle",
+                    "SpinCore_TestMod_TestToggle",
                     false,
                     enable => NotificationSystemGUI.AddMessage("Enabled: " + enable)
                 );
@@ -147,19 +145,19 @@ namespace SpinCore.TestMod
                 UIHelper.CreateButton(
                     section.Transform,
                     "TestHorizontalButton1",
-                    "SpinCore_FirstButton",
+                    "SpinCore_TestMod_FirstButton",
                     () => NotificationSystemGUI.AddMessage("Am First Button bloop bloop")
                 );
                 UIHelper.CreateButton(
                     section.Transform,
                     "TestHorizontalButton2",
-                    "SpinCore_SecondButton",
+                    "SpinCore_TestMod_SecondButton",
                     () => NotificationSystemGUI.AddMessage("Button, The 2nd")
                 );
                 UIHelper.CreateButton(
                     section.Transform,
                     "TestHorizontalButton3",
-                    "SpinCore_ThirdButton",
+                    "SpinCore_TestMod_ThirdButton",
                     () => NotificationSystemGUI.AddMessage("third button's the charm")
                 );
                 
@@ -167,17 +165,6 @@ namespace SpinCore.TestMod
                     parent,
                     "Test Input Field From Side Bar",
                     (s, newVal) => { if (!string.IsNullOrWhiteSpace(newVal)) NotificationSystemGUI.AddMessage("Hello " + newVal + "!"); }
-                );
-            };
-
-            var tanocTab = UIHelper.CreateSidePanel("TanocTab", "SpinCore_TanocTab");
-            tanocTab.OnSidePanelLoaded += parent =>
-            {
-                UIHelper.CreateButton(
-                    parent,
-                    "TanocButton",
-                    "SpinCore_TanocTab",
-                    () => { Process.Start("https://www.youtube.com/@tanoc_official"); }
                 );
             };
 

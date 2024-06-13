@@ -1,44 +1,41 @@
 {
-  "SpinCore_ModTab": {
-    "en": "Quick Mod Settings"
+  "SpinCore_TestMod_ModTab": {
+    "en": "Test Mod Demo Panel"
   },
-  "SpinCore_HelloWorld": {
+  "SpinCore_TestMod_HelloWorld": {
     "en": "Hello World!"
   },
-  "SpinCore_SecondTestButton": {
+  "SpinCore_TestMod_SecondTestButton": {
     "en": "Notify"
   },
-  "SpinCore_ShiftValue": {
+  "SpinCore_TestMod_ShiftValue": {
     "en": "Shift Value"
   },
-  "SpinCore_BestModder": {
+  "SpinCore_TestMod_BestModder": {
     "en": "Best Modder"
   },
-  "SpinCore_TestToggle": {
+  "SpinCore_TestMod_TestToggle": {
     "en": "Test Toggle"
   },
-  "SpinCore_TanocTab": {
-    "en": "HARDCORE TANO*C"
-  },
-  "SpinCore_ModSettings_TestPopout": {
+  "SpinCore_TestMod_ModSettings_TestPopout": {
     "en": "Test Popout UI"
   },
-  "SpinCore_ModSettings_TestPopoutHeader": {
+  "SpinCore_TestMod_ModSettings_TestPopoutHeader": {
     "en": "Test Popout Header"
   },
-  "SpinCore_ModSettings_TestPopoutButton": {
+  "SpinCore_TestMod_ModSettings_TestPopoutButton": {
     "en": "Test Popout Button"
   },
-  "SpinCore_ModSettings_TestLabel": {
+  "SpinCore_TestMod_ModSettings_TestLabel": {
     "en": "boing"
   },
-  "SpinCore_FirstButton": {
+  "SpinCore_TestMod_FirstButton": {
     "en": "First Button"
   },
-  "SpinCore_SecondButton": {
+  "SpinCore_TestMod_SecondButton": {
     "en": "Second Button"
   },
-  "SpinCore_ThirdButton": {
+  "SpinCore_TestMod_ThirdButton": {
     "en": "Third Button"
   }
 }
