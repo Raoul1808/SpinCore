@@ -10,6 +10,8 @@ namespace SpinCore.Patches
 {
     internal static class UIPatches
     {
+        private static XDMainMenu _mainMenuInstance;
+        
         private static void GetRequiredPanelUIComponents(XDTabPanelGroup instance)
         {
             var modPanel = GameObject.Instantiate(instance.tabs[instance.tabs.Length - 1].prefabs[0].gameObject, CustomPrefabStore.RootTransform);
@@ -116,7 +118,7 @@ namespace SpinCore.Patches
             {
                 if (UIHelper.AnyPagesLeftOnStack())
                     UIHelper.ClearStack();
-                customTopButton.GetComponent<GameStateUIHelper>().ChangeState(XDCustomiseMenu.StateNames.CustomiseSettings);
+                _mainMenuInstance.gameObject.GetComponent<GameStateUIHelper>().ChangeState(XDCustomiseMenu.StateNames.CustomiseSettings);
                 _customTopNavigable.forceExpanded = true;
                 customiseSettingsTab.SetActive(false);
                 _settingsButtonRef.forceExpanded = false;
@@ -186,6 +188,16 @@ namespace SpinCore.Patches
         private static void RunSidePanelBuffer()
         {
             UIHelper.CheckPanelCreation();
+        }
+
+        [HarmonyPatch(typeof(XDMainMenu), nameof(XDMainMenu.Update))]
+        [HarmonyPostfix]
+        private static void SaveMenuReference(XDMainMenu __instance)
+        {
+            if (_mainMenuInstance == null)
+            {
+                _mainMenuInstance = __instance;
+            }
         }
     }
 }
