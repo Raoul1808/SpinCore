@@ -53,6 +53,11 @@ namespace SpinCore.TestMod
             TranslationHelper.LoadTranslationsFromStream(localeStream);
 
             TranslationHelper.AddTranslation("TestKey", "TestString");
+            
+            UIHelper.RegisterGroupInQuickModSettings(parent =>
+            {
+                UIHelper.CreateLabel(parent, "Test", "SpinCore_HelloWorld");
+            });
 
             var testSettings = UIHelper.CreateSettingsPage("TestPopout");
             testSettings.OnPageLoad += pageTransform =>

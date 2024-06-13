@@ -8,5 +8,8 @@
   },
   "SpinCore_ModSettings_ModList": {
     "en": "Mods"
+  },
+  "SpinCore_QuickModSettings": {
+    "en": "Quick Mod Settings"
   }
 }

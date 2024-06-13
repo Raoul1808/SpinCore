@@ -1,6 +1,8 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
+using SpinCore.Utility;
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.UI;
@@ -38,6 +40,7 @@ namespace SpinCore.UI
         private static readonly List<CustomPage> PageStack = new List<CustomPage>();
         private static readonly List<(TranslationReference, CustomPage)> ModSettingsPopoutBuffer = new List<(TranslationReference, CustomPage)>();
         private static readonly List<CustomPage> CustomPageBuffer = new List<CustomPage>();
+        private static CustomSidePanel _quickSettingsPanelRef;
         private static CustomPage _modSettingsPageRef;
         private static CustomActiveComponent _modSettingsListRef;
         private static CustomPage LastPageOnStack => PageStack.Count > 0 ? PageStack[PageStack.Count - 1] : null;
@@ -45,6 +48,16 @@ namespace SpinCore.UI
         #endregion
 
         #region Internal Side Panel Management
+        internal static void CreateQuickSettingsSidePanel()
+        {
+            var assembly = Assembly.GetExecutingAssembly();
+            var stream = assembly.GetManifestResourceStream("SpinCore.Resources.Wrench.png");
+            var tex = RuntimeAssetLoader.Texture2DFromStream(stream);
+            const int squareBorderOffset = 50;
+            var icon = Sprite.Create(tex, new Rect(squareBorderOffset, squareBorderOffset, tex.width - squareBorderOffset * 2, tex.height - squareBorderOffset * 2), Vector2.zero);
+            _quickSettingsPanelRef = CreateSidePanel("SpinCoreQuickSettings", "SpinCore_QuickModSettings", icon);
+        }
+
         internal static void LoadSidePanels(XDTabPanelGroup instance)
         {
             _tabPanelGroupInstance = instance;
@@ -197,6 +210,13 @@ namespace SpinCore.UI
                 return;
             }
             ModSettingsPopoutBuffer.Add((translation, page));
+        }
+
+        public static void RegisterGroupInQuickModSettings(CustomSidePanel.SidePanelLoad onLoad)
+        {
+            if (_quickSettingsPanelRef == null)
+                CreateQuickSettingsSidePanel();
+            _quickSettingsPanelRef.OnSidePanelLoaded += onLoad;
         }
 
         public static CustomInputField CreateInputField(Transform parent, string name, Action<string, string> onValueChanged)
