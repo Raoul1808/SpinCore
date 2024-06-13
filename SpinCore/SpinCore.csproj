@@ -32,6 +32,9 @@
       <Reference Include="UnityEngine.CoreModule">
         <HintPath>..\srxd-dir\SpinRhythm_Data\Managed\UnityEngine.CoreModule.dll</HintPath>
       </Reference>
+      <Reference Include="UnityEngine.ImageConversionModule">
+        <HintPath>..\srxd-dir\SpinRhythm_Data\Managed\UnityEngine.ImageConversionModule.dll</HintPath>
+      </Reference>
       <Reference Include="UnityEngine.UI">
         <HintPath>..\srxd-dir\SpinRhythm_Data\Managed\UnityEngine.UI.dll</HintPath>
       </Reference>
@@ -47,6 +50,8 @@
 
     <ItemGroup>
       <EmbeddedResource Include="locale.json" />
+      <None Remove="Resources\wrench.png" />
+      <EmbeddedResource Include="Resources\Wrench.png" />
     </ItemGroup>
 
     <Target Name="PostBuildScript" AfterTargets="AfterBuild">

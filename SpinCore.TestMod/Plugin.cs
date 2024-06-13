@@ -6,6 +6,7 @@ using BepInEx.Logging;
 using SpinCore.Translation;
 using SpinCore.Triggers;
 using SpinCore.UI;
+using SpinCore.Utility;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -31,18 +32,10 @@ namespace SpinCore.TestMod
 
         private Texture2D LoadImage(string name)
         {
-            byte[] imageData;
             using (Stream imageStream = Assembly.GetExecutingAssembly().GetManifestResourceStream("SpinCore.TestMod.Resources." + name))
             {
-                using (MemoryStream mem = new MemoryStream())
-                {
-                    imageStream.CopyTo(mem);
-                    imageData = mem.ToArray();
-                }
+                return RuntimeAssetLoader.Texture2DFromStream(imageStream);
             }
-            var tex = new Texture2D(1, 1);
-            tex.LoadImage(imageData);
-            return tex;
         }
 
         private void Awake()
