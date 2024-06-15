@@ -34,6 +34,12 @@ namespace SpinCore.Patches
             UIHelper.Prefabs.Image = panelImage;
 
             var filterPanelClone = GameObject.Instantiate(instance.tabs[1].prefabs[0].gameObject, CustomPrefabStore.RootTransform);
+            var smallMultiChoice = GameObject.Instantiate(filterPanelClone.transform.Find("FilterSettingsPopout/TrackSorting").gameObject, CustomPrefabStore.RootTransform);
+            smallMultiChoice.GetComponent<XDNavigableOptionMultiChoice>().state.callbacks = new XDNavigableOptionMultiChoice.Callbacks();
+            smallMultiChoice.GetComponentInChildren<TranslatedTextMeshPro>().translation = TranslationReference.Empty;
+            Object.Destroy(smallMultiChoice.GetComponent<XDNavigableOptionMultiChoice_IntValue>());
+            smallMultiChoice.name = "SampleSmallMultiChoice";
+            UIHelper.Prefabs.SmallMultiChoice = smallMultiChoice;
             Object.Destroy(filterPanelClone);
 
             panelContent.RemoveAllChildren();
@@ -85,7 +91,7 @@ namespace SpinCore.Patches
             multiChoiceBase.GetComponent<XDNavigableOptionMultiChoice>().state.callbacks = new XDNavigableOptionMultiChoice.Callbacks();
             multiChoiceBase.GetComponentInChildren<TranslatedTextMeshPro>().translation = TranslationReference.Empty;
             multiChoiceBase.SetActive(false);
-            UIHelper.Prefabs.MultiChoice = multiChoiceBase;
+            UIHelper.Prefabs.LargeMultiChoice = multiChoiceBase;
             var optionLabel = GameObject.Instantiate(multiChoiceBase.transform.Find("OptionLabel").gameObject, CustomPrefabStore.RootTransform);
 
             tabSectionBase.transform.RemoveAllChildren();

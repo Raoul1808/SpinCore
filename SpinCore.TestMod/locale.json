@@ -26,6 +26,9 @@
   "SpinCore_TestMod_ModSettings_TestPopoutButton": {
     "en": "Test Popout Button"
   },
+  "SpinCore_TestMod_ModSettings_TestLargeToggle": {
+    "en": "Test Large Toggle"
+  },
   "SpinCore_TestMod_ModSettings_TestLabel": {
     "en": "boing"
   },

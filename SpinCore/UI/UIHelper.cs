@@ -16,7 +16,8 @@ namespace SpinCore.UI
         {
             public GameObject LargeButton { get; internal set; }
             public GameObject SidePanel { get; internal set; }
-            public GameObject MultiChoice { get; internal set; }
+            public GameObject LargeMultiChoice { get; internal set; }
+            public GameObject SmallMultiChoice { get; internal set; }
             public GameObject SettingsPage { get; internal set; }
             public GameObject Line { get; internal set; }
             public GameObject SectionHeader { get; internal set; }
@@ -239,7 +240,7 @@ namespace SpinCore.UI
 
         public static CustomTextComponent CreateLabel(Transform parent, string name, TranslationReference translation)
         {
-            var text = GameObject.Instantiate(Prefabs.MultiChoice.transform.Find("OptionLabel").gameObject, parent);
+            var text = GameObject.Instantiate(Prefabs.LargeMultiChoice.transform.Find("OptionLabel").gameObject, parent);
             text.name = name;
             text.GetComponentInChildren<TranslatedTextMeshPro>().SetTranslation(translation);
             return new CustomTextComponent(text);
@@ -326,14 +327,14 @@ namespace SpinCore.UI
             return new CustomButton(button);
         }
 
-        public static CustomMultiChoice CreateToggle(
+        public static CustomMultiChoice CreateSmallToggle(
             Transform parent,
             string name,
             string translationKey,
             bool defaultValue,
             Action<bool> onValueChange)
         {
-            return CreateToggle(
+            return CreateSmallToggle(
                 parent,
                 name,
                 new TranslationReference(translationKey, false),
@@ -342,14 +343,14 @@ namespace SpinCore.UI
             );
         }
         
-        public static CustomMultiChoice CreateToggle(
+        public static CustomMultiChoice CreateSmallToggle(
             Transform parent,
             string name,
             TranslationReference translation,
             bool defaultValue,
             Action<bool> onValueChange)
         {
-            return CreateMultiChoiceButton(
+            return CreateSmallMultiChoiceButton(
                 parent,
                 name,
                 translation,
@@ -360,14 +361,14 @@ namespace SpinCore.UI
             );
         }
 
-        public static CustomMultiChoice CreateMultiChoiceButton<T>(
+        public static CustomMultiChoice CreateLargeToggle(
             Transform parent,
             string name,
             string translationKey,
-            T defaultValue,
-            Action<T> onValueChange) where T : Enum
+            bool defaultValue,
+            Action<bool> onValueChange)
         {
-            return CreateMultiChoiceButton(
+            return CreateLargeToggle(
                 parent,
                 name,
                 new TranslationReference(translationKey, false),
@@ -376,7 +377,41 @@ namespace SpinCore.UI
             );
         }
         
-        public static CustomMultiChoice CreateMultiChoiceButton<T>(
+        public static CustomMultiChoice CreateLargeToggle(
+            Transform parent,
+            string name,
+            TranslationReference translation,
+            bool defaultValue,
+            Action<bool> onValueChange)
+        {
+            return CreateLargeMultiChoiceButton(
+                parent,
+                name,
+                translation,
+                defaultValue ? 1 : 0,
+                v => onValueChange.Invoke(v == 1),
+                () => new IntRange(0, 2),
+                v => v == 1 ? "UI_Yes" : "UI_No"
+            );
+        }
+
+        public static CustomMultiChoice CreateSmallMultiChoiceButton<T>(
+            Transform parent,
+            string name,
+            string translationKey,
+            T defaultValue,
+            Action<T> onValueChange) where T : Enum
+        {
+            return CreateSmallMultiChoiceButton(
+                parent,
+                name,
+                new TranslationReference(translationKey, false),
+                defaultValue,
+                onValueChange
+            );
+        }
+        
+        public static CustomMultiChoice CreateSmallMultiChoiceButton<T>(
             Transform parent,
             string name,
             TranslationReference translation,
@@ -385,7 +420,7 @@ namespace SpinCore.UI
         {
             var values = (T[])Enum.GetValues(typeof(T));
             int defaultValueInt = values.ToList().IndexOf(defaultValue);
-            return CreateMultiChoiceButton(
+            return CreateSmallMultiChoiceButton(
                 parent,
                 name,
                 translation,
@@ -396,7 +431,7 @@ namespace SpinCore.UI
             );
         }
 
-        public static CustomMultiChoice CreateMultiChoiceButton(
+        public static CustomMultiChoice CreateSmallMultiChoiceButton(
             Transform parent,
             string name,
             string translationKey,
@@ -405,7 +440,7 @@ namespace SpinCore.UI
             XDNavigableOptionMultiChoice.OnValueRangeRequested valueRangeRequested,
             XDNavigableOptionMultiChoice.OnValueTextRequested valueTextRequested)
         {
-            return CreateMultiChoiceButton(
+            return CreateSmallMultiChoiceButton(
                 parent,
                 name,
                 new TranslationReference(translationKey, false),
@@ -416,7 +451,7 @@ namespace SpinCore.UI
             );
         }
         
-        public static CustomMultiChoice CreateMultiChoiceButton(
+        public static CustomMultiChoice CreateSmallMultiChoiceButton(
             Transform parent,
             string name,
             TranslationReference translation,
@@ -425,7 +460,106 @@ namespace SpinCore.UI
             XDNavigableOptionMultiChoice.OnValueRangeRequested valueRangeRequested,
             XDNavigableOptionMultiChoice.OnValueTextRequested valueTextRequested)
         {
-            var button = GameObject.Instantiate(Prefabs.MultiChoice, parent);
+            return CreateMultiChoiceButton(
+                Prefabs.SmallMultiChoice,
+                parent,
+                name,
+                translation,
+                defaultValue,
+                valueChanged,
+                valueRangeRequested,
+                valueTextRequested
+            );
+        }
+        
+        public static CustomMultiChoice CreateLargeMultiChoiceButton<T>(
+            Transform parent,
+            string name,
+            string translationKey,
+            T defaultValue,
+            Action<T> onValueChange) where T : Enum
+        {
+            return CreateLargeMultiChoiceButton(
+                parent,
+                name,
+                new TranslationReference(translationKey, false),
+                defaultValue,
+                onValueChange
+            );
+        }
+        
+        public static CustomMultiChoice CreateLargeMultiChoiceButton<T>(
+            Transform parent,
+            string name,
+            TranslationReference translation,
+            T defaultValue,
+            Action<T> onValueChange) where T : Enum
+        {
+            var values = (T[])Enum.GetValues(typeof(T));
+            int defaultValueInt = values.ToList().IndexOf(defaultValue);
+            return CreateLargeMultiChoiceButton(
+                parent,
+                name,
+                translation,
+                defaultValueInt,
+                v => onValueChange.Invoke(values[v]),
+                () => new IntRange(0, values.Length),
+                v => values[v].ToString()
+            );
+        }
+
+        public static CustomMultiChoice CreateLargeMultiChoiceButton(
+            Transform parent,
+            string name,
+            string translationKey,
+            int defaultValue,
+            XDNavigableOptionMultiChoice.OnValueChanged valueChanged,
+            XDNavigableOptionMultiChoice.OnValueRangeRequested valueRangeRequested,
+            XDNavigableOptionMultiChoice.OnValueTextRequested valueTextRequested)
+        {
+            return CreateLargeMultiChoiceButton(
+                parent,
+                name,
+                new TranslationReference(translationKey, false),
+                defaultValue,
+                valueChanged,
+                valueRangeRequested,
+                valueTextRequested
+            );
+        }
+        
+        public static CustomMultiChoice CreateLargeMultiChoiceButton(
+            Transform parent,
+            string name,
+            TranslationReference translation,
+            int defaultValue,
+            XDNavigableOptionMultiChoice.OnValueChanged valueChanged,
+            XDNavigableOptionMultiChoice.OnValueRangeRequested valueRangeRequested,
+            XDNavigableOptionMultiChoice.OnValueTextRequested valueTextRequested)
+        {
+            return CreateMultiChoiceButton(
+                Prefabs.LargeMultiChoice,
+                parent,
+                name,
+                translation,
+                defaultValue,
+                valueChanged,
+                valueRangeRequested,
+                valueTextRequested
+            );
+        }
+
+        private static CustomMultiChoice CreateMultiChoiceButton(
+            GameObject multiChoicePrefab,
+            Transform parent,
+            string name,
+            TranslationReference translation,
+            int defaultValue,
+            XDNavigableOptionMultiChoice.OnValueChanged valueChanged,
+            XDNavigableOptionMultiChoice.OnValueRangeRequested valueRangeRequested,
+            XDNavigableOptionMultiChoice.OnValueTextRequested valueTextRequested)
+        {
+            var button = GameObject.Instantiate(multiChoicePrefab, parent);
             button.name = name;
             button.SetActive(true);
             button.GetComponentInChildren<TranslatedTextMeshPro>().SetTranslation(translation);

@@ -93,6 +93,13 @@ namespace SpinCore.TestMod
                     "Test Input Field",
                     (oldVal, newVal) => Plugin.LogInfo("Looking for " + oldVal + " of " + newVal)
                 );
+                UIHelper.CreateLargeToggle(
+                    section.Transform,
+                    "Test Large Toggle",
+                    "SpinCore_TestMod_ModSettings_TestLargeToggle",
+                    false,
+                    (val) => NotificationSystemGUI.AddMessage(val ? "Hi" : "Bye")
+                );
             };
             UIHelper.RegisterMenuInModSettingsRoot("SpinCore_TestMod_ModSettings_TestPopout", testSettings);
 
@@ -112,7 +119,7 @@ namespace SpinCore.TestMod
                     "SpinCore_TestMod_SecondTestButton",
                     () => { NotificationSystemGUI.AddMessage("Value: " + value); }
                 );
-                UIHelper.CreateMultiChoiceButton(
+                UIHelper.CreateSmallMultiChoiceButton(
                     parent,
                     "ShiftValue",
                     "SpinCore_TestMod_ShiftValue",
@@ -125,14 +132,14 @@ namespace SpinCore.TestMod
                     () => new IntRange(0, 101),
                     v => v.ToString()
                 );
-                UIHelper.CreateMultiChoiceButton(
+                UIHelper.CreateSmallMultiChoiceButton(
                     parent,
                     "BestModder",
                     "SpinCore_TestMod_BestModder",
                     Modders.Mew,
                     modder => NotificationSystemGUI.AddMessage("The new best modder is " + modder)
                 );
-                UIHelper.CreateToggle(
+                UIHelper.CreateSmallToggle(
                     parent,
                     "TestToggle",
                     "SpinCore_TestMod_TestToggle",
