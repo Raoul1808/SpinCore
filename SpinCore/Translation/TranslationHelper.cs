@@ -60,7 +60,7 @@ namespace SpinCore.Translation
         
         private static void AddKey(string key, TranslatedString value)
         {
-            var language = TranslationSystem.Instance.translationSystemSettings.translations[TranslationSystem.Instance.translationSystemSettings.translations.Length - 1];
+            var language = TranslationSystem.Settings.translations[TranslationSystem.Settings.translations.Length - 1];
             language.translationKeys.Add(key);
             foreach (var lang in language.languages)
             {
@@ -72,7 +72,7 @@ namespace SpinCore.Translation
 
         private static void RemoveKey(string key)
         {
-            var language = TranslationSystem.Instance.translationSystemSettings.translations[TranslationSystem.Instance.translationSystemSettings.translations.Length - 1];
+            var language = TranslationSystem.Settings.translations[TranslationSystem.Settings.translations.Length - 1];
             language.RemoveTranslationKey(key);
         }
     }
