@@ -19,6 +19,8 @@ namespace SpinCore.UI
             obj.AddComponent<T2>();
         }
 
+        public LayoutGroup LayoutGroup { get; private set; }
+
         public Axis LayoutDirection
         {
             get => _direction;
@@ -30,9 +32,11 @@ namespace SpinCore.UI
                     {
                         case Axis.Vertical:
                             ChangeFirstToSecond<HorizontalLayoutGroup, VerticalLayoutGroup>(GameObject);
+                            LayoutGroup = GameObject.GetComponent<VerticalLayoutGroup>();
                             break;
                         case Axis.Horizontal:
                             ChangeFirstToSecond<VerticalLayoutGroup, HorizontalLayoutGroup>(GameObject);
+                            LayoutGroup = GameObject.GetComponent<HorizontalLayoutGroup>();
                             break;
                     }
                 }
@@ -40,10 +44,11 @@ namespace SpinCore.UI
                 _direction = value;
             }
         }
-        
+
         internal CustomGroup(GameObject obj) : base(obj)
         {
             _direction = Axis.Vertical;
+            LayoutGroup = obj.GetComponent<VerticalLayoutGroup>();
         }
     }
 }

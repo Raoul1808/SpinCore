@@ -1,5 +1,4 @@
 using System;
-using System.Collections.Generic;
 using UnityEngine;
 
 namespace SpinCore.UI
@@ -16,6 +15,7 @@ namespace SpinCore.UI
                 {
                     _modalGroup = UIHelper.CreateGroup(ModalMessageDialog.Instance.transform.Find("Container/Body"), "SpinCoreModalExtension");
                     _modalGroup.Transform.SetSiblingIndex(5);
+                    _modalGroup.LayoutGroup.padding = new RectOffset(15, 15, 0, 0);
                 }
 
                 return _modalGroup;
