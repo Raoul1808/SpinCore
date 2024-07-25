@@ -2,6 +2,9 @@ using JetBrains.Annotations;
 
 namespace SpinCore.Translation
 {
+    /// <summary>
+    /// A container for a translated string in all languages supported by the game.
+    /// </summary>
     public struct TranslatedString
     {
         [NotNull]

@@ -3,6 +3,9 @@ using UnityEngine;
 
 namespace SpinCore.UI
 {
+    /// <summary>
+    /// An extension class used to extend <see cref="ModalMessageDialog"/> functionality.
+    /// </summary>
     public static class ModalMessageDialogExtensions
     {
         private static CustomGroup _modalGroup;

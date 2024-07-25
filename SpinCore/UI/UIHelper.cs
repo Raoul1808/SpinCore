@@ -10,6 +10,9 @@ using XDMenuPlay;
 
 namespace SpinCore.UI
 {
+    /// <summary>
+    /// A helper class used to create UI components.
+    /// </summary>
     public static class UIHelper
     {
         public class UIPrefabs
@@ -31,6 +34,9 @@ namespace SpinCore.UI
         }
 
         #region Fields and Properties
+        /// <summary>
+        /// Stores all cloned UI prefabs.
+        /// </summary>
         public static UIPrefabs Prefabs { get; } = new UIPrefabs();
 
         private const string PanelNamePrefix = "TabPanel_SpinCore";
@@ -160,7 +166,7 @@ namespace SpinCore.UI
         
         internal static CustomPage InitializeCustomModPage()
         {
-            _modSettingsPageRef = CreateSettingsPage("CustomiseModSettings");
+            _modSettingsPageRef = CreateCustomPage("CustomiseModSettings");
             _modSettingsPageRef.OnPageLoad += transform =>
             {
                 var modListSection = CreateGroup(
@@ -202,7 +208,18 @@ namespace SpinCore.UI
         #endregion
 
         #region UI Component Creation
+        /// <summary>
+        /// Registers the given <see cref="CustomPage"/> to SpinCore's Mod Settings menu and creates a button to open the page.
+        /// </summary>
+        /// <param name="translationKey">A translation key used for the button's label</param>
+        /// <param name="page">The page to register</param>
         public static void RegisterMenuInModSettingsRoot(string translationKey, CustomPage page) => RegisterMenuInModSettingsRoot(new TranslationReference(translationKey, false), page);
+
+        /// <summary>
+        /// Registers the given <see cref="CustomPage"/> to SpinCore's Mod Settings menu and creates a button to open the page.
+        /// </summary>
+        /// <param name="translation">A translation reference used for the button's label</param>
+        /// <param name="page">The page to register</param>
         public static void RegisterMenuInModSettingsRoot(TranslationReference translation, CustomPage page)
         {
             if (_modSettingsListRef != null)
@@ -213,6 +230,10 @@ namespace SpinCore.UI
             ModSettingsPopoutBuffer.Add((translation, page));
         }
 
+        /// <summary>
+        /// Registers the given callback to be used for when the quick mod settings tab is created.
+        /// </summary>
+        /// <param name="onLoad">A callback function</param>
         public static void RegisterGroupInQuickModSettings(CustomSidePanel.SidePanelLoad onLoad)
         {
             if (_quickSettingsPanelRef == null)
@@ -220,6 +241,13 @@ namespace SpinCore.UI
             _quickSettingsPanelRef.OnSidePanelLoaded += onLoad;
         }
 
+        /// <summary>
+        /// Creates an input field UI Component
+        /// </summary>
+        /// <param name="parent">A transform to place the component on</param>
+        /// <param name="name">The internal name of the component</param>
+        /// <param name="onValueChanged">A function called when text is changed</param>
+        /// <returns>The input field component</returns>
         public static CustomInputField CreateInputField(Transform parent, string name, Action<string, string> onValueChanged)
         {
             var textField = GameObject.Instantiate(Prefabs.InputField, parent);
@@ -228,6 +256,13 @@ namespace SpinCore.UI
             return new CustomInputField(textField, onValueChanged);
         }
 
+        /// <summary>
+        /// Creates an image UI Component
+        /// </summary>
+        /// <param name="parent">A transform to place the component on</param>
+        /// <param name="name">The internal name of the component</param>
+        /// <param name="tex">The texture to use for the image</param>
+        /// <returns>The image component</returns>
         public static CustomImage CreateImage(Transform parent, string name, Texture tex)
         {
             var image = GameObject.Instantiate(Prefabs.Image, parent);
@@ -236,8 +271,22 @@ namespace SpinCore.UI
             return new CustomImage(image);
         }
 
+        /// <summary>
+        /// Creates a label UI Component
+        /// </summary>
+        /// <param name="parent">A transform to place the component on</param>
+        /// <param name="name">The internal name of the component</param>
+        /// <param name="translationKey">A translation key for the label</param>
+        /// <returns>The label component</returns>
         public static CustomTextComponent CreateLabel(Transform parent, string name, string translationKey) => CreateLabel(parent, name, new TranslationReference(translationKey, false));
 
+        /// <summary>
+        /// Creates a label UI Component
+        /// </summary>
+        /// <param name="parent">A transform to place the component on</param>
+        /// <param name="name">The internal name of the component</param>
+        /// <param name="translation">A translation reference for the label</param>
+        /// <returns>The label component</returns>
         public static CustomTextComponent CreateLabel(Transform parent, string name, TranslationReference translation)
         {
             var text = GameObject.Instantiate(Prefabs.LargeMultiChoice.transform.Find("OptionLabel").gameObject, parent);
@@ -246,7 +295,12 @@ namespace SpinCore.UI
             return new CustomTextComponent(text);
         }
 
-        public static CustomPage CreateSettingsPage(string name)
+        /// <summary>
+        /// Creates a custom page
+        /// </summary>
+        /// <param name="name">The internal name of the custom page</param>
+        /// <returns>The custom page</returns>
+        public static CustomPage CreateCustomPage(string name)
         {
             var page = new CustomPage(name);
             if (Prefabs.SettingsPage is null)
@@ -258,6 +312,13 @@ namespace SpinCore.UI
             return page;
         }
 
+        /// <summary>
+        /// Creates a custom UI group
+        /// </summary>
+        /// <param name="parent">A transform to place the component on</param>
+        /// <param name="name">The internal name of the component</param>
+        /// <param name="layoutDirection">The group's Layout Direction</param>
+        /// <returns>The custom component</returns>
         public static CustomGroup CreateGroup(Transform parent, string name, Axis layoutDirection = Axis.Vertical)
         {
             var section = GameObject.Instantiate(Prefabs.EmptySection, parent);
@@ -267,8 +328,22 @@ namespace SpinCore.UI
             return group;
         }
 
+        /// <summary>
+        /// Creates a section header UI Component
+        /// </summary>
+        /// <param name="parent">A transform to place the component on</param>
+        /// <param name="name">The internal name of the component</param>
+        /// <param name="translationKey">A translation key for the section header text</param>
+        /// <returns>The section header component</returns>
         public static CustomSectionHeader CreateSectionHeader(Transform parent, string name, string translationKey, bool spacer) => CreateSectionHeader(parent, name, new TranslationReference(translationKey, false), spacer);
 
+        /// <summary>
+        /// Creates a section header UI Component
+        /// </summary>
+        /// <param name="parent">A transform to place the component on</param>
+        /// <param name="name">The internal name of the component</param>
+        /// <param name="translation">A translation reference for the section header text</param>
+        /// <returns>The section header component</returns>
         public static CustomSectionHeader CreateSectionHeader(Transform parent, string name, TranslationReference translation, bool spacer)
         {
             var obj = GameObject.Instantiate(Prefabs.SectionHeader, parent);
@@ -280,6 +355,12 @@ namespace SpinCore.UI
             };
         }
 
+        /// <summary>
+        /// Creates a line separator UI Component
+        /// </summary>
+        /// <param name="parent">A transform to place the component on</param>
+        /// <param name="name">The internal name of the component</param>
+        /// <returns>The line separator component</returns>
         public static CustomActiveComponent CreateLine(Transform parent, string name = "Line")
         {
             var line = GameObject.Instantiate(Prefabs.Line, parent);
@@ -287,8 +368,24 @@ namespace SpinCore.UI
             return new CustomActiveComponent(line);
         }
 
+        /// <summary>
+        /// Creates a popout button UI Component
+        /// </summary>
+        /// <param name="parent">A transform to place the component on</param>
+        /// <param name="name">The internal name of the component</param>
+        /// <param name="translationKey">A translation key for the popout button</param>
+        /// <param name="page">The page to open on click</param>
+        /// <returns>The popout button component</returns>
         public static CustomPopoutButton CreatePopout(Transform parent, string name, string translationKey, CustomPage page) => CreatePopout(parent, name, new TranslationReference(translationKey, false), page);
 
+        /// <summary>
+        /// Creates a popout button UI Component
+        /// </summary>
+        /// <param name="parent">A transform to place the component on</param>
+        /// <param name="name">The internal name of the component</param>
+        /// <param name="translation">A translation reference for the popout button</param>
+        /// <param name="page">The page to open on click</param>
+        /// <returns>The popout button component</returns>
         public static CustomPopoutButton CreatePopout(Transform parent, string name, TranslationReference translation, CustomPage page)
         {
             var button = GameObject.Instantiate(Prefabs.PopoutButton, parent);
@@ -303,7 +400,22 @@ namespace SpinCore.UI
             return new CustomPopoutButton(button, page);
         }
 
+        /// <summary>
+        /// Creates a custom side panel
+        /// </summary>
+        /// <param name="name">The internal name of the side panel</param>
+        /// <param name="translationKey">A translation key for the panel's name</param>
+        /// <param name="sprite">The icon used for the side panel</param>
+        /// <returns>The custom side panel</returns>
         public static CustomSidePanel CreateSidePanel(string name, string translationKey, Sprite sprite = null) => CreateSidePanel(name, new TranslationReference(translationKey, false), sprite);
+
+        /// <summary>
+        /// Creates a custom side panel
+        /// </summary>
+        /// <param name="name">The internal name of the side panel</param>
+        /// <param name="translation">A translation reference for the panel's name</param>
+        /// <param name="sprite">The icon used for the side panel</param>
+        /// <returns>The custom side panel</returns>
         public static CustomSidePanel CreateSidePanel(string name, TranslationReference translation, Sprite sprite = null)
         {
             var panel = new CustomSidePanel(name, translation, sprite);
@@ -315,7 +427,24 @@ namespace SpinCore.UI
             return panel;
         }
 
+        /// <summary>
+        /// Creates a button UI Component
+        /// </summary>
+        /// <param name="parent">A transform to place the component on</param>
+        /// <param name="name">The internal name of the component</param>
+        /// <param name="translationKey">A translation key for the button</param>
+        /// <param name="action">Function called on click</param>
+        /// <returns>The button component</returns>
         public static CustomButton CreateButton(Transform parent, string name, string translationKey, UnityAction action) => CreateButton(parent, name, new TranslationReference(translationKey, false), action);
+
+        /// <summary>
+        /// Creates a button UI Component
+        /// </summary>
+        /// <param name="parent">A transform to place the component on</param>
+        /// <param name="name">The internal name of the component</param>
+        /// <param name="translation">A translation reference for the button</param>
+        /// <param name="action">Function called on click</param>
+        /// <returns>The button component</returns>
         public static CustomButton CreateButton(Transform parent, string name, TranslationReference translation, UnityAction action)
         {
             var button = GameObject.Instantiate(Prefabs.LargeButton, parent);
@@ -327,6 +456,15 @@ namespace SpinCore.UI
             return new CustomButton(button);
         }
 
+        /// <summary>
+        /// Creates a small toggle UI Component
+        /// </summary>
+        /// <param name="parent">A transform to place the component on</param>
+        /// <param name="name">The internal name of the component</param>
+        /// <param name="translationKey">A translation key for the toggle</param>
+        /// <param name="defaultValue">The toggle's default value</param>
+        /// <param name="onValueChange">Function called when the toggle is updated</param>
+        /// <returns>The toggle component</returns>
         public static CustomMultiChoice CreateSmallToggle(
             Transform parent,
             string name,
@@ -343,6 +481,15 @@ namespace SpinCore.UI
             );
         }
         
+        /// <summary>
+        /// Creates a small toggle UI Component
+        /// </summary>
+        /// <param name="parent">A transform to place the component on</param>
+        /// <param name="name">The internal name of the component</param>
+        /// <param name="translation">A translation reference for the toggle</param>
+        /// <param name="defaultValue">The toggle's default value</param>
+        /// <param name="onValueChange">Function called when the toggle is updated</param>
+        /// <returns>The toggle component</returns>
         public static CustomMultiChoice CreateSmallToggle(
             Transform parent,
             string name,
@@ -361,6 +508,15 @@ namespace SpinCore.UI
             );
         }
 
+        /// <summary>
+        /// Creates a large toggle UI Component
+        /// </summary>
+        /// <param name="parent">A transform to place the component on</param>
+        /// <param name="name">The internal name of the component</param>
+        /// <param name="translationKey">A translation key for the toggle</param>
+        /// <param name="defaultValue">The toggle's default value</param>
+        /// <param name="onValueChange">Function called when the toggle is updated</param>
+        /// <returns>The toggle component</returns>
         public static CustomMultiChoice CreateLargeToggle(
             Transform parent,
             string name,
@@ -376,7 +532,16 @@ namespace SpinCore.UI
                 onValueChange
             );
         }
-        
+
+        /// <summary>
+        /// Creates a large toggle UI Component
+        /// </summary>
+        /// <param name="parent">A transform to place the component on</param>
+        /// <param name="name">The internal name of the component</param>
+        /// <param name="translation">A translation reference for the toggle</param>
+        /// <param name="defaultValue">The toggle's default value</param>
+        /// <param name="onValueChange">Function called when the toggle is updated</param>
+        /// <returns>The toggle component</returns>
         public static CustomMultiChoice CreateLargeToggle(
             Transform parent,
             string name,
@@ -395,6 +560,15 @@ namespace SpinCore.UI
             );
         }
 
+        /// <summary>
+        /// Creates a small multi-choice UI Component based on an enum
+        /// </summary>
+        /// <param name="parent">A transform to place the component on</param>
+        /// <param name="name">The internal name of the component</param>
+        /// <param name="translationKey">A translation key for the multi-choice</param>
+        /// <param name="defaultValue">The multi-choice's default value</param>
+        /// <param name="onValueChange">Function called when the option is changed</param>
+        /// <returns>The multi-choice component</returns>
         public static CustomMultiChoice CreateSmallMultiChoiceButton<T>(
             Transform parent,
             string name,
@@ -410,7 +584,16 @@ namespace SpinCore.UI
                 onValueChange
             );
         }
-        
+
+        /// <summary>
+        /// Creates a small multi-choice UI Component based on an enum
+        /// </summary>
+        /// <param name="parent">A transform to place the component on</param>
+        /// <param name="name">The internal name of the component</param>
+        /// <param name="translation">A translation reference for the multi-choice</param>
+        /// <param name="defaultValue">The multi-choice's default value</param>
+        /// <param name="onValueChange">Function called when the option is changed</param>
+        /// <returns>The multi-choice component</returns>
         public static CustomMultiChoice CreateSmallMultiChoiceButton<T>(
             Transform parent,
             string name,
@@ -431,6 +614,17 @@ namespace SpinCore.UI
             );
         }
 
+        /// <summary>
+        /// Creates a small multi-choice UI Component
+        /// </summary>
+        /// <param name="parent">A transform to place the component on</param>
+        /// <param name="name">The internal name of the component</param>
+        /// <param name="translationKey">A translation key for the multi-choice</param>
+        /// <param name="defaultValue">The multi-choice's default value</param>
+        /// <param name="valueChanged">Function called when the option is changed</param>
+        /// <param name="valueRangeRequested">Function called to define the multi-choice range</param>
+        /// <param name="valueTextRequested">Function called to define each multi-choice option text</param>
+        /// <returns>The multi-choice component</returns>
         public static CustomMultiChoice CreateSmallMultiChoiceButton(
             Transform parent,
             string name,
@@ -450,7 +644,18 @@ namespace SpinCore.UI
                 valueTextRequested
             );
         }
-        
+
+        /// <summary>
+        /// Creates a small multi-choice UI Component
+        /// </summary>
+        /// <param name="parent">A transform to place the component on</param>
+        /// <param name="name">The internal name of the component</param>
+        /// <param name="translation">A translation reference for the multi-choice</param>
+        /// <param name="defaultValue">The multi-choice's default value</param>
+        /// <param name="valueChanged">Function called when the option is changed</param>
+        /// <param name="valueRangeRequested">Function called to define the multi-choice range</param>
+        /// <param name="valueTextRequested">Function called to define each multi-choice option text</param>
+        /// <returns>The multi-choice component</returns>
         public static CustomMultiChoice CreateSmallMultiChoiceButton(
             Transform parent,
             string name,
@@ -471,7 +676,16 @@ namespace SpinCore.UI
                 valueTextRequested
             );
         }
-        
+
+        /// <summary>
+        /// Creates a large multi-choice UI Component based on an enum
+        /// </summary>
+        /// <param name="parent">A transform to place the component on</param>
+        /// <param name="name">The internal name of the component</param>
+        /// <param name="translationKey">A translation key for the multi-choice</param>
+        /// <param name="defaultValue">The multi-choice's default value</param>
+        /// <param name="onValueChange">Function called when the option is changed</param>
+        /// <returns>The multi-choice component</returns>
         public static CustomMultiChoice CreateLargeMultiChoiceButton<T>(
             Transform parent,
             string name,
@@ -487,7 +701,16 @@ namespace SpinCore.UI
                 onValueChange
             );
         }
-        
+
+        /// <summary>
+        /// Creates a large multi-choice UI Component based on an enum
+        /// </summary>
+        /// <param name="parent">A transform to place the component on</param>
+        /// <param name="name">The internal name of the component</param>
+        /// <param name="translation">A translation reference for the multi-choice</param>
+        /// <param name="defaultValue">The multi-choice's default value</param>
+        /// <param name="onValueChange">Function called when the option is changed</param>
+        /// <returns>The multi-choice component</returns>
         public static CustomMultiChoice CreateLargeMultiChoiceButton<T>(
             Transform parent,
             string name,
@@ -508,6 +731,17 @@ namespace SpinCore.UI
             );
         }
 
+        /// <summary>
+        /// Creates a large multi-choice UI Component
+        /// </summary>
+        /// <param name="parent">A transform to place the component on</param>
+        /// <param name="name">The internal name of the component</param>
+        /// <param name="translationKey">A translation key for the multi-choice</param>
+        /// <param name="defaultValue">The multi-choice's default value</param>
+        /// <param name="valueChanged">Function called when the option is changed</param>
+        /// <param name="valueRangeRequested">Function called to define the multi-choice range</param>
+        /// <param name="valueTextRequested">Function called to define each multi-choice option text</param>
+        /// <returns>The multi-choice component</returns>
         public static CustomMultiChoice CreateLargeMultiChoiceButton(
             Transform parent,
             string name,
@@ -527,7 +761,18 @@ namespace SpinCore.UI
                 valueTextRequested
             );
         }
-        
+
+        /// <summary>
+        /// Creates a large multi-choice UI Component
+        /// </summary>
+        /// <param name="parent">A transform to place the component on</param>
+        /// <param name="name">The internal name of the component</param>
+        /// <param name="translation">A translation reference for the multi-choice</param>
+        /// <param name="defaultValue">The multi-choice's default value</param>
+        /// <param name="valueChanged">Function called when the option is changed</param>
+        /// <param name="valueRangeRequested">Function called to define the multi-choice range</param>
+        /// <param name="valueTextRequested">Function called to define each multi-choice option text</param>
+        /// <returns>The multi-choice component</returns>
         public static CustomMultiChoice CreateLargeMultiChoiceButton(
             Transform parent,
             string name,

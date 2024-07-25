@@ -38,6 +38,7 @@ namespace SpinCore.TestMod
 
         private void Awake()
         {
+            // Load images embedded in the mod
             var tabIcon = LoadImage("TestModIcon.png");
             const int squareBorderOffset = 10;
             var sprite = Sprite.Create(tabIcon, new Rect(squareBorderOffset, squareBorderOffset, tabIcon.width - squareBorderOffset * 2, tabIcon.height - squareBorderOffset * 2), Vector2.zero);
@@ -47,19 +48,27 @@ namespace SpinCore.TestMod
             _logger = Logger;
             LogInfo($"Hello from {Name}!");
 
+            // Load locale data embedded in the mod
             var localeStream = Assembly.GetExecutingAssembly().GetManifestResourceStream("SpinCore.TestMod.locale.json");
             TranslationHelper.LoadTranslationsFromStream(localeStream);
 
+            // Manual translation also works
+            // An implicit operator is defined so that "This string" will translate to TranslatedString { en = "This string" }
             TranslationHelper.AddTranslation("TestKey", "TestString");
             
+            // Register a new group in the quick mod settings panel
             UIHelper.RegisterGroupInQuickModSettings(parent =>
             {
                 UIHelper.CreateLabel(parent, "Test", "SpinCore_TestMod_HelloWorld");
             });
 
-            var testSettings = UIHelper.CreateSettingsPage("TestPopout");
+            // Create a new custom page to be used in the mod settings page
+            var testSettings = UIHelper.CreateCustomPage("TestPopout");
+            
+            // Custom pages are lazily loaded, so a callback must be defined
             testSettings.OnPageLoad += pageTransform =>
             {
+                // The UI definition should be self-explanatory
                 var section = UIHelper.CreateGroup(pageTransform, "Test Section");
                 UIHelper.CreateSectionHeader(
                     section.Transform,
@@ -101,11 +110,17 @@ namespace SpinCore.TestMod
                     (val) => NotificationSystemGUI.AddMessage(val ? "Hi" : "Bye")
                 );
             };
+            
+            // Once the custom page is created, you can add it to the mod settings menu with this method.
             UIHelper.RegisterMenuInModSettingsRoot("SpinCore_TestMod_ModSettings_TestPopout", testSettings);
 
+            // Next, let's create a custom side panel
             var modPanel = UIHelper.CreateSidePanel("QuickModSettings", "SpinCore_TestMod_ModTab", sprite);
+
+            // Side panels are also lazily loaded
             modPanel.OnSidePanelLoaded += parent =>
             {
+                // This should once again be self-explanatory
                 int value = 0;
                 UIHelper.CreateButton(
                     parent,
@@ -147,8 +162,10 @@ namespace SpinCore.TestMod
                     enable => NotificationSystemGUI.AddMessage("Enabled: " + enable)
                 );
 
+                // Here we want to make a subsection with a horizontal layout
                 var section = UIHelper.CreateGroup(parent, "Test Section", Axis.Horizontal);
 
+                // To target the subsection, simply change the target transform
                 UIHelper.CreateButton(
                     section.Transform,
                     "TestHorizontalButton1",
@@ -180,6 +197,7 @@ namespace SpinCore.TestMod
                     "SpinCore_TestMod_TestCustomDialog",
                     () =>
                     {
+                        // Here is a demonstration of how to add custom UI components to the modal message dialog
                         var msg = ModalMessageDialogExtensions.CreateYesNo();
                         msg.message = "Hello!";
                         string buffer = "";
@@ -203,6 +221,8 @@ namespace SpinCore.TestMod
                 );
             };
 
+            // Trigger management
+            // Here we load 4 triggers when loading any track
             Track.OnLoadedIntoTrack += (handle, states) =>
             {
                 var triggers = new[]
@@ -228,10 +248,17 @@ namespace SpinCore.TestMod
                         Time = 3.5f,
                     }
                 };
+                
+                // The trigger manager by default takes the trigger's class name and the mod's assembly name to define a key.
+                // You can manually specify a key, but the assembly name will still be added to it.
                 TriggerManager.LoadTriggers(triggers);
             };
 
             string lastMessage = "";
+            
+            // Here we register a function to be called every time a trigger is encountered and gone past.
+            // Once again, the trigger's class name and the assembly are taken for the key.
+            // The key must match the triggers loaded, otherwise the trigger event simply won't be called.
             TriggerManager.RegisterTriggerEvent<TestTrigger>((trigger, trackTime) =>
             {
                 if (trigger.Message == lastMessage) return;

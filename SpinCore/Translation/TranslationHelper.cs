@@ -4,6 +4,9 @@ using Newtonsoft.Json;
 
 namespace SpinCore.Translation
 {
+    /// <summary>
+    /// A helper class used to manually add translated strings to the game's translation pools.
+    /// </summary>
     public static class TranslationHelper
     {
         private static bool _readyToAdd = false;
@@ -11,6 +14,10 @@ namespace SpinCore.Translation
 
         private static Dictionary<string, TranslatedString> _pendingTranslations = new Dictionary<string, TranslatedString>();
 
+        /// <summary>
+        /// Loads translation from a stream. Needs to be valid translation json.
+        /// </summary>
+        /// <param name="stream">The stream to read from</param>
         public static void LoadTranslationsFromStream(Stream stream)
         {
             string fullText = "";
@@ -26,6 +33,11 @@ namespace SpinCore.Translation
             }
         }
 
+        /// <summary>
+        /// Manually add a translated string for the given key.
+        /// </summary>
+        /// <param name="key">The translation key</param>
+        /// <param name="value">The translated string</param>
         public static void AddTranslation(string key, TranslatedString value)
         {
             if (!_readyToAdd)
@@ -37,6 +49,10 @@ namespace SpinCore.Translation
             AddKey(key, value);
         }
 
+        /// <summary>
+        /// Manually remove a translated string for the given key.
+        /// </summary>
+        /// <param name="key">The translation key</param>
         public static void RemoveTranslation(string key)
         {
             if (!_readyToAdd)

@@ -4,6 +4,9 @@ using System.Reflection;
 
 namespace SpinCore.Triggers
 {
+    /// <summary>
+    /// A class used for registering triggers and trigger events.
+    /// </summary>
     public static class TriggerManager
     {
         private static readonly Dictionary<string, ModTriggerStore> TriggerStores = new Dictionary<string, ModTriggerStore>();
