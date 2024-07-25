@@ -40,5 +40,8 @@
   },
   "SpinCore_TestMod_ThirdButton": {
     "en": "Third Button"
+  },
+  "SpinCore_TestMod_TestCustomDialog": {
+    "en": "Test Custom Dialog UI"
   }
 }

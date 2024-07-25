@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using UnityEngine;
 
 namespace SpinCore
@@ -21,6 +22,13 @@ namespace SpinCore
             {
                 Object.DestroyImmediate(transform.GetChild(i - 1).gameObject);
             }
+        }
+
+        public static bool TryPop<TKey, TValue>(this Dictionary<TKey, TValue> dict, TKey key, out TValue value)
+        {
+            if (!dict.TryGetValue(key, out value)) return false;
+            dict.Remove(key);
+            return true;
         }
     }
 }

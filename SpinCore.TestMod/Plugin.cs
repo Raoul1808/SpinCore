@@ -173,6 +173,35 @@ namespace SpinCore.TestMod
                     "Test Input Field From Side Bar",
                     (s, newVal) => { if (!string.IsNullOrWhiteSpace(newVal)) NotificationSystemGUI.AddMessage("Hello " + newVal + "!"); }
                 );
+
+                UIHelper.CreateButton(
+                    parent,
+                    "Test Custom Dialog Component",
+                    "SpinCore_TestMod_TestCustomDialog",
+                    () =>
+                    {
+                        var msg = ModalMessageDialogExtensions.CreateYesNo();
+                        msg.message = "Hello!";
+                        string buffer = "";
+                        msg.cancelCallback += () =>
+                        {
+                            NotificationSystemGUI.AddMessage(":(");
+                        };
+                        msg.affirmativeCallback += () =>
+                        {
+                            NotificationSystemGUI.AddMessage("Hi " + buffer + "!");
+                        };
+                        msg.AddCustomUI(modalParent =>
+                        {
+                            UIHelper.CreateInputField(
+                                modalParent,
+                                "Modal Input",
+                                (s, newVal) => buffer = newVal
+                            );
+                        });
+                        ModalMessageDialog.Instance.AddMessage(msg);
+                    }
+                );
             };
 
             Track.OnLoadedIntoTrack += (handle, states) =>
