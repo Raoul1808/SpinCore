@@ -191,7 +191,7 @@ namespace SpinCore.TestMod
                         {
                             NotificationSystemGUI.AddMessage("Hi " + buffer + "!");
                         };
-                        msg.AddCustomUI(modalParent =>
+                        msg.OpenWithCustomUI(modalParent =>
                         {
                             UIHelper.CreateInputField(
                                 modalParent,
@@ -199,7 +199,6 @@ namespace SpinCore.TestMod
                                 (s, newVal) => buffer = newVal
                             );
                         });
-                        ModalMessageDialog.Instance.AddMessage(msg);
                     }
                 );
             };

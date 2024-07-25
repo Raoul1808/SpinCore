@@ -22,8 +22,6 @@ namespace SpinCore.UI
             }
         }
 
-        private static readonly Dictionary<int, Action<Transform>> StoredActions = new Dictionary<int, Action<Transform>>();
-
         public static ModalMessageDialog.ModalMessage CreateYesNo()
         {
             return new ModalMessageDialog.ModalMessage
@@ -33,16 +31,15 @@ namespace SpinCore.UI
             };
         }
 
-        public static void AddCustomUI(this ModalMessageDialog.ModalMessage msg, Action<Transform> onOpen)
+        public static void Open(this ModalMessageDialog.ModalMessage msg)
         {
-            var hash = msg.GetHashCode();
-            StoredActions.Add(hash, onOpen);
+            ModalMessageDialog.Instance.AddMessage(msg);
         }
 
-        internal static void ModalMessageDialogOpened(int modalHash)
+        public static void OpenWithCustomUI(this ModalMessageDialog.ModalMessage msg, Action<Transform> onOpen)
         {
-            if (StoredActions.TryPop(modalHash, out var action))
-                action.Invoke(ModalMessageDialogCustomGroup.Transform);
+            msg.Open();
+            onOpen?.Invoke(ModalMessageDialogCustomGroup.Transform);
         }
 
         internal static void ModalMessageDialogClosed()

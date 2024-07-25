@@ -206,14 +206,6 @@ namespace SpinCore.Patches
             }
         }
 
-        [HarmonyPatch(typeof(ModalMessageDialog), nameof(ModalMessageDialog.OpenMenu))]
-        [HarmonyPostfix]
-        private static void AddCustomUI(ModalMessageDialog __instance)
-        {
-            int hash = __instance.currentMessage.GetHashCode();
-            ModalMessageDialogExtensions.ModalMessageDialogOpened(hash);
-        }
-
         [HarmonyPatch(typeof(ModalMessageDialog), nameof(ModalMessageDialog.CloseMenu))]
         [HarmonyPostfix]
         private static void RemoveCustomUI()
