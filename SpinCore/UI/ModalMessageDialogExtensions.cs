@@ -47,7 +47,7 @@ namespace SpinCore.UI
 
         internal static void ModalMessageDialogClosed()
         {
-            ModalMessageDialogCustomGroup.Transform.RemoveAllChildren();
+            _modalGroup?.Transform.RemoveAllChildren();
         }
     }
 }
