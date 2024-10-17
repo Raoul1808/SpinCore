@@ -12,7 +12,7 @@ namespace SpinCore
     {
         private const string Guid = "srxd.raoul1808.spincore";
         private const string Name = "SpinCore";
-        private const string Version = "0.1.0";
+        private const string Version = "1.1.0";
 
         private static ManualLogSource _logger;
         
