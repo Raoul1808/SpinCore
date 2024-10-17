@@ -21,10 +21,17 @@ namespace SpinCore.UI
             }
         }
 
+        public int CharacterLimit
+        {
+            get => InputField.tmpInputField.characterLimit;
+            set => InputField.tmpInputField.characterLimit = value;
+        }
+
         internal CustomInputField(GameObject obj, Action<string, string> listener) : base(obj)
         {
             InputField = obj.GetComponent<XDNavigableInputField>();
             OnValueChanged = listener;
+            CharacterLimit = 255;
         }
     }
 }
