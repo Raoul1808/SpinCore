@@ -12,6 +12,11 @@ namespace SpinCore.UI
             _button = button.GetComponent<XDNavigableButton>();
         }
 
+        internal static void PlayButtonSound()
+        {
+            SoundEffectAssets.Instance.forwardSound.Play();
+        }
+
         public void AddListener(UnityAction action) => _button.onClick.AddListener(action);
         public void RemoveListener(UnityAction action) => _button.onClick.RemoveListener(action);
         public void RemoveAllListeners() => _button.onClick.RemoveAllListeners();

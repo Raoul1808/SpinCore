@@ -393,6 +393,7 @@ namespace SpinCore.UI
             button.SetActive(true);
             button.GetComponentInChildren<TranslatedTextMeshPro>().SetTranslation(translation);
             button.GetComponent<XDNavigableButton>().onClick = new Button.ButtonClickedEvent();
+            button.GetComponent<XDNavigableButton>().onClick.AddListener(CustomButton.PlayButtonSound);
             button.GetComponent<XDNavigableButton>().onClick.AddListener(() =>
             {
                 PushPageOnStack(page);
@@ -452,6 +453,7 @@ namespace SpinCore.UI
             button.SetActive(true);
             button.GetComponentInChildren<TranslatedTextMeshPro>().SetTranslation(translation);
             button.GetComponent<XDNavigableButton>().onClick = new Button.ButtonClickedEvent();
+            button.GetComponent<XDNavigableButton>().onClick.AddListener(CustomButton.PlayButtonSound);
             button.GetComponent<XDNavigableButton>().onClick.AddListener(action);
             return new CustomButton(button);
         }
