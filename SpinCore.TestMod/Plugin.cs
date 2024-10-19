@@ -11,7 +11,7 @@ using UnityEngine;
 namespace SpinCore.TestMod
 {
     [BepInPlugin(Guid, Name, Version)]
-    [BepInDependency("srxd.raoul1808.spincore", BepInDependency.DependencyFlags.HardDependency)]
+    [BepInDependency(SpinCorePlugin.Guid, SpinCorePlugin.Version)]
     public class Plugin : BaseUnityPlugin
     {
         private const string Guid = "srxd.raoul1808.spincore.testmod";

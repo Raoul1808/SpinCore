@@ -8,11 +8,11 @@ using SpinCore.Translation;
 namespace SpinCore
 {
     [BepInPlugin(Guid, Name, Version)]
-    internal class Plugin : BaseUnityPlugin
+    public class SpinCorePlugin : BaseUnityPlugin
     {
-        private const string Guid = "srxd.raoul1808.spincore";
-        private const string Name = "SpinCore";
-        private const string Version = "1.1.0";
+        public const string Guid = "srxd.raoul1808.spincore";
+        public const string Name = "SpinCore";
+        public const string Version = "1.1.0";
 
         private static ManualLogSource _logger;
         

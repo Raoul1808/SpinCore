@@ -29,7 +29,6 @@ namespace SpinCore.UI
         internal void OnFocus()
         {
             if (_loaded) return;
-            Plugin.LogInfo("Transform: " + PageContentTransform);
             OnPageLoad?.Invoke(PageContentTransform);
             _loaded = true;
         }
