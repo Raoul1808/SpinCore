@@ -3,6 +3,7 @@ using SpinCore.Translation;
 
 namespace SpinCore.Patches
 {
+    [HarmonyPatch]
     internal static class TranslationPatches
     {
         [HarmonyPatch(typeof(TranslationSystem), nameof(TranslationSystem.GenerateTranslationLookupIfNeeded))]

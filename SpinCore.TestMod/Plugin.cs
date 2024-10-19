@@ -28,9 +28,9 @@ namespace SpinCore.TestMod
             Edge,
         }
 
-        private Texture2D LoadImage(string name)
+        private Texture2D LoadImage(string imgName)
         {
-            using (Stream imageStream = Assembly.GetExecutingAssembly().GetManifestResourceStream("SpinCore.TestMod.Resources." + name))
+            using (Stream imageStream = Assembly.GetExecutingAssembly().GetManifestResourceStream("SpinCore.TestMod.Resources." + imgName))
             {
                 return RuntimeAssetLoader.Texture2DFromStream(imageStream);
             }

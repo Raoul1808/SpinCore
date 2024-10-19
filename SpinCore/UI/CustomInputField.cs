@@ -5,9 +5,9 @@ namespace SpinCore.UI
 {
     public class CustomInputField : CustomActiveComponent
     {
-        public XDNavigableInputField InputField { get; private set; }
+        public XDNavigableInputField InputField { get; }
 
-        private Action<string, string> _currentListener = null;
+        private Action<string, string> _currentListener;
         public Action<string, string> OnValueChanged
         {
             get => _currentListener;

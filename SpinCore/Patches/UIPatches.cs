@@ -8,18 +8,19 @@ using XDMenuPlay.TrackMenus;
 
 namespace SpinCore.Patches
 {
+    [HarmonyPatch]
     internal static class UIPatches
     {
         private static XDMainMenu _mainMenuInstance;
         
         private static void GetRequiredPanelUIComponents(XDTabPanelGroup instance)
         {
-            var modPanel = GameObject.Instantiate(instance.tabs[instance.tabs.Length - 1].prefabs[0].gameObject, CustomPrefabStore.RootTransform);
+            var modPanel = Object.Instantiate(instance.tabs[instance.tabs.Length - 1].prefabs[0].gameObject, CustomPrefabStore.RootTransform);
             modPanel.name = "TabPanel_SpinCoreBasePanel";
             modPanel.SetActive(false);
             Object.Destroy(modPanel.GetComponent<ManageCustomTracksHandler>());
             var panelContent = modPanel.transform.Find("Scroll List Tab Prefab/Scroll View/Viewport/Content");
-            var sidePanelButtonBase = GameObject.Instantiate(panelContent.Find("ManageTrackPopout/DeleteSelected").gameObject, CustomPrefabStore.RootTransform);
+            var sidePanelButtonBase = Object.Instantiate(panelContent.Find("ManageTrackPopout/DeleteSelected").gameObject, CustomPrefabStore.RootTransform);
             sidePanelButtonBase.SetActive(false);
             sidePanelButtonBase.name = "SampleSidePanelButtonAsset";
             UIHelper.Prefabs.LargeButton = sidePanelButtonBase;
@@ -28,13 +29,13 @@ namespace SpinCore.Patches
             // panelLabel.name = "SampleLabel";
             // UIHelper.Prefabs.Label = panelLabel;
 
-            var panelImage = GameObject.Instantiate(panelContent.Find("DescriptonContainer/ImageContainer").gameObject, CustomPrefabStore.RootTransform);
+            var panelImage = Object.Instantiate(panelContent.Find("DescriptonContainer/ImageContainer").gameObject, CustomPrefabStore.RootTransform);
             panelImage.name = "SampleImage";
             panelImage.GetComponentInChildren<LayoutElement>().ignoreLayout = false;
             UIHelper.Prefabs.Image = panelImage;
 
-            var filterPanelClone = GameObject.Instantiate(instance.tabs[1].prefabs[0].gameObject, CustomPrefabStore.RootTransform);
-            var smallMultiChoice = GameObject.Instantiate(filterPanelClone.transform.Find("FilterSettingsPopout/TrackSorting").gameObject, CustomPrefabStore.RootTransform);
+            var filterPanelClone = Object.Instantiate(instance.tabs[1].prefabs[0].gameObject, CustomPrefabStore.RootTransform);
+            var smallMultiChoice = Object.Instantiate(filterPanelClone.transform.Find("FilterSettingsPopout/TrackSorting").gameObject, CustomPrefabStore.RootTransform);
             smallMultiChoice.GetComponent<XDNavigableOptionMultiChoice>().state.callbacks = new XDNavigableOptionMultiChoice.Callbacks();
             smallMultiChoice.GetComponentInChildren<TranslatedTextMeshPro>().translation = TranslationReference.Empty;
             Object.Destroy(smallMultiChoice.GetComponent<XDNavigableOptionMultiChoice_IntValue>());
@@ -68,23 +69,23 @@ namespace SpinCore.Patches
         private static void PrepareMenuPrefabs(XDCustomiseMenu instance)
         {
             var settingsTab = instance.gameObject.transform.Find("VRContainerOffset/MenuContainer/CustomiseTabsContainer/CustomiseSettingsTab").gameObject;
-            var tabBase = GameObject.Instantiate(settingsTab, CustomPrefabStore.RootTransform);
+            var tabBase = Object.Instantiate(settingsTab, CustomPrefabStore.RootTransform);
             var settingsTabLoadPrefabComponent = tabBase.GetComponent<LoadPrefabOnStart>();
             var settingsTabContentPrefab = settingsTabLoadPrefabComponent.prefabToLoad;
             Object.DestroyImmediate(settingsTabLoadPrefabComponent);
-            var tabContentBase = GameObject.Instantiate(settingsTabContentPrefab, tabBase.transform.Find("Scroll View/Viewport/"));
+            var tabContentBase = Object.Instantiate(settingsTabContentPrefab, tabBase.transform.Find("Scroll View/Viewport/"));
             tabContentBase.name = "Content";
-            var tabSectionBase = GameObject.Instantiate(tabContentBase.transform.Find("General Settings Section").gameObject, CustomPrefabStore.RootTransform);
+            var tabSectionBase = Object.Instantiate(tabContentBase.transform.Find("General Settings Section").gameObject, CustomPrefabStore.RootTransform);
             tabSectionBase.name = "CustomSectionPrefab";
-            var sectionHeader = GameObject.Instantiate(tabSectionBase.transform.GetChild(0).gameObject, CustomPrefabStore.RootTransform);
+            var sectionHeader = Object.Instantiate(tabSectionBase.transform.GetChild(0).gameObject, CustomPrefabStore.RootTransform);
             sectionHeader.name = "CustomSectionHeader";
-            var sectionLine = GameObject.Instantiate(tabContentBase.transform.Find("BuildInfoSection/Line").gameObject, CustomPrefabStore.RootTransform);
+            var sectionLine = Object.Instantiate(tabContentBase.transform.Find("BuildInfoSection/Line").gameObject, CustomPrefabStore.RootTransform);
             sectionLine.name = "CustomLine";
-            var popoutButton = GameObject.Instantiate(tabContentBase.transform.Find("General Settings Section/CalibrationButton").gameObject, CustomPrefabStore.RootTransform);
+            var popoutButton = Object.Instantiate(tabContentBase.transform.Find("General Settings Section/CalibrationButton").gameObject, CustomPrefabStore.RootTransform);
             popoutButton.name = "CustomPopoutButton";
             popoutButton.GetComponent<XDNavigableButton>().onClick = new Button.ButtonClickedEvent();
 
-            var multiChoiceBase = GameObject.Instantiate(tabSectionBase.transform.Find("Language").gameObject, CustomPrefabStore.RootTransform);
+            var multiChoiceBase = Object.Instantiate(tabSectionBase.transform.Find("Language").gameObject, CustomPrefabStore.RootTransform);
             multiChoiceBase.name = "SampleMultiChoiceButton";
             Object.DestroyImmediate(multiChoiceBase.GetComponent<XDNavigableOptionMultiChoice_IntValue>());
             Object.DestroyImmediate(multiChoiceBase.GetComponent<LanguageMultiChoiceHandler>());
@@ -92,7 +93,7 @@ namespace SpinCore.Patches
             multiChoiceBase.GetComponentInChildren<TranslatedTextMeshPro>().translation = TranslationReference.Empty;
             multiChoiceBase.SetActive(false);
             UIHelper.Prefabs.LargeMultiChoice = multiChoiceBase;
-            var optionLabel = GameObject.Instantiate(multiChoiceBase.transform.Find("OptionLabel").gameObject, CustomPrefabStore.RootTransform);
+            var optionLabel = Object.Instantiate(multiChoiceBase.transform.Find("OptionLabel").gameObject, CustomPrefabStore.RootTransform);
 
             tabSectionBase.transform.RemoveAllChildren();
             tabContentBase.transform.RemoveAllChildren();
@@ -112,7 +113,7 @@ namespace SpinCore.Patches
             var settingsTopButton = tabButtonsTransform.Find("CustomiseSettingsButton").gameObject;
             var customiseSettingsTab = customiseTabsContainerTransform.Find("CustomiseSettingsTab").gameObject;
             _settingsButtonRef = settingsTopButton.GetComponent<XDNavigable>();
-            var customTopButton = GameObject.Instantiate(settingsTopButton, tabButtonsTransform);
+            var customTopButton = Object.Instantiate(settingsTopButton, tabButtonsTransform);
             customTopButton.name = "CustomiseModsButton";
             customTopButton.GetComponentInChildren<TranslatedTextMeshPro>().SetTranslationKey("SpinCore_CustomiseModsTabButton");
             _customTopNavigable = customTopButton.GetComponent<XDNavigable>();
@@ -182,7 +183,7 @@ namespace SpinCore.Patches
         private static void CloneSearchBar(XDSelectionListMenu __instance)
         {
             var searchBox = __instance.gameObject.transform.Find("Container/Content/MainContentMoveAmount/HorizontalMover/MainContentContainer/MainSelectionPanel/SearchButtonsContainer/SearchButtonsOffset/SearchFieldContainer/SearchFilter");
-            var inputFieldClone = GameObject.Instantiate(searchBox.gameObject, CustomPrefabStore.RootTransform);
+            var inputFieldClone = Object.Instantiate(searchBox.gameObject, CustomPrefabStore.RootTransform);
             inputFieldClone.GetComponent<XDNavigableInputField>().pointSize = 32;
             inputFieldClone.transform.Find("Text Area").localPosition = new Vector3(24, 0, 0);
             inputFieldClone.transform.Find("IconContainer").gameObject.SetActive(false);

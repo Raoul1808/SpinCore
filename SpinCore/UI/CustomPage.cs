@@ -10,7 +10,7 @@ namespace SpinCore.UI
             set => GameObject?.SetActive(value);
         }
 
-        private bool _loaded = false;
+        private bool _loaded;
         public string PageName { get; }
         
         public GameObject GameObject { get; internal set; }

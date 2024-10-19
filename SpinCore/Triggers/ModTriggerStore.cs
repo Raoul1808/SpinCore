@@ -5,7 +5,7 @@ namespace SpinCore.Triggers
     internal class ModTriggerStore
     {
         private readonly List<ITrigger> _triggers = new List<ITrigger>();
-        private int _currentOrNextIndex = 0;
+        private int _currentOrNextIndex;
         private ITrigger _previousTrigger;
         private ITrigger _currentTrigger;
         private ITrigger _nextTrigger;

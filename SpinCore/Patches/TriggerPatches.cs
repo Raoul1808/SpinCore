@@ -3,6 +3,7 @@ using SpinCore.Triggers;
 
 namespace SpinCore.Patches
 {
+    [HarmonyPatch]
     internal static class TriggerPatches
     {
         [HarmonyPatch(typeof(Track), nameof(Track.Update))]

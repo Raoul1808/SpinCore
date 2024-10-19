@@ -9,10 +9,10 @@ namespace SpinCore.Translation
     /// </summary>
     public static class TranslationHelper
     {
-        private static bool _readyToAdd = false;
+        private static bool _readyToAdd;
         private static void MarkReadyToAdd() => _readyToAdd = true;
 
-        private static Dictionary<string, TranslatedString> _pendingTranslations = new Dictionary<string, TranslatedString>();
+        private static readonly Dictionary<string, TranslatedString> PendingTranslations = new Dictionary<string, TranslatedString>();
 
         /// <summary>
         /// Loads translation from a stream. Needs to be valid translation json.
@@ -20,7 +20,7 @@ namespace SpinCore.Translation
         /// <param name="stream">The stream to read from</param>
         public static void LoadTranslationsFromStream(Stream stream)
         {
-            string fullText = "";
+            string fullText;
             using (StreamReader reader = new StreamReader(stream))
             {
                 fullText = reader.ReadToEnd();
@@ -42,7 +42,7 @@ namespace SpinCore.Translation
         {
             if (!_readyToAdd)
             {
-                _pendingTranslations.Add(key, value);
+                PendingTranslations.Add(key, value);
                 return;
             }
 
@@ -57,7 +57,7 @@ namespace SpinCore.Translation
         {
             if (!_readyToAdd)
             {
-                _pendingTranslations.Remove(key);
+                PendingTranslations.Remove(key);
                 return;
             }
 
@@ -67,11 +67,11 @@ namespace SpinCore.Translation
         internal static void AddAllPendingKeys()
         {
             MarkReadyToAdd();
-            foreach (var pair in _pendingTranslations)
+            foreach (var pair in PendingTranslations)
             {
                 AddKey(pair.Key, pair.Value);
             }
-            _pendingTranslations.Clear();
+            PendingTranslations.Clear();
         }
         
         private static void AddKey(string key, TranslatedString value)

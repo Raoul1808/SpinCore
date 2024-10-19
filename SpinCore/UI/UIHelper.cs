@@ -7,6 +7,7 @@ using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.UI;
 using XDMenuPlay;
+using Object = UnityEngine.Object;
 
 namespace SpinCore.UI
 {
@@ -74,7 +75,7 @@ namespace SpinCore.UI
 
         internal static void CreateSidePanelObject(CustomSidePanel panel)
         {
-            var panelObj = GameObject.Instantiate(Prefabs.SidePanel, CustomPrefabStore.RootTransform);
+            var panelObj = Object.Instantiate(Prefabs.SidePanel, CustomPrefabStore.RootTransform);
             panelObj.name = PanelNamePrefix + panel.PanelName;
             var tabConfig = new XDTabPanelGroup.TabConfig
             {
@@ -200,7 +201,7 @@ namespace SpinCore.UI
 
         internal static void CreateCustomPage(CustomPage page)
         {
-            page.GameObject = GameObject.Instantiate(Prefabs.SettingsPage, CommonTabParent);
+            page.GameObject = Object.Instantiate(Prefabs.SettingsPage, CommonTabParent);
             page.GameObject.name = "SpinCoreCustomTab_" + page.PageName;
             page.PageTransform = page.GameObject.transform;
             page.PageContentTransform = page.PageTransform.Find("Scroll View/Viewport/Content");
@@ -238,7 +239,9 @@ namespace SpinCore.UI
         {
             if (_quickSettingsPanelRef == null)
                 CreateQuickSettingsSidePanel();
-            _quickSettingsPanelRef.OnSidePanelLoaded += onLoad;
+            // Adding this to silence warnings smh
+            if (_quickSettingsPanelRef != null)
+                _quickSettingsPanelRef.OnSidePanelLoaded += onLoad;
         }
 
         /// <summary>
@@ -250,7 +253,7 @@ namespace SpinCore.UI
         /// <returns>The input field component</returns>
         public static CustomInputField CreateInputField(Transform parent, string name, Action<string, string> onValueChanged)
         {
-            var textField = GameObject.Instantiate(Prefabs.InputField, parent);
+            var textField = Object.Instantiate(Prefabs.InputField, parent);
             textField.name = name;
             textField.GetComponent<XDNavigableInputField>().OnValueChanged += onValueChanged;
             return new CustomInputField(textField, onValueChanged);
@@ -265,7 +268,7 @@ namespace SpinCore.UI
         /// <returns>The image component</returns>
         public static CustomImage CreateImage(Transform parent, string name, Texture tex)
         {
-            var image = GameObject.Instantiate(Prefabs.Image, parent);
+            var image = Object.Instantiate(Prefabs.Image, parent);
             image.name = name;
             image.GetComponentInChildren<SlantedRectangle>().texture = tex;
             return new CustomImage(image);
@@ -289,7 +292,7 @@ namespace SpinCore.UI
         /// <returns>The label component</returns>
         public static CustomTextComponent CreateLabel(Transform parent, string name, TranslationReference translation)
         {
-            var text = GameObject.Instantiate(Prefabs.LargeMultiChoice.transform.Find("OptionLabel").gameObject, parent);
+            var text = Object.Instantiate(Prefabs.LargeMultiChoice.transform.Find("OptionLabel").gameObject, parent);
             text.name = name;
             text.GetComponentInChildren<TranslatedTextMeshPro>().SetTranslation(translation);
             return new CustomTextComponent(text);
@@ -321,7 +324,7 @@ namespace SpinCore.UI
         /// <returns>The custom component</returns>
         public static CustomGroup CreateGroup(Transform parent, string name, Axis layoutDirection = Axis.Vertical)
         {
-            var section = GameObject.Instantiate(Prefabs.EmptySection, parent);
+            var section = Object.Instantiate(Prefabs.EmptySection, parent);
             section.name = name;
             var group = new CustomGroup(section);
             group.LayoutDirection = layoutDirection;
@@ -334,6 +337,7 @@ namespace SpinCore.UI
         /// <param name="parent">A transform to place the component on</param>
         /// <param name="name">The internal name of the component</param>
         /// <param name="translationKey">A translation key for the section header text</param>
+        /// <param name="spacer">Whether to insert extra space above or not</param>
         /// <returns>The section header component</returns>
         public static CustomSectionHeader CreateSectionHeader(Transform parent, string name, string translationKey, bool spacer) => CreateSectionHeader(parent, name, new TranslationReference(translationKey, false), spacer);
 
@@ -343,10 +347,11 @@ namespace SpinCore.UI
         /// <param name="parent">A transform to place the component on</param>
         /// <param name="name">The internal name of the component</param>
         /// <param name="translation">A translation reference for the section header text</param>
+        /// <param name="spacer">Whether to insert extra space above or not</param>
         /// <returns>The section header component</returns>
         public static CustomSectionHeader CreateSectionHeader(Transform parent, string name, TranslationReference translation, bool spacer)
         {
-            var obj = GameObject.Instantiate(Prefabs.SectionHeader, parent);
+            var obj = Object.Instantiate(Prefabs.SectionHeader, parent);
             obj.name = name;
             return new CustomSectionHeader(obj)
             {
@@ -363,7 +368,7 @@ namespace SpinCore.UI
         /// <returns>The line separator component</returns>
         public static CustomActiveComponent CreateLine(Transform parent, string name = "Line")
         {
-            var line = GameObject.Instantiate(Prefabs.Line, parent);
+            var line = Object.Instantiate(Prefabs.Line, parent);
             line.name = name;
             return new CustomActiveComponent(line);
         }
@@ -388,7 +393,7 @@ namespace SpinCore.UI
         /// <returns>The popout button component</returns>
         public static CustomPopoutButton CreatePopout(Transform parent, string name, TranslationReference translation, CustomPage page)
         {
-            var button = GameObject.Instantiate(Prefabs.PopoutButton, parent);
+            var button = Object.Instantiate(Prefabs.PopoutButton, parent);
             button.name = name;
             button.SetActive(true);
             button.GetComponentInChildren<TranslatedTextMeshPro>().SetTranslation(translation);
@@ -448,7 +453,7 @@ namespace SpinCore.UI
         /// <returns>The button component</returns>
         public static CustomButton CreateButton(Transform parent, string name, TranslationReference translation, UnityAction action)
         {
-            var button = GameObject.Instantiate(Prefabs.LargeButton, parent);
+            var button = Object.Instantiate(Prefabs.LargeButton, parent);
             button.name = name;
             button.SetActive(true);
             button.GetComponentInChildren<TranslatedTextMeshPro>().SetTranslation(translation);
@@ -806,7 +811,7 @@ namespace SpinCore.UI
             XDNavigableOptionMultiChoice.OnValueRangeRequested valueRangeRequested,
             XDNavigableOptionMultiChoice.OnValueTextRequested valueTextRequested)
         {
-            var button = GameObject.Instantiate(multiChoicePrefab, parent);
+            var button = Object.Instantiate(multiChoicePrefab, parent);
             button.name = name;
             button.SetActive(true);
             button.GetComponentInChildren<TranslatedTextMeshPro>().SetTranslation(translation);
