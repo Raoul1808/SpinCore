@@ -69,15 +69,18 @@ namespace SpinCore.TestMod
             testSettings.OnPageLoad += pageTransform =>
             {
                 // The UI definition should be self-explanatory
+                // v1.1.0 update: UIHelper works with transforms, but you can also just give it a CustomGroup.
+                // The transform component will automatically be taken. you don't need to specify it.
+                // tl;dr: CreateButton(myCustomGroup, ...) == CreateButton(myCustomGroup.Transform, ...)
                 var section = UIHelper.CreateGroup(pageTransform, "Test Section");
                 UIHelper.CreateSectionHeader(
-                    section.Transform,
+                    section,
                     "Section Header",
                     "SpinCore_TestMod_ModSettings_TestPopoutHeader",
                     false
                 );
                 UIHelper.CreateButton(
-                    section.Transform,
+                    section,
                     "Test Button",
                     "SpinCore_TestMod_ModSettings_TestPopoutButton",
                     () => NotificationSystemGUI.AddMessage("Test Button clicked!")
@@ -86,24 +89,24 @@ namespace SpinCore.TestMod
                     var subSection = UIHelper.CreateGroup(section.Transform, "Test Image Container");
                     subSection.LayoutDirection = Axis.Horizontal;
                     UIHelper.CreateImage(
-                        subSection.Transform,
+                        subSection,
                         "Test Image",
                         sproing
                     );
                     UIHelper.CreateLabel(
-                        subSection.Transform,
+                        subSection,
                         "Test Label",
                         "SpinCore_TestMod_ModSettings_TestLabel"
                     );
                     // subSection.GameObject.GetComponent<VerticalLayoutGroup>().padding = new RectOffset(230, 10, 10, 10);
                 }
                 UIHelper.CreateInputField(
-                    section.Transform,
+                    section,
                     "Test Input Field",
                     (oldVal, newVal) => Plugin.LogInfo("Looking for " + oldVal + " of " + newVal)
                 );
                 UIHelper.CreateLargeToggle(
-                    section.Transform,
+                    section,
                     "Test Large Toggle",
                     "SpinCore_TestMod_ModSettings_TestLargeToggle",
                     false,
@@ -167,19 +170,19 @@ namespace SpinCore.TestMod
 
                 // To target the subsection, simply change the target transform
                 UIHelper.CreateButton(
-                    section.Transform,
+                    section,
                     "TestHorizontalButton1",
                     "SpinCore_TestMod_FirstButton",
                     () => NotificationSystemGUI.AddMessage("Am First Button bloop bloop")
                 );
                 UIHelper.CreateButton(
-                    section.Transform,
+                    section,
                     "TestHorizontalButton2",
                     "SpinCore_TestMod_SecondButton",
                     () => NotificationSystemGUI.AddMessage("Button, The 2nd")
                 );
                 UIHelper.CreateButton(
-                    section.Transform,
+                    section,
                     "TestHorizontalButton3",
                     "SpinCore_TestMod_ThirdButton",
                     () => NotificationSystemGUI.AddMessage("third button's the charm")

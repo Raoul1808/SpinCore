@@ -50,5 +50,7 @@ namespace SpinCore.UI
             _direction = Axis.Vertical;
             LayoutGroup = obj.GetComponent<VerticalLayoutGroup>();
         }
+
+        public static implicit operator Transform(CustomGroup group) => group.Transform;
     }
 }
