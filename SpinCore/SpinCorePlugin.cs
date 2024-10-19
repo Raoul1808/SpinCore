@@ -7,11 +7,25 @@ using SpinCore.Translation;
 
 namespace SpinCore
 {
+    /// <summary>
+    /// The BepInEx plugin for SpinCore.
+    /// </summary>
     [BepInPlugin(Guid, Name, Version)]
     public class SpinCorePlugin : BaseUnityPlugin
     {
+        /// <summary>
+        /// SpinCore's plugin Guid. This should be used for dependencies.
+        /// </summary>
         public const string Guid = "srxd.raoul1808.spincore";
+
+        /// <summary>
+        /// SpinCore's plugin name. This is used exclusively for display and logging purposes.
+        /// </summary>
         public const string Name = "SpinCore";
+
+        /// <summary>
+        /// SpinCore's plugin version. This should be used for version-specific dependencies.
+        /// </summary>
         public const string Version = "1.1.0";
 
         private static ManualLogSource _logger;
