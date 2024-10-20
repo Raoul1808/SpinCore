@@ -112,6 +112,14 @@ namespace SpinCore.TestMod
                     false,
                     (val) => NotificationSystemGUI.AddMessage(val ? "Hi" : "Bye")
                 );
+                // This button should have a tooltip
+                var button = UIHelper.CreateButton(
+                    section,
+                    "Test Tooltip Button",
+                    "SpinCore_TestMod_ModSettings_TestTooltipButton",
+                    () => { }
+                );
+                UIHelper.AddTooltip(button, "SpinCore_TestMod_ModSettings_TestTooltip");
             };
             
             // Once the custom page is created, you can add it to the mod settings menu with this method.

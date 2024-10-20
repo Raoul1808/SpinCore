@@ -32,6 +32,13 @@
   "SpinCore_TestMod_ModSettings_TestLabel": {
     "en": "boing"
   },
+  "SpinCore_TestMod_ModSettings_TestTooltipButton": {
+    "en": "Hover me"
+  },
+  "SpinCore_TestMod_ModSettings_TestTooltip": {
+    "en": "beep boop I am test tooltip hello hello yes I am test tooltip goodbye",
+    "fr": "salut beep bloop je suis un tooltip de test ignore moi je suis là juste"
+  },
   "SpinCore_TestMod_FirstButton": {
     "en": "First Button"
   },

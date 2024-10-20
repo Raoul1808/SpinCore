@@ -95,6 +95,10 @@ namespace SpinCore.Patches
             UIHelper.Prefabs.LargeMultiChoice = multiChoiceBase;
             var optionLabel = Object.Instantiate(multiChoiceBase.transform.Find("OptionLabel").gameObject, CustomPrefabStore.RootTransform);
 
+            var gamepadControlStyle = tabContentBase.transform.Find("Content Settings Section Simple Input/GamepadControlStyle").gameObject;
+            var tooltipOpener = gamepadControlStyle.GetComponent<XDTooltipPopoutOpener>();
+            UIHelper.Prefabs.TooltipPopout = tooltipOpener.tooltipPrefab;
+
             tabSectionBase.transform.RemoveAllChildren();
             tabContentBase.transform.RemoveAllChildren();
 

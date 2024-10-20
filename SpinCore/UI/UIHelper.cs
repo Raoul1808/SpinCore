@@ -30,6 +30,7 @@ namespace SpinCore.UI
             public GameObject Image { get; internal set; }
             public GameObject Label { get; internal set; }
             public GameObject InputField { get; internal set; }
+            public GameObject TooltipPopout { get; internal set; }
             
             internal UIPrefabs() {}
         }
@@ -242,6 +243,28 @@ namespace SpinCore.UI
             // Adding this to silence warnings smh
             if (_quickSettingsPanelRef != null)
                 _quickSettingsPanelRef.OnSidePanelLoaded += onLoad;
+        }
+
+        /// <summary>
+        /// Adds a tooltip to a custom UI component. Works only in the Options menu, not in side panels.
+        /// </summary>
+        /// <param name="component">The component to add the tooltip to</param>
+        /// <param name="translationKey">A translation key for the text to be shown</param>
+        /// <returns>The tooltip added</returns>
+        public static CustomTooltip AddTooltip(CustomActiveComponent component, string translationKey) => AddTooltip(component, new TranslationReference(translationKey, false));
+
+        /// <summary>
+        /// Adds a tooltip to a custom UI component. Works only in the Options menu, not in side panels.
+        /// </summary>
+        /// <param name="component">The component to add the tooltip to</param>
+        /// <param name="translation">A translation reference for the text to be shown</param>
+        /// <returns>The tooltip added</returns>
+        public static CustomTooltip AddTooltip(CustomActiveComponent component, TranslationReference translation)
+        {
+            var tooltipOpener = component.GameObject.AddComponent<XDTooltipPopoutOpener>();
+            tooltipOpener.tooltip = translation;
+            tooltipOpener.tooltipPrefab = Prefabs.TooltipPopout;
+            return new CustomTooltip(tooltipOpener);
         }
 
         /// <summary>
