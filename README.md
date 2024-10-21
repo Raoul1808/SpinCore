@@ -7,6 +7,7 @@ Library and utility mod for Spin Rhythm XD.
 - Custom panels and nested mod settings pages
 - Custom UI components on tabs and pages
 - Custom UI components on modal dialogs
+- Tooltips on custom UI components (only in options menu)
 - Translations
 - Custom chart triggers
 - A collection of utility functions
