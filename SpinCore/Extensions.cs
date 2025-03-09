@@ -56,5 +56,21 @@ namespace SpinCore
             dict.Remove(key);
             return true;
         }
+
+        /// <summary>
+        /// Gets the given transform's full hierarchy path.
+        /// </summary>
+        /// <param name="transform">The transform</param>
+        /// <returns>The full path as a string</returns>
+        public static string GetFullPath(this Transform transform)
+        {
+            string path = "/" + transform.name;
+            while (transform.parent)
+            {
+                transform = transform.parent;
+                path = "/" + transform.name + path;
+            }
+            return path;
+        }
     }
 }
