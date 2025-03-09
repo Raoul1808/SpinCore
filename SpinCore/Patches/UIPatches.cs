@@ -35,7 +35,7 @@ namespace SpinCore.Patches
             UIHelper.Prefabs.Image = panelImage;
 
             var filterPanelClone = Object.Instantiate(instance.tabs[1].prefabs[0].gameObject, CustomPrefabStore.RootTransform);
-            var smallMultiChoice = Object.Instantiate(filterPanelClone.transform.Find("FilterSettingsPopout/TrackSorting").gameObject, CustomPrefabStore.RootTransform);
+            var smallMultiChoice = Object.Instantiate(filterPanelClone.transform.Find("Scroll List Tab Prefab/Scroll View/Viewport/Content/FilterSettingsPopout/TrackSorting").gameObject, CustomPrefabStore.RootTransform);
             smallMultiChoice.GetComponent<XDNavigableOptionMultiChoice>().state.callbacks = new XDNavigableOptionMultiChoice.Callbacks();
             smallMultiChoice.GetComponentInChildren<TranslatedTextMeshPro>().translation = TranslationReference.Empty;
             Object.Destroy(smallMultiChoice.GetComponent<XDNavigableOptionMultiChoice_IntValue>());
