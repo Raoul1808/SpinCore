@@ -164,7 +164,7 @@ namespace SpinCore.Patches
             _portraitSettingsButtonRef = settingsTopButton.GetComponent<XDNavigable>();
             var customTopButton = Object.Instantiate(settingsTopButton, tabButtonsTransform);
             customTopButton.name = "CustomiseModsButtonNoText";
-            customTopButton.GetComponentInChildren<TranslatedTextMeshPro>().SetTranslationKey("SpinCore_CustomiseModsTabButton");
+            customTopButton.GetComponentInChildren<TranslatedTextMeshPro>().SetTranslationKey("SpinCore_CustomiseModsTabButtonNoText");
             _portraitCustomTopNavigable = customTopButton.GetComponent<XDNavigable>();
 
             _modSettingsPage = UIHelper.InitializeCustomModPage();
