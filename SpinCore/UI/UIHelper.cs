@@ -209,6 +209,7 @@ namespace SpinCore.UI
             page.GameObject.name = "SpinCoreCustomTab_" + page.PageName;
             page.PageTransform = page.GameObject.transform;
             page.PageContentTransform = page.PageTransform.Find("Scroll View/Viewport/Content");
+            page.PageTransform.Find("Scroll View").GetComponent<CustomScrollRect>().content = page.PageContentTransform.GetComponent<RectTransform>();
         }
         #endregion
 
