@@ -96,7 +96,9 @@ namespace SpinCore.UI
                 translation = panel.Translation,
             };
             _tabPanelGroupInstance.CreateTabButton(tabInstance, false);
-            tabInstance.activeButton.selectorButton.transform.SetSiblingIndex(_tabPanelGroupInstance._tabInstances.Count + 1);
+            _tabPanelGroupInstance.CreateTabButton(tabInstance, true);
+            tabInstance.button.selectorButton.transform.SetSiblingIndex(_tabPanelGroupInstance._tabInstances.Count + 1);
+            tabInstance.verticalButton.selectorButton.transform.SetSiblingIndex(_tabPanelGroupInstance._tabInstances.Count + 1);
             // tabInstance.selectorButton.transform.SetSiblingIndex(_tabPanelGroupInstance._tabInstances.Count + 1);
             _tabPanelGroupInstance._tabInstances.Add(tabInstance);
             _tabPanelGroupInstance._tabInstancesByName.Add(panel.PanelName, tabInstance);
