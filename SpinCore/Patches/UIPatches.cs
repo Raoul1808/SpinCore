@@ -62,8 +62,10 @@ namespace SpinCore.Patches
             UIHelper.CallSidePanelEvent(tabName);
         }
 
-        private static XDNavigable _customTopNavigable;
-        private static XDNavigable _settingsButtonRef;
+        private static XDNavigable _landscapeCustomTopNavigable;
+        private static XDNavigable _portraitCustomTopNavigable;
+        private static XDNavigable _landscapeSettingsButtonRef;
+        private static XDNavigable _portraitSettingsButtonRef;
         private static CustomPage _modSettingsPage;
 
         private static void PrepareMenuPrefabs(XDCustomiseMenu instance)
@@ -116,11 +118,12 @@ namespace SpinCore.Patches
             var customiseTabsContainerTransform = instance.gameObject.transform.Find("VRContainerOffset/MenuContainer/CustomiseTabsContainer");
             var settingsTopButton = tabButtonsTransform.Find("CustomiseSettingsButton").gameObject;
             var customiseSettingsTab = customiseTabsContainerTransform.Find("CustomiseSettingsTab").gameObject;
-            _settingsButtonRef = settingsTopButton.GetComponent<XDNavigable>();
+            _landscapeSettingsButtonRef = settingsTopButton.GetComponent<XDNavigable>();
             var customTopButton = Object.Instantiate(settingsTopButton, tabButtonsTransform);
+            customTopButton.transform.SetSiblingIndex(5);
             customTopButton.name = "CustomiseModsButton";
             customTopButton.GetComponentInChildren<TranslatedTextMeshPro>().SetTranslationKey("SpinCore_CustomiseModsTabButton");
-            _customTopNavigable = customTopButton.GetComponent<XDNavigable>();
+            _landscapeCustomTopNavigable = customTopButton.GetComponent<XDNavigable>();
 
             _modSettingsPage = UIHelper.InitializeCustomModPage();
 
@@ -130,16 +133,58 @@ namespace SpinCore.Patches
                 if (UIHelper.AnyPagesLeftOnStack())
                     UIHelper.ClearStack();
                 _mainMenuInstance.gameObject.GetComponent<GameStateUIHelper>().ChangeState(XDCustomiseMenu.StateNames.CustomiseSettings);
-                _customTopNavigable.forceExpanded = true;
+                _landscapeCustomTopNavigable.forceExpanded = true;
                 customiseSettingsTab.SetActive(false);
-                _settingsButtonRef.forceExpanded = false;
+                _landscapeSettingsButtonRef.forceExpanded = false;
                 UIHelper.PushPageOnStack(_modSettingsPage);
             });
             settingsTopButton.GetComponent<XDNavigableButton>().onClick.AddListener(() =>
             {
                 HideCustomMenu();
                 customiseSettingsTab.SetActive(true);
-                _settingsButtonRef.forceExpanded = true;
+                _landscapeSettingsButtonRef.forceExpanded = true;
+            });
+
+            var backButton = instance.transform.Find("VRContainerOffset/BackButtonContainer/BackButton Variant").gameObject;
+            backButton.GetComponent<XDNavigableButton>().onClick = new Button.ButtonClickedEvent();
+            backButton.GetComponent<XDNavigableButton>().onClick.AddListener(() =>
+            {
+                UIHelper.RemoveLastFromStack();
+                if (!UIHelper.AnyPagesLeftOnStack())
+                    instance.ExitButtonPressed();
+            });
+        }
+
+        private static void CreateModSettingsButtonNoText(XDCustomiseMenu instance)
+        {
+            var tabButtonsTransform = instance.gameObject.transform.Find("VRContainerOffset/TabButtons");
+            var customiseTabsContainerTransform = instance.gameObject.transform.Find("VRContainerOffset/MenuContainer/CustomiseTabsContainer");
+            var settingsTopButton = tabButtonsTransform.Find("CustomiseSettingsButtonNoText").gameObject;
+            var customiseSettingsTab = customiseTabsContainerTransform.Find("CustomiseSettingsTab").gameObject;
+            _portraitSettingsButtonRef = settingsTopButton.GetComponent<XDNavigable>();
+            var customTopButton = Object.Instantiate(settingsTopButton, tabButtonsTransform);
+            customTopButton.name = "CustomiseModsButtonNoText";
+            customTopButton.GetComponentInChildren<TranslatedTextMeshPro>().SetTranslationKey("SpinCore_CustomiseModsTabButton");
+            _portraitCustomTopNavigable = customTopButton.GetComponent<XDNavigable>();
+
+            _modSettingsPage = UIHelper.InitializeCustomModPage();
+
+            customTopButton.GetComponent<XDNavigableButton>().onClick = new Button.ButtonClickedEvent();
+            customTopButton.GetComponent<XDNavigableButton>().onClick.AddListener(() =>
+            {
+                if (UIHelper.AnyPagesLeftOnStack())
+                    UIHelper.ClearStack();
+                _mainMenuInstance.gameObject.GetComponent<GameStateUIHelper>().ChangeState(XDCustomiseMenu.StateNames.CustomiseSettings);
+                _portraitCustomTopNavigable.forceExpanded = true;
+                customiseSettingsTab.SetActive(false);
+                _portraitSettingsButtonRef.forceExpanded = false;
+                UIHelper.PushPageOnStack(_modSettingsPage);
+            });
+            settingsTopButton.GetComponent<XDNavigableButton>().onClick.AddListener(() =>
+            {
+                HideCustomMenu();
+                customiseSettingsTab.SetActive(true);
+                _portraitSettingsButtonRef.forceExpanded = true;
             });
 
             var backButton = instance.transform.Find("VRContainerOffset/BackButtonContainer/BackButton Variant").gameObject;
@@ -160,6 +205,7 @@ namespace SpinCore.Patches
             UIHelper.CommonTabParent = customiseTabsContainerTransform;
             PrepareMenuPrefabs(__instance);
             CreateModSettingsButton(__instance);
+            CreateModSettingsButtonNoText(__instance);
             UIHelper.CreateCustomPagesInBuffer();
         }
 
@@ -168,7 +214,8 @@ namespace SpinCore.Patches
         private static void HideCustomMenu()
         {
             UIHelper.ClearStack();
-            _customTopNavigable.forceExpanded = false;
+            _landscapeCustomTopNavigable.forceExpanded = false;
+            _portraitCustomTopNavigable.forceExpanded = false;
             _modSettingsPage.Active = false;
         }
 
@@ -178,7 +225,8 @@ namespace SpinCore.Patches
         {
             if (UIHelper.AnyPagesLeftOnStack())
             {
-                _settingsButtonRef.forceExpanded = false;
+                _landscapeSettingsButtonRef.forceExpanded = false;
+                _portraitSettingsButtonRef.forceExpanded = false;
             }
         }
 
