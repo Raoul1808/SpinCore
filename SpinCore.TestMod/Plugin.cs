@@ -327,13 +327,16 @@ namespace SpinCore.TestMod
         private static void DebugDumpLanguageKeys()
         {
             var keys = TranslationSystem.Instance.translationKeys;
+            var language = TranslationSystem.Settings.translations[TranslationSystem.Settings.translations.Length - 1]
+                .GetLanguage(TranslationSystem.CurrentLanguage);
             var filepath = Path.Combine(Directory.GetParent(Assembly.GetExecutingAssembly().Location).FullName, "keys.json");
             var file = File.CreateText(filepath);
             file.WriteLine("{");
             for (int i = 0; i < keys.Count; i++)
             {
                 string key = keys[i];
-                file.Write($"\"{key}\": \"\"");
+                string str = language.GetString(i);
+                file.Write($"    \"{key}\": \"{str.Replace("\"", "\\\"")}\"");
                 if (i < keys.Count - 1)
                     file.Write(",");
                 file.WriteLine();
