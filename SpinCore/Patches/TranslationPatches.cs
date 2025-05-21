@@ -13,8 +13,8 @@ namespace SpinCore.Patches
         [HarmonyPrefix]
         private static void PrepareTranslationKeys(TranslationSystem __instance)
         {
-            LanguageHelper.AddNewLanguage();
             TranslationHelper.AddAllPendingKeys();
+            LanguageHelper.AddPendingLanguages();
         }
 
         private static int _language;
@@ -25,22 +25,22 @@ namespace SpinCore.Patches
         {
             if (PlayerSettingsData.Instance == null)
                 return;
-            SpinCorePlugin.LogInfo("I am yoink language");
+            //SpinCorePlugin.LogInfo("I am yoink language");
             _language = PlayerSettingsData.Instance.CurrentLanguageIndex.GetValue();
-            SpinCorePlugin.LogInfo("Language was " + (SupportedLanguage)_language);
+            //SpinCorePlugin.LogInfo("Language was " + (SupportedLanguage)_language);
         }
 
         [HarmonyPatch(typeof(TranslationSystem), nameof(TranslationSystem.CalculateCurrentLanguage))]
         [HarmonyPostfix]
         private static void OverrideTheLanguage(ref SupportedLanguage __result)
         {
-            SpinCorePlugin.LogInfo("Language was set to " + __result);
-            if (_language == 15)
+            //SpinCorePlugin.LogInfo("Language was set to " + __result);
+            if (_language >= 15)
             {
-                SpinCorePlugin.LogInfo("I am replace language");
-                __result = (SupportedLanguage)15;
+                //SpinCorePlugin.LogInfo("I am replace language");
+                __result = (SupportedLanguage)_language;
             }
-            SpinCorePlugin.LogInfo("Language is now " + __result);
+            //SpinCorePlugin.LogInfo("Language is now " + __result);
         }
 
         [HarmonyPatch(typeof(TranslationSystem), nameof(TranslationSystem.CycleLanguage))]

@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using System.IO;
 using System.Reflection;
 using BepInEx;
@@ -289,6 +290,23 @@ namespace SpinCore.TestMod
                 LogInfo(trigger.Message);
                 lastMessage = trigger.Message;
             });
+            
+            // Add a new langage
+            LanguageHelper.AddLanguage(new CustomLanguage
+            {
+                Id = "yaynay",
+                Name = "YAY or NAY???",
+                Keys = new Dictionary<string, string>
+                {
+                    {"UI_Yes", "YIPPEE!!!"},
+                    {"UI_No", "oh hell naw"},
+                }
+            });
+            
+            // Add another language from stream
+            var languageStream = Assembly.GetExecutingAssembly()
+                .GetManifestResourceStream("SpinCore.TestMod.language.json");
+            LanguageHelper.LoadCustomLanguageFromStream(languageStream);
         }
 
         internal static void LogInfo(object msg) => _logger.LogMessage(msg);

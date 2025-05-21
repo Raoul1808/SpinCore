@@ -1,0 +1,8 @@
+{
+  "id": "invert",
+  "name": "inverted yes and no",
+  "keys": {
+    "UI_Yes": "No",
+    "UI_No": "Yes"
+  }
+}
