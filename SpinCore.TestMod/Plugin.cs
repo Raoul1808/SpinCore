@@ -18,7 +18,7 @@ namespace SpinCore.TestMod
     {
         private const string Guid = "srxd.raoul1808.spincore.testmod";
         private const string Name = "SpinCore Test Mod";
-        private const string Version = "1.1.0";
+        private const string Version = "1.2.0";
 
         private static ManualLogSource _logger;
 

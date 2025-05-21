@@ -28,7 +28,7 @@ namespace SpinCore
         /// <summary>
         /// SpinCore's plugin version. This should be used for version-specific dependencies.
         /// </summary>
-        public const string Version = "1.1.2";
+        public const string Version = "1.2.0";
 
         private static ManualLogSource _logger;
         
