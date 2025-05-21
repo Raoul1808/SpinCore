@@ -12,7 +12,7 @@
       <Reference Include="0Harmony">
         <HintPath>..\srxd-dir\BepInEx\core\0Harmony.dll</HintPath>
       </Reference>
-      <Reference Include="Assembly-CSharp">
+      <Reference Include="Assembly-CSharp" Publicize="true">
         <HintPath>..\srxd-dir\SpinRhythm_Data\Managed\Assembly-CSharp.dll</HintPath>
       </Reference>
       <Reference Include="BepInEx">
@@ -50,6 +50,13 @@
       <EmbeddedResource Include="locale.json" />
       <EmbeddedResource Include="Resources\sproing.png" />
       <EmbeddedResource Include="language.json" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <PackageReference Include="BepInEx.AssemblyPublicizer.MSBuild" Version="0.4.3">
+        <PrivateAssets>all</PrivateAssets>
+        <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+      </PackageReference>
     </ItemGroup>
 
     <Target Name="PostBuildScript" AfterTargets="AfterBuild">

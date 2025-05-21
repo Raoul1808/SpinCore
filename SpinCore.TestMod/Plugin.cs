@@ -134,6 +134,14 @@ namespace SpinCore.TestMod
                     "SpinCore_TestMod_ModSettings_CycleLanguageTest",
                     () => TranslationSystem.Instance.CycleLanguage()
                 );
+                #if DEBUG
+                UIHelper.CreateButton(
+                    section,
+                    "Debug Dump All Keys",
+                    "SpinCore_TestMod_ModSettings_DEBUGDumpLanguageKeys",
+                    DebugDumpLanguageKeys
+                );
+                #endif
             };
             
             // Once the custom page is created, you can add it to the mod settings menu with this method.
@@ -307,8 +315,33 @@ namespace SpinCore.TestMod
             var languageStream = Assembly.GetExecutingAssembly()
                 .GetManifestResourceStream("SpinCore.TestMod.language.json");
             LanguageHelper.LoadCustomLanguageFromStream(languageStream);
+
+            #if DEBUG
+            TranslationHelper.AddTranslation("SpinCore_TestMod_ModSettings_DEBUGDumpLanguageKeys", "Dump Language Keys");
+            #endif
         }
 
         internal static void LogInfo(object msg) => _logger.LogMessage(msg);
+
+        #if DEBUG
+        private static void DebugDumpLanguageKeys()
+        {
+            var keys = TranslationSystem.Instance.translationKeys;
+            var filepath = Path.Combine(Directory.GetParent(Assembly.GetExecutingAssembly().Location).FullName, "keys.json");
+            var file = File.CreateText(filepath);
+            file.WriteLine("{");
+            for (int i = 0; i < keys.Count; i++)
+            {
+                string key = keys[i];
+                file.Write($"\"{key}\": \"\"");
+                if (i < keys.Count - 1)
+                    file.Write(",");
+                file.WriteLine();
+            }
+            file.WriteLine("}");
+            file.Close();
+            NotificationSystemGUI.AddMessage("keys.json file generated. Check your BepInEx/plugins folder");
+        }
+        #endif
     }
 }
