@@ -1,3 +1,5 @@
+using System;
+using System.IO;
 using System.Reflection;
 using BepInEx;
 using BepInEx.Logging;
@@ -41,8 +43,32 @@ namespace SpinCore
 
             var localeStream = Assembly.GetExecutingAssembly().GetManifestResourceStream("SpinCore.locale.json");
             TranslationHelper.LoadTranslationsFromStream(localeStream);
+            LoadLanguages();
         }
 
+        private void LoadLanguages()
+        {
+            var langPath = Path.Combine(Directory.GetParent(Assembly.GetExecutingAssembly().Location).FullName,
+                "CustomLanguages");
+            foreach (var filepath in Directory.EnumerateFiles(langPath))
+            {
+                FileStream file = null;
+                try
+                {
+                    file = File.OpenRead(filepath);
+                    LanguageHelper.LoadCustomLanguageFromStream(file);
+                }
+                catch (Exception e)
+                {
+                    LogInfo($"Failed to load language at {filepath}: {e}");
+                }
+                finally
+                {
+                    file?.Close();
+                }
+            }
+        }
+        
         internal static void LogInfo(object msg) => _logger.LogInfo(msg);
     }
 }
