@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using UnityEngine;
 
 namespace SpinCore.Translation
 {
@@ -31,9 +32,10 @@ namespace SpinCore.Translation
                     supportedLanguage = (SupportedLanguage)15,
                 };
 
-                foreach (var key in language.translationKeys)
+                var english = language.GetLanguage(SupportedLanguage.English);
+                for (int i = 0; i < language.translationKeys.Count; i++)
                 {
-                    lang.strings.Add("wawa");
+                    lang.strings.Add(Random.Range(0, 2) % 2 == 0 ? "wawa" : english.GetString(i));
                 }
 
                 language.languages.Add(lang);
