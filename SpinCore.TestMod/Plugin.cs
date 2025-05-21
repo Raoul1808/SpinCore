@@ -127,6 +127,12 @@ namespace SpinCore.TestMod
                     "SpinCore_TestMod_ModSettings_TestLabel"
                 );
                 label.GameObject.GetComponent<CustomTextMeshProUGUI>().margin = new Vector4(0, 500, 0, 0);
+                UIHelper.CreateButton(
+                    section,
+                    "Test Language Button",
+                    "SpinCore_TestMod_ModSettings_CycleLanguageTest",
+                    () => TranslationSystem.Instance.CycleLanguage()
+                );
             };
             
             // Once the custom page is created, you can add it to the mod settings menu with this method.

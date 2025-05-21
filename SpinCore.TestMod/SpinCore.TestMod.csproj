@@ -18,6 +18,9 @@
       <Reference Include="BepInEx">
         <HintPath>..\srxd-dir\BepInEx\core\BepInEx.dll</HintPath>
       </Reference>
+      <Reference Include="SSD.Game">
+        <HintPath>..\srxd-dir\SpinRhythm_Data\Managed\SSD.Game.dll</HintPath>
+      </Reference>
       <Reference Include="SSD.Types">
         <HintPath>..\srxd-dir\SpinRhythm_Data\Managed\SSD.Types.dll</HintPath>
       </Reference>

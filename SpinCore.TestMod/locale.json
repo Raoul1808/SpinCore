@@ -39,6 +39,9 @@
     "en": "beep boop I am test tooltip hello hello yes I am test tooltip goodbye",
     "fr": "salut beep bloop je suis un tooltip de test ignore moi je suis là juste"
   },
+  "SpinCore_TestMod_ModSettings_CycleLanguageTest": {
+    "en": "Test Cycle Language",
+  },
   "SpinCore_TestMod_FirstButton": {
     "en": "First Button"
   },
