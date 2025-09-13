@@ -1,4 +1,19 @@
 {
+  "SpinCore_Name": {
+    "en": "SpinCore"
+  },
+  "SpinCore_CustomLanguages": {
+    "en": "Custom Languages"
+  },
+  "SpinCore_CustomLanguage_CreateTemplate": {
+    "en": "Create custom language template"
+  },
+  "SpinCore_CustomLanguage_ConfirmTemplateOverride": {
+    "en": "A language.json file already exists. Overwrite this file?"
+  },
+  "SpinCore_CustomLanguage_TemplateCreated": {
+    "en": "Custom language template file created at BepInEx/plugins/language.json!"
+  },
   "SpinCore_CustomiseModsTabButton": {
     "en": "Mod Settings",
     "fr": "Options des mods",

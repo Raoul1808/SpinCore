@@ -44,12 +44,18 @@ namespace SpinCore
             var localeStream = Assembly.GetExecutingAssembly().GetManifestResourceStream("SpinCore.locale.json");
             TranslationHelper.LoadTranslationsFromStream(localeStream);
             LoadLanguages();
+            SettingsMenu.Initialize();
         }
 
         private void LoadLanguages()
         {
             var langPath = Path.Combine(Directory.GetParent(Assembly.GetExecutingAssembly().Location).FullName,
                 "CustomLanguages");
+            if (!Directory.Exists(langPath))
+            {
+                Directory.CreateDirectory(langPath);
+                return;
+            }
             foreach (var filepath in Directory.EnumerateFiles(langPath))
             {
                 FileStream file = null;
