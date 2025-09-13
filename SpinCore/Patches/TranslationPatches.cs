@@ -50,23 +50,23 @@ namespace SpinCore.Patches
             var codes = new List<CodeInstruction>(instructions);
             for (int i = 0; i < codes.Count; i++)
             {
-                SpinCorePlugin.LogInfo("Looking at opcode " + codes[i].opcode + " " + codes[i].operand + " " + codes[i].operand?.GetType());
+                // SpinCorePlugin.LogInfo("Looking at opcode " + codes[i].opcode + " " + codes[i].operand + " " + codes[i].operand?.GetType());
                 if (codes[i].opcode == OpCodes.Ldc_I4_S && codes[i].operand is sbyte operand && (sbyte?)operand == 15)
                 {
                     codes[i] = new CodeInstruction(OpCodes.Call,
                         AccessTools.PropertyGetter(typeof(LanguageHelper), nameof(LanguageHelper.LanguageCount)));
-                    SpinCorePlugin.LogInfo("I am replace opcode!!! " + codes[i].opcode + " " + codes[i].operand + " " + codes[i].operand?.GetType());
+                    // SpinCorePlugin.LogInfo("I am replace opcode!!! " + codes[i].opcode + " " + codes[i].operand + " " + codes[i].operand?.GetType());
                 }
             }
 
             return codes.AsEnumerable();
         }
 
-        [HarmonyPatch(typeof(TranslationSystem), nameof(TranslationSystem.CycleLanguage))]
-        [HarmonyPostfix]
-        private static void SeeLanguage()
-        {
-            SpinCorePlugin.LogInfo("Language set to " + (SupportedLanguage)PlayerSettingsData.Instance.CurrentLanguageIndex.GetValue());
-        }
+        // [HarmonyPatch(typeof(TranslationSystem), nameof(TranslationSystem.CycleLanguage))]
+        // [HarmonyPostfix]
+        // private static void SeeLanguage()
+        // {
+        //     SpinCorePlugin.LogInfo("Language set to " + (SupportedLanguage)PlayerSettingsData.Instance.CurrentLanguageIndex.GetValue());
+        // }
     }
 }
