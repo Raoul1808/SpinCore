@@ -1,3 +1,6 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
 using Newtonsoft.Json;
 
 namespace SpinCore.Utility
@@ -46,15 +49,9 @@ namespace SpinCore.Utility
         /// <param name="customFile">The file to remove data from</param>
         /// <param name="key">The key used to identify the data</param>
         /// <param name="save">Save the file immediately</param>
-        public static void RemoveCustomData(IMultiAssetSaveFile customFile, string key, bool save = false) {
-            if (!customFile.HasJsonValueForKey(key))
-                return;
-        
-            customFile.RemoveJsonValue(key);
-            customFile.MarkDirty();
-        
-            if (save)
-                customFile.WriteToDiskIfDirty(true);
+        public static void RemoveCustomData(IMultiAssetSaveFile customFile, string key, bool save = false)
+        {
+            throw new NotImplementedException("Recent update removed an essential method. Please remove your json from outside the game for now.");
         }
     }
 }
