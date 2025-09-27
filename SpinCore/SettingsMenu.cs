@@ -27,6 +27,7 @@ namespace SpinCore
             if (File.Exists(LanguageTemplatePath))
             {
                 var msg = ModalMessageDialogExtensions.CreateYesNo();
+                msg.message = new TranslationReference("SpinCore_CustomLanguage_ConfirmTemplateOverride", false).Translation;
                 msg.affirmativeCallback = CreateTemplate;
                 msg.cancelCallback = () => { };
                 msg.Open();
