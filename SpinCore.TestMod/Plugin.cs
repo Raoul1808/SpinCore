@@ -291,7 +291,7 @@ namespace SpinCore.TestMod
                 lastMessage = trigger.Message;
             });
             
-            // Add a new langage
+            // Add a new language
             LanguageHelper.AddLanguage(new CustomLanguage
             {
                 Id = "yaynay",
